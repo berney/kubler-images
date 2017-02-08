@@ -1,0 +1,1 @@
+PACKAGES="app-misc/figlet"

@@ -1,0 +1,7 @@
+.project
+tmp/
+Dockerfile
+rootfs.tar
+push.conf
+bob-core/PACKAGES.md
+*/builder/PACKAGES.md
