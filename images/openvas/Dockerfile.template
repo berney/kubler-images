@@ -1,0 +1,3 @@
+FROM ${IMAGE_PARENT}
+ADD rootfs.tar /
+CMD ["figlet", "gentoo-bb"]
