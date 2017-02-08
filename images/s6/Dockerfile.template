@@ -1,0 +1,8 @@
+FROM ${IMAGE_PARENT}
+LABEL maintainer ${MAINTAINER}
+
+ADD rootfs.tar /
+
+
+# -t0 is the default
+CMD ["/bin/s6-svscan", "/service"]

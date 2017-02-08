@@ -1,0 +1,8 @@
+FROM ${IMAGE_PARENT}
+ADD rootfs.tar /
+LABEL maintainer Berne Campbell <berne.campbell@gmail.com>
+USER turnserver
+#CMD ["/coturn.sh"]
+# -t0 is the default
+CMD ["/bin/s6-svscan", "/service"]
+EXPOSE 3478 3479 5349 5350
