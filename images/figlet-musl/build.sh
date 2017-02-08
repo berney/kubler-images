@@ -1,7 +1,7 @@
-#PACKAGES="app-misc/figlet"
+PACKAGES="app-misc/figlet"
 #PACKAGES="app-misc/figlet sys-libs/musl"
-# Don't set packages so that baselayout won't be installed
-PACKAGES_M="app-misc/figlet"
+# Don't emerge baselayout as we don't need it
+BOB_SKIP_BASELAYOUT=1
 
 #
 # this hook can be used to configure the build container itself, install packages, etc
@@ -29,11 +29,11 @@ configure_rootfs_build() {
 	# We don't set PACKAGES to avoid installing baselayout so install it now
 	mkdir -p $EMERGE_ROOT/lib
 	mkdir -p $EMERGE_ROOT/usr/lib
-	"${EMERGE_BIN}" ${EMERGE_OPT} --binpkg-respect-use=y -v $PACKAGES_M
+	#"${EMERGE_BIN}" ${EMERGE_OPT} --binpkg-respect-use=y -v $PACKAGES_M
 	# As we broke the normal builder chain, recreate the docs for the figlet-musl image
-	init_docs "$PACKAGES_M"
+	#init_docs "$PACKAGES_M"
 	#update_use "$PACKAGES_M" "+musl"
-	generate_doc_package_installed "$PACKAGES_M"
+	#generate_doc_package_installed "$PACKAGES_M"
 }
 
 #

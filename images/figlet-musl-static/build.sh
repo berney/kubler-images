@@ -5,7 +5,7 @@
 # Don't set packages so that baselayout won't be installed
 PACKAGES_M="app-misc/figlet"
 ## I added this to bob-core/build.sh
-SKIP_VAR_RUN_SYMLINK=1
+BOB_SKIP_BASELAYOUT=1
 
 #
 # this hook can be used to configure the build container itself, install packages, etc
@@ -30,7 +30,7 @@ configure_rootfs_build() {
 	# we don't need this for our purposes
 	#mkdir -p $EMERGE_ROOT/home/figlet
 
-	# We don't set PACKAGES to avoid installing baselayout so install it now
+	# We don't set PACKAGES to avoid installing a dynamically linked figlet
 	# We want a static build but there's no static USE flag so we set CFLAGS, CXXFLAGS and LDFLAGS manually
 	# We don't want to emerge the non-static binary package if it exists and emerge doesn't know not to because
 	# the use flags will be the same, so let's exclude the binary package so we always compile from source
@@ -41,6 +41,7 @@ configure_rootfs_build() {
 	"${EMERGE_BIN}" ${EMERGE_OPT} --binpkg-respect-use=y --usepkg-exclude="$PACKAGES_M" -v $PACKAGES_M
 	# As we broke the normal builder chain, recreate the docs for the busybox image
 	init_docs "$PACKAGES_M"
+	# XXX TODO would be nice to add/update fake USE flags +musl +static
 	#update_use "$PACKAGES_M" "+musl +static"
 	generate_doc_package_installed "$PACKAGES_M"
 }
