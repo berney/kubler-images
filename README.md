@@ -5,6 +5,9 @@ My namespace for [gentoo-bb][] to build my [ricer][] images.
 - Slim Docker images based on Gentoo.
 - Generally opinionated, these are my images after all.
 
+https://github.com/berney/gentoo-bb-images
+Maintainer: Berne Campbell <berne.campbell@gmail.com>
+
 
 ## What is gentoo-bb
 
@@ -44,7 +47,6 @@ I strive to have high quality optimal images that have at least one but hopefull
 - Documented
 
 
-
 ## Reasons Why / Why Not
 
 ### Why not just use Docker Hub
@@ -77,7 +79,6 @@ With gentoo-bb we get the power and flexibility of Gentoo plus the separation of
 - The `master` branch should always be stable, production-ready, building working images.
 - New images that are WIP will be in feature branches.
   - Once they are working they'll get merged into `master`
-
 
 
 ## Contributions
