@@ -5,3 +5,5 @@ ADD rootfs.tar /
 
 #CMD ["/bin/some-cmd", "--some-option", "some-value"]
 ENTRYPOINT ["/usr/bin/nmap"]
+
+VOLUME nmap-log:/data

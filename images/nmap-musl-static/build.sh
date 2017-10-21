@@ -10,8 +10,7 @@
 #     eix <search-string>
 #_packages="net-analyzer/nmap app-misc/pax-utils sys-libs/musl sys-apps/file app-shells/bash"
 #_packages="net-analyzer/nmap"
-_packages=""
-_packages_m="net-analyzer/nmap"
+_packages="net-analyzer/nmap"
 # Install a standard system directory layout at ${_EMERGE_ROOT}, optional, default: false
 #BOB_INSTALL_BASELAYOUT=true
 
@@ -23,33 +22,33 @@ _packages_m="net-analyzer/nmap"
 #
 configure_bob()
 {
+    # Add our custom overlay
+    add_overlay berne https://github.com/berney/gentoo-overlay.git
+
     # Packages installed in this hook don't end up in the final image but are available for depending image builds
     #emerge dev-lang/go app-misc/foo
     :
     # our package
-    #update_use 'net-analyzer/nmap' '-ipv6' '-libressl' '-ncat' '-ndiff' '-nls' '-nmap-update' '-nping' '-nse' '-ssl' '-system-lua' '-zenmap'
-    update_use 'net-analyzer/nmap' '-ipv6' '-libressl' '+ncat' '-ndiff' '-nls' '-nmap-update' '-nping' '-nse' '-ssl' '-system-lua' '-zenmap'
-    #update_use 'net-analyzer/nmap' '+ipv6' '+libressl' '+ncat' '+ndiff' '-nls' '-nmap-update' '+nping' '+nse' '-ssl' '-system-lua' '-zenmap'
+    update_use 'net-analyzer/nmap' '+ipv6' '+libressl' '+ncat' '-ndiff' '-nls' '-nmap-update' '+nping' '+nse' '+ssl' '-system-lua' '-zenmap' '+static'
+    #update_use 'net-analyzer/nmap' '+ipv6' '+libressl' '+ncat' '+ndiff' '-nls' '-nmap-update' '+nping' '+nse' '+ssl' '-system-lua' '-zenmap' '+static'
     # global
     #   - seems to cause problems
     #update_use '+static-libs' '+minimal' '+static'
     # targeted
     update_use 'net-libs/libpcap' '+static-libs'
-    update_use 'sys-libs/zlib' '+static-libs'
-    update_use 'sys-libs/ncurses' '+static-libs'
-    update_use 'sys-libs/readline' '+static-libs'
+    #update_use 'sys-libs/zlib' '+static-libs'
+    #update_use 'sys-libs/ncurses' '+static-libs'
+    #update_use 'sys-libs/readline' '+static-libs'
     update_use 'dev-libs/libpcre' '+static-libs'
+    update_use 'dev-lang/python' '+sqlite'
+    update_use 'dev-libs/libressl' '+static-libs'
+
+    # Need to unprovide libressl so that it will be rebuilt
+    # This can be useful to install a package from a parent image again, it may be needed at build time
+    unprovide_package dev-libs/libressl
 
     # emerge in builder to pull in dependencies
     emerge -vt net-analyzer/nmap
-    # for some reason the +static-libs change is not seen/picked up so the -static-libs version is left installed
-    emerge -1vt dev-libs/libpcre
-    
-    # copy /config/etc/portage/env/net-analyzer/nmap /etc/portage/env/net-analyzer/nmap
-    mkdir -p /etc/portage/env/net-analyzer
-    echo 'CFLAGS="$CFLAGS -static -static-libgcc -fPIC"' >> /etc/portage/env/net-analyzer/nmap 
-    echo 'CXXFLAGS="$CXXFLAGS -static -static-libstdc++ -static-libgcc -fPIC"' >> /etc/portage/env/net-analyzer/nmap 
-    echo 'LDFLAGS="$LDFLAGS -static -fuse-ld=gold"' >> /etc/portage/env/net-analyzer/nmap 
 }
 
 #
@@ -59,36 +58,27 @@ configure_rootfs_build()
 {
     # Update a Gentoo package use flag..
     #update_use 'dev-libs/some-lib' '+feature' '-some_other_feature'
-    #update_use 'net-analyzer/nmap' '-ipv6' '-libressl' '-ncat' '-ndiff' '-nls' '-nmap-update' '-nping' '-nse' '-ssl' '-system-lua' '-zenmap'
-    #update_use 'net-analyzer/nmap' '+ipv6' '+libressl' '+ncat' '+ndiff' '-nls' '-nmap-update' '+nping' '+nse' '+ssl' '-system-lua' '-zenmap'
 
     # ..or a Gentoo package keyword
     #update_keywords 'dev-lang/some-package' '+~amd64'
 
     # Add a package to Portage's package.provided file, effectively skipping it during installation
     #provide_package 'dev-lang/some-package'
-    provide_package 
     provide_package 'net-libs/libpcap'
     provide_package 'sys-libs/zlib'
     provide_package 'sys-libs/ncurses'
     provide_package 'sys-libs/readline'
     provide_package 'dev-libs/libpcre'
+    provide_package 'dev-libs/liblinear'
+    provide_package 'dev-libs/libressl'
 
     # This can be useful to install a package from a parent image again, it may be needed at build time
     #unprovide_package 'dev-lang/some-package'
 
     # Only needed when ${_packages} is empty, initializes PACKAGES.md
-    init_docs "berne/nmap-musl-static"
-    echo "was CFLAGS: $CFLAGS, CXXFLAGS: $CXXFLAGS, LDFLAGS: $LDFLAGS"
-    #CFLAGS="$CFLAGS -static"
-    #CXXFLAGS="$CXXFLAGS -static"
-    #LDFLAGS="$LDFLAGS -static"
-    #echo "now CFLAGS: $CFLAGS, CXXFLAGS: $CXXFLAGS, LDFLAGS: $LDFLAGS"
+    #init_docs "berne/nmap-musl-static"
     
     # emerge in EMERGE_ROOT, we should already have all the dependencies built
-    # - always compile from source to ensure our env overide is honoured
-    ROOT="${_EMERGE_ROOT}" $_emerge_bin $_emerge_opt --usepkg-exclude="$_packages_m" -v $_packages_m
-    generate_doc_package_installed "$_packages_m"
     :
 }
 
@@ -120,6 +110,15 @@ finish_rootfs_build()
 
     # Everything at ${_EMERGE_ROOT} will end up in the final image
     #cp -rp "${DISTRIBUTION_DIR}/bin/*" "${_EMERGE_ROOT}/usr/local/bin"
+    
+    # Rice Rice Baby - rm stuff we don't want in the final image
+    rm -rf "${_EMERGE_ROOT}"/etc
+    rm -rf "${_EMERGE_ROOT}"/tmp
+    rm -rf "${_EMERGE_ROOT}"/var
+    # to run as a user you need /etc/{passwd,group}
+    #mkdir -p "${_EMERGE_ROOT}"/etc
+    # handle bug in portage when using custom root, user/groups created during install are not created at the custom root but on the host
+    #cp -f /etc/{passwd,group} "${_EMERGE_ROOT}"/etc/
 
     # After installing packages manually you might want to add an entry to PACKAGES.md
     #log_as_installed "manual install" "nmap-musl-static-${_nmap-musl-static_version}" "https://nmap-musl-static.org/"
