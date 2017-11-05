@@ -22,6 +22,19 @@ _packages="net-analyzer/nmap"
 #
 configure_bob()
 {
+    # Stolen from kubler/libressl-musl
+    add_layman_overlay libressl
+    # libressl
+    # https://wiki.gentoo.org/wiki/Project:LibreSSL
+    echo 'USE="${USE} libressl"'   >> /etc/portage/make.conf 
+    echo "-libressl"               >> /etc/portage/profile/use.stable.mask 
+    echo "-curl_ssl_libressl"      >> /etc/portage/profile/use.stable.mask 
+    echo "dev-libs/openssl"        >> /etc/portage/package.mask/openssl
+    echo "=dev-libs/libressl-2.4*" >> /etc/portage/package.accept_keywords/libressl
+    emerge -f dev-libs/libressl
+    emerge -C dev-libs/openssl
+    emerge -1 dev-libs/libressl net-misc/wget
+    
     # Add our custom overlay
     add_overlay berne https://github.com/berney/gentoo-overlay.git
 
@@ -36,16 +49,18 @@ configure_bob()
     #update_use '+static-libs' '+minimal' '+static'
     # targeted
     update_use 'net-libs/libpcap' '+static-libs'
-    #update_use 'sys-libs/zlib' '+static-libs'
+    update_use 'sys-libs/zlib' '+static-libs'
     #update_use 'sys-libs/ncurses' '+static-libs'
     #update_use 'sys-libs/readline' '+static-libs'
     update_use 'dev-libs/libpcre' '+static-libs'
     update_use 'dev-lang/python' '+sqlite'
     update_use 'dev-libs/libressl' '+static-libs'
+    update_use 'dev-libs/openssl' '+static-libs'
 
     # Need to unprovide libressl so that it will be rebuilt
     # This can be useful to install a package from a parent image again, it may be needed at build time
     unprovide_package dev-libs/libressl
+    unprovide_package dev-libs/openssl
 
     # emerge in builder to pull in dependencies
     emerge -vt net-analyzer/nmap
