@@ -1,12 +1,12 @@
-### berne/nmap-musl-static:20170925
+### berney/nmap-musl-static:20171030
 
-Built: Thu Oct 19 07:20:46 GMT 2017
-Image Size: 30.1MB
+Built: Tue Nov  7 19:50:18 AEDT 2017
+Image Size: 32MB
 
 #### Installed
 Package | USE Flags
 --------|----------
-net-analyzer/nmap-7.40 | `ipv6 libressl ncat nping nse ssl static -ndiff -nls -nmap-update (-system-lua) -zenmap`
+net-analyzer/nmap-9999 | `ipv6 libressl libssh2 ncat nping nse ssl static -ndiff -nls -nmap-update (-system-lua) -zenmap`
 #### Inherited
 Package | USE Flags
 --------|----------

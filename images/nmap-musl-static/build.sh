@@ -42,14 +42,19 @@ configure_bob()
     #emerge dev-lang/go app-misc/foo
     :
     # our package
-    update_use 'net-analyzer/nmap' '+ipv6' '+libressl' '+ncat' '-ndiff' '-nls' '-nmap-update' '+nping' '+nse' '+ssl' '-system-lua' '-zenmap' '+static'
-    #update_use 'net-analyzer/nmap' '+ipv6' '+libressl' '+ncat' '+ndiff' '-nls' '-nmap-update' '+nping' '+nse' '+ssl' '-system-lua' '-zenmap' '+static'
+    #update_keywords '=net-analyzer/nmap-7.50' '+~amd64'
+    #update_keywords '=net-analyzer/nmap-7.60' '+~amd64'
+    #update_keywords '=net-analyzer/nmap-9999' '+~amd64'
+    update_keywords '=net-analyzer/nmap-9999' '+**'
+    update_use 'net-analyzer/nmap' '+ipv6' '+libressl' '+ncat' '-ndiff' '-nls' '-nmap-update' '+nping' '+nse' '+ssl' '-system-lua' '-zenmap' '+static' '+libssh2'
     # global
     #   - seems to cause problems
     #update_use '+static-libs' '+minimal' '+static'
     # targeted
     update_use 'net-libs/libpcap' '+static-libs'
     update_use 'sys-libs/zlib' '+static-libs'
+    update_use 'net-libs/libssh2' '+static-libs'
+    update_use 'dev-db/sqlite' '+static-libs'
     #update_use 'sys-libs/ncurses' '+static-libs'
     #update_use 'sys-libs/readline' '+static-libs'
     update_use 'dev-libs/libpcre' '+static-libs'
@@ -61,6 +66,7 @@ configure_bob()
     # This can be useful to install a package from a parent image again, it may be needed at build time
     unprovide_package dev-libs/libressl
     unprovide_package dev-libs/openssl
+    unprovide_package sys-libs/zlib
 
     # emerge in builder to pull in dependencies
     emerge -vt net-analyzer/nmap
@@ -86,6 +92,7 @@ configure_rootfs_build()
     provide_package 'dev-libs/libpcre'
     provide_package 'dev-libs/liblinear'
     provide_package 'dev-libs/libressl'
+    provide_package 'net-libs/libssh2'
 
     # This can be useful to install a package from a parent image again, it may be needed at build time
     #unprovide_package 'dev-lang/some-package'
