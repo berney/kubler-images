@@ -1,11 +1,12 @@
-### berne/figlet-musl-static:20170127
+### kubler-images/figlet-musl-static:20200707
 
-Built: Wed Feb  8 20:36:22 AEDT 2017
-Image Size: 666.1 kB
+Built: Sat Jul 11 21:38:41 AEST 2020
+Image Size: 670kB
+
 #### Installed
 Package | USE Flags
 --------|----------
-app-misc/figlet-2.2.5-8 | ``
+app-misc/figlet-2.2.5 | ``
 #### Inherited
 Package | USE Flags
 --------|----------

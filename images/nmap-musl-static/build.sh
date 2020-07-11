@@ -23,20 +23,21 @@ _packages="net-analyzer/nmap"
 configure_bob()
 {
     # Stolen from kubler/libressl-musl
-    add_layman_overlay libressl
+    #add_layman_overlay libressl
     # libressl
     # https://wiki.gentoo.org/wiki/Project:LibreSSL
-    echo 'USE="${USE} libressl"'   >> /etc/portage/make.conf 
     echo "-libressl"               >> /etc/portage/profile/use.stable.mask 
     echo "-curl_ssl_libressl"      >> /etc/portage/profile/use.stable.mask 
-    echo "dev-libs/openssl"        >> /etc/portage/package.mask/openssl
-    echo "=dev-libs/libressl-2.4*" >> /etc/portage/package.accept_keywords/libressl
+    #echo "=dev-libs/libressl-2.4*" >> /etc/portage/package.accept_keywords/libressl
     emerge -f dev-libs/libressl
-    emerge -C dev-libs/openssl
+    emerge -C dev-libs/openssl net-misc/wget
+    echo "dev-libs/openssl"        >> /etc/portage/package.mask/openssl
+    update_use '+libressl'
     emerge -1 dev-libs/libressl net-misc/wget
     
     # Add our custom overlay
     add_overlay berne https://github.com/berney/gentoo-overlay.git
+    #add_overlay berne file:///config/gentoo-overlay
 
     # Packages installed in this hook don't end up in the final image but are available for depending image builds
     #emerge dev-lang/go app-misc/foo
@@ -48,19 +49,21 @@ configure_bob()
     update_keywords '=net-analyzer/nmap-9999' '+**'
     update_use 'net-analyzer/nmap' '+ipv6' '+libressl' '+ncat' '-ndiff' '-nls' '-nmap-update' '+nping' '+nse' '+ssl' '-system-lua' '-zenmap' '+static' '+libssh2'
     # global
-    #   - seems to cause problems
-    #update_use '+static-libs' '+minimal' '+static'
+    #   - seems to cause problems (seems to work again, except for debianutils)
+    update_use '+static-libs' '+minimal' '+static'
+    # debianutils breaks on +static
+    update_use 'sys-apps/debianutils' '-static'
     # targeted
-    update_use 'net-libs/libpcap' '+static-libs'
-    update_use 'sys-libs/zlib' '+static-libs'
-    update_use 'net-libs/libssh2' '+static-libs'
-    update_use 'dev-db/sqlite' '+static-libs'
-    #update_use 'sys-libs/ncurses' '+static-libs'
-    #update_use 'sys-libs/readline' '+static-libs'
-    update_use 'dev-libs/libpcre' '+static-libs'
-    update_use 'dev-lang/python' '+sqlite'
-    update_use 'dev-libs/libressl' '+static-libs'
-    update_use 'dev-libs/openssl' '+static-libs'
+    #update_use 'net-libs/libpcap' '+static-libs'
+    #update_use 'sys-libs/zlib' '+static-libs'
+    #update_use 'net-libs/libssh2' '+static-libs'
+    #update_use 'dev-db/sqlite' '+static-libs'
+    ##update_use 'sys-libs/ncurses' '+static-libs'
+    ##update_use 'sys-libs/readline' '+static-libs'
+    #update_use 'dev-libs/libpcre' '+static-libs'
+    #update_use 'dev-lang/python' '+sqlite'
+    #update_use 'dev-libs/libressl' '+static-libs'
+    #update_use 'dev-libs/openssl' '+static-libs'
 
     # Need to unprovide libressl so that it will be rebuilt
     # This can be useful to install a package from a parent image again, it may be needed at build time
@@ -83,8 +86,8 @@ configure_rootfs_build()
     # ..or a Gentoo package keyword
     #update_keywords 'dev-lang/some-package' '+~amd64'
 
-    # Add a package to Portage's package.provided file, effectively skipping it during installation
-    #provide_package 'dev-lang/some-package'
+    ## Add a package to Portage's package.provided file, effectively skipping it during installation
+    ##provide_package 'dev-lang/some-package'
     provide_package 'net-libs/libpcap'
     provide_package 'sys-libs/zlib'
     provide_package 'sys-libs/ncurses'
@@ -98,7 +101,7 @@ configure_rootfs_build()
     #unprovide_package 'dev-lang/some-package'
 
     # Only needed when ${_packages} is empty, initializes PACKAGES.md
-    #init_docs "berne/nmap-musl-static"
+    init_docs "berne/nmap-musl-static"
     
     # emerge in EMERGE_ROOT, we should already have all the dependencies built
     :

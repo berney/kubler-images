@@ -1,4 +1,4 @@
-PACKAGES="app-misc/figlet"
+_packages="app-misc/figlet"
 
 #
 # this hook can be used to configure the build container itself, install packages, etc

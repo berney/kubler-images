@@ -4,9 +4,9 @@ This basically the gentoo-bb README.md example.
 
 Run this [figlet][] image with:
 
-        $ docker run --rm berne/figlet [<figlet options>] [message]
+    $ docker run --rm berne/figlet [<figlet options>] [message]
 
-
+[Last Build][packages]
 ## Related images
 
 - figlet-user
@@ -14,3 +14,4 @@ Run this [figlet][] image with:
 - figlet-musl-static
 
 [figlet]: http://www.figlet.org/
+[packages]: PACKAGES.md
