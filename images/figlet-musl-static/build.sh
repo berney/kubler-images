@@ -1,23 +1,13 @@
 ## This is an exercise in minimalism
 
-#PACKAGES="app-misc/figlet"
-#PACKAGES="app-misc/figlet sys-libs/musl"
-# Don't set packages so that baselayout won't be installed
+# Don't set _packages so that baselayout won't be installed
 PACKAGES_M="app-misc/figlet"
-## I added this to bob-core/build.sh
-BOB_SKIP_BASELAYOUT=1
 
 #
 # this hook can be used to configure the build container itself, install packages, etc
 #
 configure_bob() {
-	# Setup portage so that all ebuilds will apply user patches
-	cp /config/etc-portage-bashrc /etc/portage/bashrc
-	chmod +x /etc/portage/bashrc
-
-	# Add user patch from Alpine Linux aports to fix figlet C++ problems so that it will compile under musl
-	mkdir -p /etc/portage/patches/app-misc/figlet/
-	cp /config/*.patch /etc/portage/patches/app-misc/figlet/
+	:
 }
 
 #
@@ -30,7 +20,7 @@ configure_rootfs_build() {
 	# we don't need this for our purposes
 	#mkdir -p $_EMERGE_ROOT/home/figlet
 
-	# We don't set PACKAGES to avoid installing a dynamically linked figlet
+	# We don't set _packages to avoid installing a dynamically linked figlet
 	# We want a static build but there's no static USE flag so we set CFLAGS, CXXFLAGS and LDFLAGS manually
 	# We don't want to emerge the non-static binary package if it exists and emerge doesn't know not to because
 	# the use flags will be the same, so let's exclude the binary package so we always compile from source
