@@ -1,43 +1,26 @@
 _packages="app-misc/figlet"
-#PACKAGES="app-misc/figlet sys-libs/musl"
-# Don't emerge baselayout as we don't need it
-BOB_SKIP_BASELAYOUT=1
 
 #
 # this hook can be used to configure the build container itself, install packages, etc
 #
 configure_bob() {
-	# Setup portage so that all ebuilds will apply user patches
-	cp /config/etc-portage-bashrc /etc/portage/bashrc
-	chmod +x /etc/portage/bashrc
-
-	# Add user patch from Alpine Linux aports to fix figlet C++ problems so that it will compile under musl
-	mkdir -p /etc/portage/patches/app-misc/figlet/
-	cp /config/*.patch /etc/portage/patches/app-misc/figlet/
+	:
 }
 
 #
 # this method runs in the bb builder container just before starting the build of the rootfs
 #
 configure_rootfs_build() {
-	set -u
 	# this runs in the builder, but as one of the last build steps the builder's /etc/passwd is copied to the custom root
 	useradd figlet
 	# Create home directory in custom root
 	# we don't need this for our purposes
 	#mkdir -p $_EMERGE_ROOT/home/figlet
 
-	# We don't set PACKAGES to avoid installing baselayout so install it now
-
 	set -u
 	mkdir -p $_EMERGE_ROOT/lib
 	mkdir -p $_EMERGE_ROOT/usr/lib
 
-	#"${_emerge_bin}" ${_emerge_opt} --binpkg-respect-use=y -v $PACKAGES_M
-	# As we broke the normal builder chain, recreate the docs for the figlet-musl image
-	#init_docs "$PACKAGES_M"
-	#update_use "$PACKAGES_M" "+musl"
-	#generate_doc_package_installed "$PACKAGES_M"
 	set +u
 }
 
@@ -50,11 +33,8 @@ finish_rootfs_build() {
 	# Figlet is dynamically linked to Musl's libc so copy needed libraries and symlinks
 	# - This is better than add sys-libs/musl to PACKAGES as that will install unneeded headers, and .o files etc
 	# - lib/ld-musl-x86_64.so.1 -> /usr/lib/libc.so
-	#ln -s /usr/lib/libc.so $_EMERGE_ROOT/lib/ld-musl-x86_64.so.1
-	#cp -a /usr/lib/libc.so $_EMERGE_ROOT/usr/lib/libc.so
-
-	# if we install packages build-root automatically installs baselayout
-	#uninstall_package -vt sys-apps/baselayout
+	ln -s /usr/lib/libc.so $_EMERGE_ROOT/lib/ld-musl-x86_64.so.1
+	cp -a /usr/lib/libc.so $_EMERGE_ROOT/usr/lib/libc.so
 
 	# figlist and showfig fonts are shell scripts needing /bin/sh, since we are building without a shell purge them too
 	rm -f $_EMERGE_ROOT/usr/bin/{figlist,showfigfonts}
