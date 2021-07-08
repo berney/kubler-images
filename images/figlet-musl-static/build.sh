@@ -18,7 +18,7 @@ configure_rootfs_build() {
 	useradd figlet
 	# Create home directory in custom root
 	# we don't need this for our purposes
-	#mkdir -p $_EMERGE_ROOT/home/figlet
+	#mkdir -p "${_EMERGE_ROOT}"/home/figlet
 
 	# We don't set _packages to avoid installing a dynamically linked figlet
 	# We want a static build but there's no static USE flag so we set CFLAGS, CXXFLAGS and LDFLAGS manually
@@ -45,24 +45,24 @@ configure_rootfs_build() {
 finish_rootfs_build() {
 	set -u
 	# figlist and showfig fonts are shell scripts needing /bin/sh, since we are building without a shell purge them too
-	rm -f $_EMERGE_ROOT/usr/bin/{figlist,showfigfonts}
+	rm -f "${_EMERGE_ROOT}"/usr/bin/{figlist,showfigfonts}
 	# let's assume we've tested the fonts and trust they are good, so hasta-la-vista chkfont
-	rm $_EMERGE_ROOT/usr/bin/chkfont
+	rm "${_EMERGE_ROOT}"/usr/bin/chkfont
 	# Only figlet let so let's move it and remove a directory
-	mv $_EMERGE_ROOT/usr/bin/figlet $_EMERGE_ROOT/figlet
-	rmdir $_EMERGE_ROOT/usr/bin
+	mv "${_EMERGE_ROOT}"/usr/bin/figlet "${_EMERGE_ROOT}"/figlet
+	rmdir "${_EMERGE_ROOT}"/usr/bin
 	# no USE flag for bash-completion so just rm it
-	rm -rf $_EMERGE_ROOT/usr/share/bash-completion/
+	rm -rf "${_EMERGE_ROOT}"/usr/share/bash-completion/
 	# Not sure how to stop these
-	rm -rf $_EMERGE_ROOT/var/lib/gentoo
-	rm -rf $_EMERGE_ROOT/var
+	rm -rf "${_EMERGE_ROOT}"/var/lib/gentoo
+	rm -rf "${_EMERGE_ROOT}"/var
 	# mostly coming from env-update, doesn't seem needed
-	rm -rf $_EMERGE_ROOT/etc
+	rm -rf "${_EMERGE_ROOT}"/etc
 	# not sure where tmp is coming from
-	rmdir $_EMERGE_ROOT/tmp
+	rmdir "${_EMERGE_ROOT}"/tmp
 	# to run as USER we need /etc/{passwd,group}
-	mkdir -p $_EMERGE_ROOT/etc
+	mkdir -p "${_EMERGE_ROOT}"/etc
 	# handle bug in portage when using custom root, user/groups created during install are not created at the custom root but on the host
-	cp -f /etc/{passwd,group} $_EMERGE_ROOT/etc
+	cp -f /etc/{passwd,group} "${_EMERGE_ROOT}"/etc
 	set +u
 }

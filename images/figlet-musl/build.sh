@@ -15,11 +15,11 @@ configure_rootfs_build() {
 	useradd figlet
 	# Create home directory in custom root
 	# we don't need this for our purposes
-	#mkdir -p $_EMERGE_ROOT/home/figlet
+	#mkdir -p "${_EMERGE_ROOT}"/home/figlet
 
 	set -u
-	mkdir -p $_EMERGE_ROOT/lib
-	mkdir -p $_EMERGE_ROOT/usr/lib
+	mkdir -p "${_EMERGE_ROOT}"/lib
+	mkdir -p "${_EMERGE_ROOT}"/usr/lib
 
 	set +u
 }
@@ -33,22 +33,22 @@ finish_rootfs_build() {
 	# Figlet is dynamically linked to Musl's libc so copy needed libraries and symlinks
 	# - This is better than add sys-libs/musl to PACKAGES as that will install unneeded headers, and .o files etc
 	# - lib/ld-musl-x86_64.so.1 -> /usr/lib/libc.so
-	ln -s /usr/lib/libc.so $_EMERGE_ROOT/lib/ld-musl-x86_64.so.1
-	cp -a /usr/lib/libc.so $_EMERGE_ROOT/usr/lib/libc.so
+	ln -s /usr/lib/libc.so "${_EMERGE_ROOT}"/lib/ld-musl-x86_64.so.1
+	cp -a /usr/lib/libc.so "${_EMERGE_ROOT}"/usr/lib/libc.so
 
 	# figlist and showfig fonts are shell scripts needing /bin/sh, since we are building without a shell purge them too
-	rm -f $_EMERGE_ROOT/usr/bin/{figlist,showfigfonts}
+	rm -f "${_EMERGE_ROOT}"/usr/bin/{figlist,showfigfonts}
 	# no USE flag for bash-completion so just rm it
-	rm -rf $_EMERGE_ROOT/usr/share/bash-completion/
+	rm -rf "${_EMERGE_ROOT}"/usr/share/bash-completion/
 	# Not sure how to stop these
-	rm -rf $_EMERGE_ROOT/var/lib/gentoo
-	rm -rf $_EMERGE_ROOT/var
+	rm -rf "${_EMERGE_ROOT}"/var/lib/gentoo
+	rm -rf "${_EMERGE_ROOT}"/var
 	# mostly coming from env-update, doesn't seem needed
-	rm -rf $_EMERGE_ROOT/etc
+	rm -rf "${_EMERGE_ROOT}"/etc
 	# to run as USER we need /etc/{passwd,group}
-	mkdir -p $_EMERGE_ROOT/etc
+	mkdir -p "${_EMERGE_ROOT}"/etc
 	# handle bug in portage when using custom root, user/groups created during install are not created at the custom root but on the host
-	cp -f /etc/{passwd,group} $_EMERGE_ROOT/etc
+	cp -f /etc/{passwd,group} "${_EMERGE_ROOT}"/etc
 	set +u
 	echo "XXX options $-"
 }
