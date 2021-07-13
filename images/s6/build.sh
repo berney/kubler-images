@@ -1,8 +1,7 @@
 #
 # build config
 #
-PACKAGES="sys-apps/s6"
-BOB_SKIP_BASELAYOUT=1
+_packages="sys-apps/s6"
 
 #
 # this method runs in the bb builder container just before starting the build of the rootfs
@@ -22,25 +21,25 @@ finish_rootfs_build()
     # s6-* are dynamically linked to Musl's libc so copy needed libraries and symlinks
     # - This is better than add sys-libs/musl to PACKAGES as that will install unneeded headers, and .o files etc
     # - lib/ld-musl-x86_64.so.1 -> /usr/lib/libc.so
-    mkdir -p $EMERGE_ROOT/lib
-    mkdir -p $EMERGE_ROOT/usr/lib
-    ln -s /usr/lib/libc.so $EMERGE_ROOT/lib/ld-musl-x86_64.so.1
-    cp -a /usr/lib/libc.so $EMERGE_ROOT/usr/lib/libc.so
+    mkdir -p "${_EMERGE_ROOT}/lib"
+    mkdir -p "${_EMERGE_ROOT}/usr/lib"
+    ln -s /usr/lib/libc.so "${_EMERGE_ROOT}/lib/ld-musl-x86_64.so.1"
+    cp -a /usr/lib/libc.so "${_EMERGE_ROOT}/usr/lib/libc.so"
 
     # s6 folders
-    mkdir -p $EMERGE_ROOT/etc/service/.s6-svscan $EMERGE_ROOT/service
+    mkdir -p "${_EMERGE_ROOT}/etc/service/.s6-svscan" "${_EMERGE_ROOT}/service"
 
     # This was from the Dockerfile.template
     # I'm planning on using musl as much as possible, ldconfig is glibc specific
     #ldconfig
 
     # I don't want to do this in the Dockerfile.template
-    cp -a /config/etc $EMERGE_ROOT/
+    cp -a /config/etc "${_EMERGE_ROOT}/"
     # it should already be +x but this won't hurt
-    chmod +x $EMERGE_ROOT/etc/s6_finish_default
+    chmod +x "${_EMERGE_ROOT}/etc/s6_finish_default"
     # I created this in the source already
     #ln -s /etc/s6_finish_default /etc/service/.s6-svscan/finish
 
     # We can do this step
-    ln -s /etc/service/.s6-svscan $EMERGE_ROOT/service
+    ln -s /etc/service/.s6-svscan "${_EMERGE_ROOT}/service"
 }
