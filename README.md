@@ -1,33 +1,33 @@
-# gentoo-bb-images
+# kubler-images
 
-My namespace for [gentoo-bb][] to build my [ricer][] images.
+My namespace for [kubler][] to build my [ricer][] images.
 - This is my source/templates that build my Docker images.
-- Slim Docker images based on Gentoo.
+- Slim [distroless][] Docker images based on Gentoo's build system.
 - Generally opinionated, these are my images after all.
 
-https://github.com/berney/gentoo-bb-images
+https://github.com/berney/kubler-images
 Maintainer: Berne Campbell <berne.campbell@gmail.com>
 
 
-## What is gentoo-bb
+## What is kubler
 
-[gentoo-bb][] is an excellent build framework to produce minimal Docker images, and minimal root file systems based on Gentoo. It's primarily intended for maintaining an organization's LXC base image stack(s), but can probably fairly easy (ab)used for other use cases involving a custom root fs, cross compiling comes to mind.
+[kubler][] is an excellent build framework to produce minimal Docker images, and minimal root file systems based on Gentoo. It's primarily intended for maintaining an organization's Docker/LXC base image stack(s), but can probably fairly easy be (ab)used for other use cases involving a custom root fs, cross compiling comes to mind.
 
 
 ## Quick Start
 
-1. You need [gentoo-bb][]:
-   `git clone https://github.com/edannenberg/gentoo-bb.git`
+1. You need [kubler][]:
+   `git clone https://github.com/edannenberg/kubler.git`
+   Rest assumes kubler added to your PATH
 
 2. Add my namespace:
    ```
-   cd gentoo-bb/dock
-   git clone git@github.com:berney/gentoo-bb-images.git berne
-   cd ..
+   git clone git@github.com:berney/kubler-images.git berney
+   cd berney
    ```
 3. Build my namespace:
-   `./build.sh build berne`
-   
+   `kubler build berney`
+
 
 ## Goals
 
@@ -51,12 +51,12 @@ I strive to have high quality optimal images that have at least one but hopefull
 
 ### Why not just use Docker Hub
 
-Most images are ~shit~ sub-optimal IMO
+Most images are sub-optimal IMO
 - Bloaty
 - Insecure
 - Don't follow Docker's best practices
 - Source might not be available
-- Hard to understand/reason 
+- Hard to understand/reason
 
 
 ### Why not just use Alpine
@@ -64,7 +64,7 @@ Most images are ~shit~ sub-optimal IMO
 Alpine is a great base for images.
 This is to ricer things, go that one step further in minimalism, security hardening, optimisation, or have software or a feature or
 setup that's not available out of the box in alpine with `apk`.
-With gentoo-bb we get the power and flexibility of Gentoo plus the separation of build-time dependencies and run time dependencies.
+With kubler we get the power and flexibility of Gentoo plus the separation of build-time dependencies and run time dependencies.
 
 
 ## Todo / Wishlist
@@ -87,14 +87,9 @@ PRs are welcome, if I like your ideas I'll use them. See my wishlist above. Keep
 how Docker images should be, and our goals might differ.
 
 
-## My gentoo-bb fork
 
-All of these images should generally build off the upstream [gentoo-bb][], there might be some (should be documented) that
-need [my fork][]. I generally upstream all my changes as PRs, so unless I'm doing something funky you shouldn't need my
-fork of gentoo-bb.
-
-
-[gentoo-bb]: https://github.com/edannenberg/gentoo-bb
+[kubler]: https://github.com/edannenberg/gentoo-bb
 [my fork]: https://github.com/berney/gentoo-bb
 [ricer]: https://fun.irq.dk/funroll-loops.org/
+[distroless]: https://github.com/GoogleContainerTools/distroless
 [Branching Model]: http://nvie.com/posts/a-successful-git-branching-model/
