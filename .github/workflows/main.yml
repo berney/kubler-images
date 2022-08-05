@@ -44,6 +44,7 @@ jobs:
           kubler build -v figlet || echo "exit code $?"
           docker images
           docker ps -a
+          df -h
           git status
           git ls-files -o
           ls -ld ~/.kubler
