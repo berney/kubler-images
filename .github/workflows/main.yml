@@ -37,5 +37,6 @@ jobs:
           kubler --help
       - name: 🚧 Build Images
         run: |
+          kubler update
           kubler build figlet
       - run: echo "🍏 This job's status is ${{ job.status }}."
