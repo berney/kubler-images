@@ -43,6 +43,9 @@ jobs:
           docker ps -a
           git status
           git ls-files -o
-          ls -l ~/.kubler/log/build.log
-          cat ~/.kubler/log/build.log
+          ls -ld ~/.kubler
+          ls -la ~/.kubler
+          ls -ld ~/.kubler/log
+          ls -l ~/.kubler/log/build.log || true
+          cat ~/.kubler/log/build.log || true
       - run: echo "🍏 This job's status is ${{ job.status }}."
