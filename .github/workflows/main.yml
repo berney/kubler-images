@@ -14,4 +14,9 @@ jobs:
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}
+      - name: 🔎 Inspect Runner
+        run: |
+          df -h
+          free -m
+          bash --version
       - run: echo "🍏 This job's status is ${{ job.status }}."
