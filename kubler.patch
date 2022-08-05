@@ -1,0 +1,13 @@
+diff --git a/engine/docker.sh b/engine/docker.sh
+index 252d1de..d5a7611 100644
+--- a/engine/docker.sh
++++ b/engine/docker.sh
+@@ -548,7 +548,7 @@ function run_image() {
+         docker_mounts+=('-v' "${dmnt}")
+     done
+     # general docker args
+-    docker_args=("-it" "--hostname" "${container_host_name//\//-}")
++    docker_args=("--hostname" "${container_host_name//\//-}")
+     [[ "${auto_rm}" == "true" ]] && docker_args+=("--rm")
+     [[ -n "${container_name}" ]] && docker_args+=("--name" "${container_name//\//-}")
+     [[ "${BUILDER_CAPS_SYS_PTRACE}" == "true" ]] && docker_args+=('--cap-add' 'SYS_PTRACE')
