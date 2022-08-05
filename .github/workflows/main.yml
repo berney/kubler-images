@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: Kubler Build
 on: [push]
 jobs:
   Explore-GitHub-Actions:
@@ -38,9 +38,11 @@ jobs:
       - name: 🚧 Build Images
         run: |
           kubler update
-          kubler build figlet || echo "exit code $?"
+          kubler build -v figlet || echo "exit code $?"
           docker images
           docker ps -a
           git status
           git ls-files -o
+          ls -l ~/.kubler/log/build.log
+          cat ~/.kubler/log/build.log
       - run: echo "🍏 This job's status is ${{ job.status }}."
