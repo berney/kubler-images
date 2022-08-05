@@ -21,4 +21,16 @@ jobs:
           bash --version
           docker version
           docker info
+          pwd
+          echo $PATH
+      - name: 👷 Install Kubler
+        run: |
+          cd ..
+          curl -L https://github.com/edannenberg/kubler/archive/master.tar.gz | tar xz
+          echo "$(pwd)/kubler-master/bin" >> $GITHUB_PATH
+          echo $PATH
+          kubler --version
+      - name: 👷 Install Kubler
+        run: |
+          kubler --version
       - run: echo "🍏 This job's status is ${{ job.status }}."
