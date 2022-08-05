@@ -38,5 +38,9 @@ jobs:
       - name: 🚧 Build Images
         run: |
           kubler update
-          kubler build figlet
+          kubler build figlet || echo "exit code $?"
+          docker images
+          docker ps -a
+          git status
+          git ls-files -o
       - run: echo "🍏 This job's status is ${{ job.status }}."
