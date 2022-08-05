@@ -19,4 +19,6 @@ jobs:
           df -h
           free -m
           bash --version
+          docker version
+          docker info
       - run: echo "🍏 This job's status is ${{ job.status }}."
