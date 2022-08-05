@@ -31,6 +31,11 @@ jobs:
           echo "$(pwd)/kubler-master/bin" >> $GITHUB_PATH
       - name: 👷 Kubler Version
         run: |
+          echo "TERM=$TERM"
           echo $PATH
+          pwd
           kubler --help
+      - name: 🚧 Build Images
+        run: |
+          kubler build figlet
       - run: echo "🍏 This job's status is ${{ job.status }}."
