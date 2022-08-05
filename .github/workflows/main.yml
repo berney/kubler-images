@@ -49,6 +49,7 @@ jobs:
           ls -ld ~/.kubler
           ls -la ~/.kubler
           ls -ld ~/.kubler/log
+          ls -la ~/.kubler/log
           ls -l ~/.kubler/log/build.log || true
           cat ~/.kubler/log/build.log || true
       - run: echo "🍏 This job's status is ${{ job.status }}."
