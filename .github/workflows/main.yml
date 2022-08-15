@@ -1,7 +1,7 @@
 name: Kubler Build
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  kubler:
     runs-on: ubuntu-latest
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
@@ -37,9 +37,16 @@ jobs:
           echo "TERM=$TERM"
           echo $PATH
           pwd
-          kubler --help
+          env
+          # test term colors
+          kubler dep-graph xxx || true
+          export TERM
+          kubler dep-graph xxx || true
+          export TERM=xterm
+          kubler dep-graph xxx || true
       - name: 🚧 Build Images
         run: |
+          export TERM=xterm
           kubler update
           kubler build -v figlet || echo "exit code $?"
           docker images
