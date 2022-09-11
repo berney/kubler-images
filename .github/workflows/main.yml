@@ -41,7 +41,7 @@ jobs:
 
       - name: 👷 Kubler Version
         run: |
-          export TERM=xterm
+          export TERM
           kubler --help
 
       - name: 👷 Kubler Inspect Terminal
@@ -137,7 +137,7 @@ jobs:
 
       - name: 👷 Update Kubler (kubler-images, Gentoo Stage3)
         run: |
-          export TERM=xterm
+          export TERM
           ls -la ~/.kubler || true
           ls -la ~/.kubler/namespaces || true
           ls -la ~/.kubler/namespaces/kubler || true
@@ -157,7 +157,7 @@ jobs:
 
       - name: 🚧 Build Images
         run: |
-          export TERM=xterm
+          export TERM
           kubler build -v figlet || echo "exit code $?"
           docker images
           docker ps -a
