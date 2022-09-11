@@ -1,4 +1,4 @@
-name: Kubler Build
+name: Kubler Cache Inspect
 
 on:
   workflow_dispatch:
