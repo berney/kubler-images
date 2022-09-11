@@ -1,5 +1,9 @@
 name: Kubler Build
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 jobs:
   kubler:
     runs-on: ubuntu-latest
@@ -28,9 +32,6 @@ jobs:
           cd ..
           curl -L https://github.com/edannenberg/kubler/archive/master.tar.gz | tar xz
           ls -l kubler-master/bin
-          cd kubler-master
-          git apply ${{ github.workspace}}/kubler.patch
-          cd ..
           echo "$(pwd)/kubler-master/bin" >> $GITHUB_PATH
       - name: 👷 Kubler Version
         run: |
