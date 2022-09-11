@@ -1,0 +1,33 @@
+name: Kubler Build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  kubler-cache-inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cache Kubler Downloads
+        uses: actions/cache@v3
+        with:
+          key: kubler-downloads
+          path: ~/.kubler/downloads/
+
+      - name: Cache Kubler Gentoo Distfiles
+        uses: actions/cache@v3
+        with:
+          key: kubler-distfiles
+          path: ~/.kubler/distfiles/
+
+      - name: Cache Kubler Gentoo Packages
+        uses: actions/cache@v3
+        with:
+          key: kubler-packages
+          path: ~/.kubler/packages/
+
+      - name: Inspect Kubler Caches
+        run: |
+          ls -l ~/.kubler/
+          type tree
+          tree -a -C ~/.kubler
+
