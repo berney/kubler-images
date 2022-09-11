@@ -41,6 +41,7 @@ jobs:
 
       - name: 👷 Kubler Version
         run: |
+          export TERM=xterm
           kubler --help
 
       - name: 👷 Kubler Inspect Terminal
@@ -51,8 +52,14 @@ jobs:
           env
           # test term colors
           kubler dep-graph xxx || true
+          echo "export TERM"
           export TERM
           kubler dep-graph xxx || true
+          echo "export TERM=dumb"
+          export TERM
+          export TERM=dumb
+          kubler dep-graph xxx || true
+          echo "export TERM=xterm"
           export TERM=xterm
           kubler dep-graph xxx || true
 
@@ -132,6 +139,7 @@ jobs:
 
       - name: 🚧 Build Images
         run: |
+          export TERM=xterm
           kubler build -v figlet || echo "exit code $?"
           docker images
           docker ps -a
