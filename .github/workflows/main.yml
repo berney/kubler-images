@@ -130,7 +130,10 @@ jobs:
           docker info
           docker buildx version
           docker buildx ls
+          # `default` is the name of the normie docker builder
           docker buildx inspect default
+          # The buildx builder is the default builder due to the `install: true` above
+          docker buildx inspect "${{ steps.buildx.outputs.name }}"
 
       - name: 👷 Update Kubler (kubler-images, Gentoo Stage3)
         run: |
