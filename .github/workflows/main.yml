@@ -35,6 +35,9 @@ jobs:
           echo "$(pwd)/kubler-master/bin" >> $GITHUB_PATH
       - name: 👷 Kubler Version
         run: |
+          kubler --help
+      - name: 👷 Kubler Inspect Terminal
+        run: |
           echo "TERM=$TERM"
           echo $PATH
           pwd
