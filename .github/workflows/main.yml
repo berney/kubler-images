@@ -63,23 +63,35 @@ jobs:
           export TERM=xterm
           kubler dep-graph xxx || true
 
+      # Cache Versions are based off key and path, so differnt path's can use same key
+      #
+      # Caches are immutable, so need unique key to create a new cache
+      # `restore-keys` provides a list to restore a cache when key doesn't match
+      # If there's no exact match, the most recent cache that partially matches will be used
+      #
       - name: Cache Kubler Downloads
         uses: actions/cache@v3
         with:
-          key: kubler-downloads
           path: ~/.kubler/downloads/
+          key: kubler-${{ github.sha }}
+          restore-keys: |
+            kubler-
 
       - name: Cache Kubler Gentoo Distfiles
         uses: actions/cache@v3
         with:
-          key: kubler-distfiles
           path: ~/.kubler/distfiles/
+          key: kubler-${{ github.sha }}
+          restore-keys: |
+            kubler-
 
       - name: Cache Kubler Gentoo Packages
         uses: actions/cache@v3
         with:
-          key: kubler-packages
           path: ~/.kubler/packages/
+          key: kubler-${{ github.sha }}
+          restore-keys: |
+            kubler-
 
       - name: Set up QEMU
         id: qemu
