@@ -160,6 +160,7 @@ jobs:
         run: |
           export TERM
           kubler build -v figlet || echo "exit code $?"
+          kubler build -v figlet-musl || echo "exit code $?"
           docker images
           docker ps -a
           df -h
