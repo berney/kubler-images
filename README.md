@@ -88,8 +88,8 @@ how Docker images should be, and our goals might differ.
 
 
 
-[kubler]: https://github.com/edannenberg/gentoo-bb
-[my fork]: https://github.com/berney/gentoo-bb
+[kubler]: https://github.com/edannenberg/kubler
+[my fork]: https://github.com/berney/kubler
 [ricer]: https://fun.irq.dk/funroll-loops.org/
 [distroless]: https://github.com/GoogleContainerTools/distroless
 [Branching Model]: http://nvie.com/posts/a-successful-git-branching-model/
