@@ -156,30 +156,95 @@ jobs:
           git checkout berney/b-fix-util-linux-su-pam
           git diff master..HEAD
 
-      - name: 🚧 Build Images - figlet
+      - name: 🚧 Build Images - Builder - kubler/bob
+        continue-on-error: true
         run: |
           export TERM
-          kubler build -v figlet || echo "exit code $?"
+          kubler build -v kubler/bob
+
+      - name: 🚧 Build Images - Builder - kubler/bob-musl
+        continue-on-error: true
+        run: |
+          export TERM
+          kubler build -v kubler/bob-musl
+
+      - name: 🚧 Build Images - kubler/busybox
+        continue-on-error: true
+        run: |
+          export TERM
+          kubler build -v kubler/busybox
+
+      - name: 🚧 Build Images - kubler/glibc
+        continue-on-error: true
+        run: |
+          export TERM
+          kubler build -v kubler/glibc
+
+      - name: 🚧 Build Images - figlet
+        continue-on-error: true
+        run: |
+          export TERM
+          kubler build -v figlet
 
       - name: 🚧 Build Images - figlet-user
+        continue-on-error: true
         run: |
           export TERM
-          kubler build -v figlet-user || echo "exit code $?"
+          kubler build -v figlet-user
 
       - name: 🚧 Build Images - figlet-musl
+        continue-on-error: true
         run: |
           export TERM
-          kubler build -v figlet-musl || echo "exit code $?"
+          kubler build -v figlet-musl
 
       - name: 🚧 Build Images - figlet-musl-static
+        continue-on-error: true
         run: |
           export TERM
-          kubler build -v figlet-musl-static || echo "exit code $?"
+          kubler build -v figlet-musl-static
 
       - name: 🚧 Build Images - coturn
+        continue-on-error: true
         run: |
           export TERM
-          kubler build -v coturn || echo "exit code $?"
+          kubler build -v coturn
+
+      - name: 🚧 Build Images - nmap
+        continue-on-error: true
+        run: |
+          export TERM
+          kubler build -v nmap
+
+      - name: 🚧 Build Images - nmap-musl-static
+        continue-on-error: true
+        run: |
+          export TERM
+          kubler build -v nmap-musl-static
+
+      - name: 🚧 Build Images - s6
+        continue-on-error: true
+        run: |
+          export TERM
+          kubler build -v s6
+
+      - name: 🚧 Build Images - s6-busybox
+        continue-on-error: true
+        run: |
+          export TERM
+          kubler build -v s6-busybox
+
+      - name: 🚧 Build Images - s6-coturn-busybox
+        continue-on-error: true
+        run: |
+          export TERM
+          kubler build -v s6-coturn-busybox
+
+      - name: 🚧 Build Images - tmux
+        continue-on-error: true
+        run: |
+          export TERM
+          kubler build -v tmux
 
       - name: 🔎 Post Build Inspect
         run: |
