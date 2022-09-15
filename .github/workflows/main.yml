@@ -156,18 +156,6 @@ jobs:
           git checkout berney/b-fix-util-linux-su-pam
           git diff master..HEAD
 
-      - name: 🚧 Build Images - Builder - kubler/bob
-        continue-on-error: true
-        run: |
-          export TERM
-          kubler build -v kubler/bob
-
-      - name: 🚧 Build Images - Builder - kubler/bob-musl
-        continue-on-error: true
-        run: |
-          export TERM
-          kubler build -v kubler/bob-musl
-
       - name: 🚧 Build Images - kubler/busybox
         continue-on-error: true
         run: |
