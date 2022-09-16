@@ -159,10 +159,14 @@ jobs:
       - name: 👷 Add Custom Kubler Command(s)
         run: |
           echo "Kubler Commands (OG)"
-          ls -l kubler-master/cmd
+          pwd
+          ls -l
+          tree -a -C
+          ls -l kubler-master || true
+          ls -l kubler-master/cmd || true
           echo "Custom Kubler Commands"
-          ls -l kubler/cmd
-          rsync -avi kubler/cmd/* kubler-master/cmd/
+          ls -l kubler/cmd || true
+          rsync -avi kubler/cmd/* kubler-master/cmd/ 
           echo "Kubler Commands (now)"
           ls -l kubler-master/cmd
 
