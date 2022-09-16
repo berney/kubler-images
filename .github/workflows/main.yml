@@ -161,14 +161,14 @@ jobs:
           echo "Kubler Commands (OG)"
           pwd
           ls -l
-          tree -a -C
-          ls -l kubler-master || true
-          ls -l kubler-master/cmd || true
+          tree -a -C ../kubler-master
+          ls -l ../kubler-master
+          ls -l ../kubler-master/cmd
           echo "Custom Kubler Commands"
-          ls -l kubler/cmd || true
-          rsync -avi kubler/cmd/* kubler-master/cmd/ 
+          ls -l kubler/cmd
+          rsync -avi kubler/cmd/* ../kubler-master/cmd/
           echo "Kubler Commands (now)"
-          ls -l kubler-master/cmd
+          ls -l ../kubler-master/cmd
 
       - name: 👷 Kubler Get Latest Portage Date
         run: |
