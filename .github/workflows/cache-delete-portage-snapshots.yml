@@ -52,11 +52,11 @@ jobs:
 
       - name: 🔎 List Files
         run: |
-          ls -l ~/.kubler/"${{ inputs.filespec }}"
+          ls -l ~/.kubler/${{ inputs.filespec }}
 
       - name: 🔥 Remove File
         run: |
-          rm -rf ~/.kubler/"${{ inputs.filespec }}"
+          rm -rf ~/.kubler/${{ inputs.filespec }}
 
       - name: Inspect Kubler Caches Again
         run: |
