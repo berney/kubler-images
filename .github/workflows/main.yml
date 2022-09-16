@@ -156,10 +156,27 @@ jobs:
           git checkout berney/b-fix-util-linux-su-pam
           git diff master..HEAD
 
+      - name: 👷 Add Custom Kubler Command(s)
+        run: |
+          echo "Kubler Commands (OG)"
+          ls -l kubler-master/cmd
+          echo "Custom Kubler Commands"
+          ls -l kubler/cmd
+          rsync -avi kubler/cmd/* kubler-master/cmd/
+          echo "Kubler Commands (now)"
+          ls -l kubler-master/cmd
+
+      - name: 👷 Kubler Get Latest Portage Date
+        run: |
+          PORTAGE_DATE=$(kubler portage)
+          echo "PORTAGE_DATE=$PORTAGE_DATE"
+          echo "PORTAGE_DATE=$PORTAGE_DATE" >> $GITHUB_ENV
+
       - name: 🚧 Build Images - kubler/busybox
         continue-on-error: true
         run: |
           export TERM
+          echo "$PORTAGE_DATE"
           kubler build -v kubler/busybox
 
       - name: 🚧 Build Images - kubler/glibc
