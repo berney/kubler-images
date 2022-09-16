@@ -170,6 +170,12 @@ jobs:
           echo "Kubler Commands (now)"
           ls -l ../kubler-master/cmd
 
+      - name: 🔑 Get Gentoo Portage GPG Key
+        run: |
+          gpg --recv-key E1D6ABB63BFCFB4BA02FDF1CEC590EEAC9189250
+          gpg --list-public-keys
+          # we just need the key, we don't need to sign/trust it
+
       - name: 👷 Kubler Get Latest Portage Date
         run: |
           export TERM
