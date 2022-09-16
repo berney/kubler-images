@@ -1,12 +1,21 @@
-name: Kubler Cache Inspect
+name: Kubler Cache Delete File(s)
 
 on:
   workflow_dispatch:
+    inputs:
+      filespec:
+        description: Filespec to use for removing files
+        required: true
+        default: downloads/portage-*.tar.*
 
 jobs:
-  kubler-cache-inspect:
+  kubler-cache-delete-files:
     runs-on: ubuntu-latest
     steps:
+      - name: 🔎 Show Inputs
+        run: |
+          echo "Filespec is: ${{ inputs.filespec }}"
+
       # Cache Versions are based off key and path, so differnt path's can use same key
       #
       # Caches are immutable, so need unique key to create a new cache
@@ -38,6 +47,18 @@ jobs:
             kubler-
 
       - name: Inspect Kubler Caches
+        run: |
+          tree -a -C ~/.kubler
+
+      - name: 🔎 List Files
+        run: |
+          ls -l "~/.kubler/${{ inputs.filespec }}"
+
+      - name: 🔥 Remove File
+        run: |
+          rm -rf "~/.kubler/${{ inputs.filespec }}"
+
+      - name: Inspect Kubler Caches Again
         run: |
           tree -a -C ~/.kubler
 
