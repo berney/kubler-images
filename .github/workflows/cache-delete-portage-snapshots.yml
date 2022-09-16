@@ -1,4 +1,4 @@
-name: Kubler Cache Delete File(s)
+name: Kubler Cache Delete Files
 
 on:
   workflow_dispatch:
@@ -54,7 +54,7 @@ jobs:
         run: |
           ls -l ~/.kubler/${{ inputs.filespec }}
 
-      - name: 🔥 Remove File
+      - name: 🔥 Remove Files
         run: |
           rm -rf ~/.kubler/${{ inputs.filespec }}
 
