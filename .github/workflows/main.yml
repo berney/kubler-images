@@ -172,6 +172,7 @@ jobs:
 
       - name: 👷 Kubler Get Latest Portage Date
         run: |
+          export TERM
           PORTAGE_DATE=$(kubler portage)
           echo "PORTAGE_DATE=$PORTAGE_DATE"
           echo "PORTAGE_DATE=$PORTAGE_DATE" >> $GITHUB_ENV
