@@ -183,6 +183,11 @@ jobs:
           echo "PORTAGE_DATE=$PORTAGE_DATE"
           echo "PORTAGE_DATE=$PORTAGE_DATE" >> $GITHUB_ENV
 
+      - name: 🔑 Check GPG
+        run: |
+          gpg --list-public-keys
+          gpg --verify ~/.kubler/downloads/portage-20220915.tar.xz.gpgsig ~/.kubler/downloads/portage-20220915.tar.xz
+
       - name: 🚧 Build Images - kubler/busybox
         continue-on-error: true
         run: |
