@@ -182,8 +182,50 @@ jobs:
 
       - name: 🔑 Get Gentoo Portage GPG Key
         run: |
-          gpg --keyserver keys.gentoo.org --recv-keys E1D6ABB63BFCFB4BA02FDF1CEC590EEAC9189250
+          # For Portage signatures
+          #
+          # Fingerprint with spaces `gpg -k --fingerprint --with-subkey-fingerprints E1D6ABB63BFCFB4BA02FDF1CEC590EEAC9189250`:
+          #
+          # pub   rsa4096/DB6B8C1F96D8BF6D 2011-11-25 [C] [expires: 2023-07-01]
+          #       Key fingerprint = DCD0 5B71 EAB9 4199 527F  44AC DB6B 8C1F 96D8 BF6D
+          #       uid                 [ unknown] Gentoo ebuild repository signing key (Automated Signing Key) <infrastructure@gentoo.org>
+          #       uid                 [ unknown] Gentoo Portage Snapshot Signing Key (Automated Signing Key)
+          #       sub   rsa4096/EC590EEAC9189250 2011-11-25 [S] [expires: 2023-07-01]
+          #             Key fingerprint = E1D6 ABB6 3BFC FB4B A02F  DF1C EC59 0EEA C918 9250
+          #
+          # Fingerprint longkeyid no spaces `gpg -k --with-subkey-fingerprints E1D6ABB63BFCFB4BA02FDF1CEC590EEAC9189250`:
+          #
+          # pub   rsa4096/DB6B8C1F96D8BF6D 2011-11-25 [C] [expires: 2023-07-01]
+          #       DCD05B71EAB94199527F44ACDB6B8C1F96D8BF6D
+          #       uid                 [ unknown] Gentoo ebuild repository signing key (Automated Signing Key) <infrastructure@gentoo.org>
+          #       uid                 [ unknown] Gentoo Portage Snapshot Signing Key (Automated Signing Key)
+          #       sub   rsa4096/EC590EEAC9189250 2011-11-25 [S] [expires: 2023-07-01]
+          #             E1D6ABB63BFCFB4BA02FDF1CEC590EEAC9189250
+          gpg --keyserver keys.gentoo.org --recv-keys DCD05B71EAB94199527F44ACDB6B8C1F96D8BF6D
+
+          # For Stage3 signatures
+          #
+          # Fingerprint with spaces:
+          #
+          # pub   rsa4096/BB572E0E2D182910 2009-08-25 [SC] [expires: 2023-07-01]
+          #       Key fingerprint = 13EB BDBE DE7A 1277 5DFD  B1BA BB57 2E0E 2D18 2910
+          #       uid                 [ unknown] Gentoo Linux Release Engineering (Automated Weekly Release Key) <releng@gentoo.org>
+          #       sub   rsa2048/2C44695DB9F6043D 2019-02-23 [S] [expires: 2023-07-01]
+          #             Key fingerprint = 534E 4209 AB49 EEE1 C19D  9616 2C44 695D B9F6 043D
+          #
+          # Fingerprint no spaces:
+          #
+          # pub   rsa4096/BB572E0E2D182910 2009-08-25 [SC] [expires: 2023-07-01]
+          #       13EBBDBEDE7A12775DFDB1BABB572E0E2D182910
+          #       uid                 [ unknown] Gentoo Linux Release Engineering (Automated Weekly Release Key) <releng@gentoo.org>
+          #       sub   rsa2048/2C44695DB9F6043D 2019-02-23 [S] [expires: 2023-07-01]
+          #             534E4209AB49EEE1C19D96162C44695DB9F6043D
+          #
+          gpg --keyserver keys.gentoo.org --recv-keys 13EBBDBEDE7A12775DFDB1BABB572E0E2D182910
+
           gpg --list-public-keys
+          gpg --list-public-keys --with-subkey-fingerprint
+          gpg --list-public-keys --with-subkey-fingerprint --fingerprint
           # we just need the key, we don't need to sign/trust it
 
       - name: 👷 Kubler Get Latest Portage Date
