@@ -147,7 +147,17 @@ jobs:
           ls -la ~/.kubler/namespaces || true
           ls -la ~/.kubler/namespaces/kubler || true
 
+      - name: 👷 Inspect Kubler Images
+        run: |
+          cd ~/.kubler/namespaces/kubler/
+          git remote -v
+          git status
+          git ls-files -o
+          git diff
+
       - name: 👷 Fix Kubler Images bob-musl
+        # Disable
+        if: ${{ false }}
         run: |
           cd ~/.kubler/namespaces/kubler/
           git remote -v
