@@ -39,8 +39,10 @@ jobs:
           ## Install from tarball
           #
           #curl -L https://github.com/edannenberg/kubler/archive/master.tar.gz | tar xz
-          #ls -l kubler-master/bin
-          #echo "$(pwd)/kubler-master/bin" >> $GITHUB_PATH
+          #ls -ld kubler-master
+          #mv kubler-master kubler
+          #ls -l kubler/bin
+          #echo "$(pwd)/kubler/bin" >> $GITHUB_PATH
 
           ## Install from Git
           #
@@ -192,14 +194,14 @@ jobs:
           echo "Kubler Commands (OG)"
           pwd
           ls -l
-          tree -a -C ../kubler-master
-          ls -l ../kubler-master
-          ls -l ../kubler-master/cmd
+          tree -a -C ../kubler
+          ls -l ../kubler
+          ls -l ../kubler/cmd
           echo "Custom Kubler Commands"
           ls -l kubler/cmd
-          rsync -avi kubler/cmd/* ../kubler-master/cmd/
+          rsync -avi kubler/cmd/* ../kubler/cmd/
           echo "Kubler Commands (now)"
-          ls -l ../kubler-master/cmd
+          ls -l ../kubler/cmd
 
       - name: 🔑 Get Gentoo Portage GPG Key
         run: |
