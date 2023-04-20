@@ -166,6 +166,15 @@ jobs:
           git checkout berney/b-fix-util-linux-su-pam
           git diff master..HEAD
 
+      - name: 👷 Fix Kubler Images busybox
+        run: |
+          cd ~/.kubler/namespaces/kubler/
+          git remote -v
+          git remote add berney https://github.com/berney/kubler-images-1.git
+          git fetch --all
+          git checkout berney/f-fix-busybox-libxcrypt-static-libs
+          git diff master..HEAD
+
       - name: 👷 Add Custom Kubler Command(s)
         run: |
           echo "Kubler Commands (OG)"
