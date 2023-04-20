@@ -186,7 +186,7 @@ jobs:
           git remote -v
           git remote add berney https://github.com/berney/kubler-images-1.git
           git fetch --all
-          git checkout berney/f-fix-busybox-libxcrypt-static-libs
+          git checkout berney/f-berne
           git diff master..HEAD
 
       - name: 👷 Add Custom Kubler Command(s)
