@@ -47,7 +47,7 @@ jobs:
           git clone https://github.com/berney/kubler.git
           cd kubler
           # Using my branch to pick-up fixes until PRs are merged
-          git co f-berne
+          git checkout f-berne
           ls -l bin
           echo "$(pwd)/bin" >> $GITHUB_PATH
 
