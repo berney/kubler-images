@@ -273,7 +273,7 @@ jobs:
           fi
 
       - name: 🚧 Build Images - kubler/busybox
-        id: kubler/busybox
+        id: busybox
         continue-on-error: true
         run: |
           export TERM
@@ -281,7 +281,7 @@ jobs:
           kubler build -v kubler/busybox
 
       - name: 🚧 Build Images - kubler/glibc
-        id: kubler/glibc
+        id: glibc
         continue-on-error: true
         run: |
           export TERM
