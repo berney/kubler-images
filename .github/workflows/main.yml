@@ -377,19 +377,19 @@ jobs:
           ls -la ~/.kubler/log
           ls -l ~/.kubler/log/build.log || true
           cat ~/.kubler/log/build.log || true
-          echo "\n== Steps"
-          jq "${{ steps }}"
+          echo "== Steps"
+          echo "${{ steps }}" | jq .
 
       - name: 🔎 Sumarise Build Status
         run: |
           echo "# Successful Steps"
-          jq "${{ steps }} | map(select(.outcome).id)"
+          echo "${{ steps }}" | jq 'map(select(.outcome).id)'
           echo "# Failed Steps"
-          jq "${{ steps }} | map(select(.outcome | not).id)"
+          echo "${{ steps }}" | jq 'map(select(.outcome | not).id)'
 
           echo "# Successful Steps" >> $GITHUB_STEP_SUMMARY
-          jq "${{ steps }} | map(select(.outcome).id)" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps }}" | jq 'map(select(.outcome).id)' >> $GITHUB_STEP_SUMMARY
           echo "# Failed Steps" >> $GITHUB_STEP_SUMMARY
-          jq "${{ steps }} | map(select(.outcome | not).id)" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps }}" | jq 'map(select(.outcome | not).id)' >> $GITHUB_STEP_SUMMARY
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
