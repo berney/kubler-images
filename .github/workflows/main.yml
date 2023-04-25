@@ -421,13 +421,13 @@ jobs:
           STEPS: ${{ toJSON(steps) }}
         run: |
           echo "# Successful Steps"
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key) | join("\n* ") | "* " + .'
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key | sub("^"; "* ")) | join("\n")'
           echo "# Failed Steps"
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key) | join("\n* ") | "* " + .'
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key | sub("^"; "* ")) | join("\n")'
 
           echo "# Successful Steps" >> $GITHUB_STEP_SUMMARY
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key) | join("\n* ") | "* " + .' >> $GITHUB_STEP_SUMMARY
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key | sub("^"; "* ")) | join("\n")' >> $GITHUB_STEP_SUMMARY
           echo "# Failed Steps" >> $GITHUB_STEP_SUMMARY
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key) | join("\n* ") | "* " + .' >> $GITHUB_STEP_SUMMARY
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key | sub("^"; "* ")) | join("\n")' >> $GITHUB_STEP_SUMMARY
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
