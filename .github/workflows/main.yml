@@ -273,7 +273,7 @@ jobs:
           fi
 
       - name: 🚧 Build Images - kubler/busybox
-        if: ${{ false }}
+        #if: ${{ false }}
         id: kubler-busybox
         continue-on-error: true
         run: |
@@ -283,7 +283,7 @@ jobs:
           kubler build -v kubler/busybox
 
       - name: 🚧 Build Images - kubler/glibc
-        if: ${{ false }}
+        #if: ${{ false }}
         id: glibc
         continue-on-error: true
         run: |
@@ -292,7 +292,7 @@ jobs:
           kubler build -v kubler/glibc
 
       - name: 🚧 Build Images - figlet
-        if: ${{ false }}
+        #if: ${{ false }}
         id: figlet
         continue-on-error: true
         run: |
@@ -328,7 +328,7 @@ jobs:
           kubler build -v figlet-musl-static
 
       - name: 🚧 Build Images - coturn
-        if: ${{ false }}
+        #if: ${{ false }}
         id: coturn
         continue-on-error: true
         run: |
@@ -421,13 +421,13 @@ jobs:
           STEPS: ${{ toJSON(steps) }}
         run: |
           echo "# Successful Steps"
-          printf '%s\n' "$STEPS" | jq 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key) | join("\n* ") | "* " + .'
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key) | join("\n* ") | "* " + .'
           echo "# Failed Steps"
-          printf '%s\n' "$STEPS" | jq 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key) | join("\n* ") | "* " + .'
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key) | join("\n* ") | "* " + .'
 
           echo "# Successful Steps" >> $GITHUB_STEP_SUMMARY
-          printf '%s\n' "$STEPS" | jq 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key) | join("\n* ") | "* " + .' >> $GITHUB_STEP_SUMMARY
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key) | join("\n* ") | "* " + .' >> $GITHUB_STEP_SUMMARY
           echo "# Failed Steps" >> $GITHUB_STEP_SUMMARY
-          printf '%s\n' "$STEPS" | jq 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key) | join("\n* ") | "* " + .' >> $GITHUB_STEP_SUMMARY
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key) | join("\n* ") | "* " + .' >> $GITHUB_STEP_SUMMARY
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
