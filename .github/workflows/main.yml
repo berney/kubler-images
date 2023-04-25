@@ -378,7 +378,9 @@ jobs:
           ls -l ~/.kubler/log/build.log || true
           cat ~/.kubler/log/build.log || true
           echo "== Steps"
-          echo "${{ steps }}"
+          echo "${{ toJSON(steps) }}"
+          echo "== Steps | jq"
+          echo "${{ toJSON(steps) }}" | jq .
 
       - name: 🔎 Sumarise Build Status
         if: ${{ false }}
