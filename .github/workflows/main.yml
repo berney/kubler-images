@@ -274,7 +274,7 @@ jobs:
 
       - name: 🚧 Build Images - kubler/busybox
         #if: ${{ false }}
-        id: kubler-busybox
+        id: busybox
         continue-on-error: true
         run: |
           echo "kubler=build" >> $GITHUB_OUTPUT
@@ -301,7 +301,7 @@ jobs:
           kubler build -v figlet
 
       - name: 🚧 Build Images - figlet-user
-        if: ${{ false }}
+        #if: ${{ false }}
         id: figlet-user
         continue-on-error: true
         run: |
@@ -310,7 +310,7 @@ jobs:
           kubler build -v figlet-user
 
       - name: 🚧 Build Images - figlet-musl
-        if: ${{ false }}
+        #if: ${{ false }}
         id: figlet-musl
         continue-on-error: true
         run: |
@@ -319,7 +319,7 @@ jobs:
           kubler build -v figlet-musl
 
       - name: 🚧 Build Images - figlet-musl-static
-        if: ${{ false }}
+        #if: ${{ false }}
         id: figlet-musl-static
         continue-on-error: true
         run: |
@@ -337,7 +337,7 @@ jobs:
           kubler build -v coturn
 
       - name: 🚧 Build Images - nmap
-        if: ${{ false }}
+        #if: ${{ false }}
         id: nmap
         continue-on-error: true
         run: |
@@ -346,7 +346,7 @@ jobs:
           kubler build -v nmap
 
       - name: 🚧 Build Images - nmap-musl-static
-        if: ${{ false }}
+        #if: ${{ false }}
         id: nmap-musl-static
         continue-on-error: true
         run: |
@@ -355,7 +355,7 @@ jobs:
           kubler build -v nmap-musl-static
 
       - name: 🚧 Build Images - s6
-        if: ${{ false }}
+        #if: ${{ false }}
         id: s6
         continue-on-error: true
         run: |
@@ -364,7 +364,7 @@ jobs:
           kubler build -v s6
 
       - name: 🚧 Build Images - s6-busybox
-        if: ${{ false }}
+        #if: ${{ false }}
         id: s6-busybox
         continue-on-error: true
         run: |
@@ -373,7 +373,7 @@ jobs:
           kubler build -v s6-busybox
 
       - name: 🚧 Build Images - s6-coturn-busybox
-        if: ${{ false }}
+        #if: ${{ false }}
         id: s6-coturn-busybox
         continue-on-error: true
         run: |
@@ -382,7 +382,7 @@ jobs:
           kubler build -v s6-coturn-busybox
 
       - name: 🚧 Build Images - tmux
-        if: ${{ false }}
+        #if: ${{ false }}
         id: tmux
         continue-on-error: true
         run: |
