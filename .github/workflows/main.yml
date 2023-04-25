@@ -273,6 +273,7 @@ jobs:
           fi
 
       - name: 🚧 Build Images - kubler/busybox
+        if: ${{ false }}
         id: busybox
         continue-on-error: true
         run: |
@@ -281,6 +282,7 @@ jobs:
           kubler build -v kubler/busybox
 
       - name: 🚧 Build Images - kubler/glibc
+        if: ${{ false }}
         id: glibc
         continue-on-error: true
         run: |
@@ -288,6 +290,7 @@ jobs:
           kubler build -v kubler/glibc
 
       - name: 🚧 Build Images - figlet
+        if: ${{ false }}
         id: figlet
         continue-on-error: true
         run: |
@@ -295,6 +298,7 @@ jobs:
           kubler build -v figlet
 
       - name: 🚧 Build Images - figlet-user
+        if: ${{ false }}
         id: figlet-user
         continue-on-error: true
         run: |
@@ -302,6 +306,7 @@ jobs:
           kubler build -v figlet-user
 
       - name: 🚧 Build Images - figlet-musl
+        if: ${{ false }}
         id: figlet-musl
         continue-on-error: true
         run: |
@@ -309,6 +314,7 @@ jobs:
           kubler build -v figlet-musl
 
       - name: 🚧 Build Images - figlet-musl-static
+        if: ${{ false }}
         id: figlet-musl-static
         continue-on-error: true
         run: |
@@ -316,6 +322,7 @@ jobs:
           kubler build -v figlet-musl-static
 
       - name: 🚧 Build Images - coturn
+        if: ${{ false }}
         id: coturn
         continue-on-error: true
         run: |
@@ -323,6 +330,7 @@ jobs:
           kubler build -v coturn
 
       - name: 🚧 Build Images - nmap
+        if: ${{ false }}
         id: nmap
         continue-on-error: true
         run: |
@@ -330,6 +338,7 @@ jobs:
           kubler build -v nmap
 
       - name: 🚧 Build Images - nmap-musl-static
+        if: ${{ false }}
         id: nmap-musl-static
         continue-on-error: true
         run: |
@@ -337,6 +346,7 @@ jobs:
           kubler build -v nmap-musl-static
 
       - name: 🚧 Build Images - s6
+        if: ${{ false }}
         id: s6
         continue-on-error: true
         run: |
@@ -344,6 +354,7 @@ jobs:
           kubler build -v s6
 
       - name: 🚧 Build Images - s6-busybox
+        if: ${{ false }}
         id: s6-busybox
         continue-on-error: true
         run: |
@@ -351,6 +362,7 @@ jobs:
           kubler build -v s6-busybox
 
       - name: 🚧 Build Images - s6-coturn-busybox
+        if: ${{ false }}
         id: s6-coturn-busybox
         continue-on-error: true
         run: |
@@ -358,6 +370,7 @@ jobs:
           kubler build -v s6-coturn-busybox
 
       - name: 🚧 Build Images - tmux
+        if: ${{ false }}
         id: tmux
         continue-on-error: true
         run: |
@@ -365,6 +378,10 @@ jobs:
           kubler build -v tmux
 
       - name: 🔎 Post Build Inspect
+        env:
+          # This will contain double-quotes, which `echo` would eat, breaking `jq`
+          # https://stackoverflow.com/a/72955840
+          STEPS: $${ toJSON(steps) }}
         run: |
           docker images
           docker ps -a
@@ -378,9 +395,9 @@ jobs:
           ls -l ~/.kubler/log/build.log || true
           cat ~/.kubler/log/build.log || true
           echo "== Steps"
-          echo "${{ toJSON(steps) }}"
+          printf '%s\n' "$STEPS"
           echo "== Steps | jq"
-          echo "${{ toJSON(steps) }}" | jq .
+          printf '%s\n' "$STEPS" | jq .
 
       - name: 🔎 Sumarise Build Status
         if: ${{ false }}
