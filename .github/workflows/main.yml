@@ -378,9 +378,10 @@ jobs:
           ls -l ~/.kubler/log/build.log || true
           cat ~/.kubler/log/build.log || true
           echo "== Steps"
-          echo "${{ steps }}" | jq .
+          echo "${{ steps }}"
 
       - name: 🔎 Sumarise Build Status
+        if: ${{ false }}
         run: |
           echo "# Successful Steps"
           echo "${{ steps }}" | jq 'map(select(.outcome).id)'
