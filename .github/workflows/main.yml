@@ -381,7 +381,7 @@ jobs:
         env:
           # This will contain double-quotes, which `echo` would eat, breaking `jq`
           # https://stackoverflow.com/a/72955840
-          STEPS: $${ toJSON(steps) }}
+          STEPS: ${{ toJSON(steps) }}
         run: |
           docker images
           docker ps -a
