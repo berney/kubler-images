@@ -181,6 +181,8 @@ jobs:
           git diff master..HEAD
 
       - name: 👷 Fix Kubler Images busybox
+        # Disable
+        if: ${{ false }}
         run: |
           cd ~/.kubler/namespaces/kubler/
           git remote -v
