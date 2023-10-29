@@ -295,6 +295,7 @@ jobs:
         run: |
           pwd
           docker images
+          docker run --rm kubler-gentoo/portage grep TIMESTAMP /var/db/repos/gentoo/Manifest
 
       - name: 🐋🍳 Docker Bake Kubler stage3
         run: |
@@ -307,6 +308,8 @@ jobs:
         run: |
           pwd
           docker images
+          docker run --rm kubler-gentoo/stage3-amd64-musl-hardened cat /etc/gentoo-release
+          docker run --rm kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc cat /etc/gentoo-release
 
       - name: 🐋🍳 Docker Bake Kubler bob-core
         run: |
