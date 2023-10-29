@@ -49,7 +49,9 @@ jobs:
           git clone https://github.com/berney/kubler.git
           cd kubler
           # Using my branch to pick-up fixes until PRs are merged
-          git checkout f-berne
+          #git checkout f-berne
+          git checkout f-experiment-buildx-bake
+          #git checkout f-berne-bake
           ls -l bin
           echo "$(pwd)/bin" >> $GITHUB_PATH
 
@@ -273,6 +275,12 @@ jobs:
           else
             echo "[!] No files to verify"
           fi
+
+      - name: 🐋🍳 Docker Bake Kubler portage, stage3, and bob-core Images
+        run: |
+          ../kubler/engine/docker/docker-bake.sh
+          docker images
+          #docker images | grep kubler
 
       - name: 🚧 Build Images - kubler/busybox
         #if: ${{ false }}
