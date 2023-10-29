@@ -278,7 +278,8 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler portage, stage3, and bob-core Images
         run: |
-          ../kubler/engine/docker/docker-bake.sh
+          cd ../kubler/engine/docker/
+          ./docker-bake.sh
           docker images
           #docker images | grep kubler
 
