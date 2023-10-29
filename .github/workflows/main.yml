@@ -152,6 +152,24 @@ jobs:
           # The buildx builder is the default builder due to the `install: true` above
           docker buildx inspect "${{ steps.buildx.outputs.name }}"
 
+      # When we use `docker buildx` and `docker bake` we want to be able to access images we built in prior steps
+      # For this we need the containerd-snapshotter feature which is in beta
+      - name: Docker Daemon Config - Enable Containerd Snapshotter
+        run: |
+          id -a
+          ls -l /etc/docker/daemon.json
+          # Old config
+          jq . /etc/docker/daemon.json
+          # First read old config before we clobber it
+          CONFIG=$(jq '.features["containerd-snapshotter"] = true' /etc/docker/daemon.json)
+          # Write new config - sudo tee to write to root owned file
+          echo "$CONFIG" | sudo tee /etc/docker/daemon.json
+          jq . /etc/docker/daemon.json
+          systemctl status docker
+          sudo systemctl restart docker
+          systemctl status docker
+          docker run --rm hello-world
+
       - name: 👷 Update Kubler (kubler-images, Gentoo Stage3)
         run: |
           export TERM
