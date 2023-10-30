@@ -148,10 +148,10 @@ jobs:
       - name: 🐋 Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@v3
-        #with:
-        #  # This breaks kubler https://github.com/edannenberg/kubler/issues/215
-        #  # Sets up `docker build` command as an alias to `docker buildx` (default `false`)
-        #  install: true
+        with:
+          # This breaks kubler https://github.com/edannenberg/kubler/issues/215
+          # Sets up `docker build` command as an alias to `docker buildx` (default `false`)
+          install: true
 
       - name: 🐋 Inspect builder
         run: |
