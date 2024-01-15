@@ -347,7 +347,7 @@ jobs:
         run: |
           # the default docker builder instance can use local images as base images
           # but IIRC it cannot build multi-platform images
-          docker build use default
+          docker buildx use default
 
       - name: 🐋 Use docker buildx instance - after
         run: |
