@@ -545,7 +545,7 @@ jobs:
         run: |
           #echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
-          kubler build berney
+          kubler build kubler-images
 
       - name: 🔎 Post Build Inspect
         env:
