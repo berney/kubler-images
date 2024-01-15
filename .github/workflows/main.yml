@@ -333,6 +333,16 @@ jobs:
           echo "PORTAGE_DATE=$PORTAGE_DATE"
           echo "PORTAGE_DATE=$PORTAGE_DATE" >> $GITHUB_ENV
 
+      - name: 👷 Kubler Set kubler.conf PORTAGE_DATE
+        run: |
+          grep PORTAGE_DATE kubler.conf || true
+          echo "PORTAGE_DATE=$PORTAGE_DATE" >> kubler.conf
+
+      - name: 👷 Kubler Set kubler.conf IMAGE_TAG
+        run: |
+          grep IMAGE_TAG kubler.conf || true
+          echo "IMAGE_TAG=$PORTAGE_DATE" >> kubler.conf
+
       - name: 👷 Check Kubler Downloads
         run: |
           ls -l ~/.kubler/downloads/portage* || true
@@ -374,7 +384,7 @@ jobs:
           # - https://github.com/docker/buildx/issues/872
           # - Doing it this way results in one image (repository hash) with two tags
           # - doing separate `TAG=xxx docker buildx bake` commands results in two different images (repository hashes), with identical layers, and near identical metadata.
-          docker buildx bake --load --set kubler-portage.tags=kubler-gentoo/portage:latest --set kubler-portage.tags=kubler-gentoo/portage:buildx2
+          docker buildx bake --load --set kubler-portage.tags=kubler-gentoo/portage:latest --set kubler-portage.tags=kubler-gentoo/portage:$PORTAGE_DATE
 
       - name: 🐋🍳 Docker Bake Kubler - images portage
         run: |
@@ -400,8 +410,8 @@ jobs:
         run: |
           set -eux
           cd ../kubler/engine/docker/bob-core || exit 1
-          DEF_CHOST=x86_64-gentoo-linux-musl BASE_IMAGE=kubler-gentoo/stage3-amd64-musl-hardened docker buildx bake --load --set core.tags=kubler/bob-musl-core:latest --set core.tags=kubler/bob-musl-core:buildx2
-          BASE_IMAGE=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc docker buildx bake --load --set core.tags=kubler/bob-core:latest --set core.tags=kubler/bob-core:buildx2
+          DEF_CHOST=x86_64-gentoo-linux-musl BASE_IMAGE=kubler-gentoo/stage3-amd64-musl-hardened docker buildx bake --load --set core.tags=kubler/bob-musl-core:latest --set core.tags=kubler/bob-musl-core:$PORTAGE_DATE
+          BASE_IMAGE=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc docker buildx bake --load --set core.tags=kubler/bob-core:latest --set core.tags=kubler/bob-core:$PORTAGE_DATE
           #docker images | grep kubler
 
       - name: 🐋🍳 Docker Bake Kubler - images bob-core
