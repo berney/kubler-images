@@ -1,3 +1,5 @@
+[![Kubler Build](https://github.com/berney/kubler-images/actions/workflows/main.yml/badge.svg)](https://github.com/berney/kubler-images/actions/workflows/main.yml)
+
 # kubler-images
 
 My namespace for [kubler][] to build my [ricer][] images.
