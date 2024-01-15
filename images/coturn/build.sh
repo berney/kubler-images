@@ -1,5 +1,13 @@
 _packages="net-im/coturn"
+#_timezone="${BOB_TIMEZONE:-UTC}"
 
+:
+configure_bob() {
+    update_use 'sys-apps/util-linux' -su -logger
+    #emerge -1 sys-libs/timezone-data
+    # set timezone
+    #echo "${_timezone}" > /etc/timezone
+}
 
 #
 # this method runs in the bb builder container just before starting the build of the rootfs
