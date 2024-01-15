@@ -9,6 +9,7 @@ _packages="sys-apps/busybox"
 configure_rootfs_build()
 {
     update_use 'sys-apps/busybox' '+make-symlinks +static'
+    update_use '+static-libs' '+minimal' '+static'
     # this runs in the builder, but as one of the last build steps the builder's /etc/passwd is copied to the custom root
     useradd busybox
 }
