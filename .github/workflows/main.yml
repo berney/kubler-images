@@ -229,6 +229,19 @@ jobs:
           git ls-files -o
           git diff
 
+      - name: 👷 Get STAGE3_DATE
+        run: |
+          cd ~/.kubler/namespaces/kubler/
+          grep '^STAGE3_DATE=' builder/bob/build.conf
+          grep '^STAGE3_DATE=' builder/bob-musl/build.conf
+          bob=$(grep -E "^STAGE3_DATE='202[34][01][0-9]{3}T[0-9]{6}Z'$" builder/bob/build.conf)
+          bob_musl=$(grep -E "^STAGE3_DATE='202[34][01][0-9]{3}T[0-9]{6}Z'$" builder/bob-musl/build.conf)
+          if [[ ("$bob" != "$bob_musl") ]]; then
+            echo "WARNING: bob and bob-musl have different STAGE3_DATE"
+          fi
+          echo "BOB_STAGE3_DATE=$bob" >> $GITHUB_ENV
+          echo "BOB_MUSL_STAGE3_DATE=$bob_musl" >> $GITHUB_ENV
+
       - name: 👷 Fix Kubler Images bob-musl
         # Disable
         if: ${{ false }}
@@ -373,8 +386,8 @@ jobs:
         run: |
           set -eux
           cd ../kubler/engine/docker/bob-stage3 || exit 1
-          BASE_TAG=musl-hardened docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:20230423T164653Z
-          BASE_TAG=hardened-nomultilib docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:20230423T164653Z
+          BASE_TAG=musl-hardened docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:$BOB_MUSL_STAGE3_DATE
+          BASE_TAG=hardened-nomultilib docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:BOB_STAGE3_DATE
 
       - name: 🐋🍳 Docker Bake Kubler - images stage3
         run: |
