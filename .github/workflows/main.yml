@@ -339,6 +339,20 @@ jobs:
           pwd
           docker images
 
+      - name: 🐋 Use docker buildx instance - before
+        run: |
+          docker buildx ls
+
+      - name: 🐋 Use docker buildx instance
+        run: |
+          # the default docker builder instance can use local images as base images
+          # but IIRC it cannot build multi-platform images
+          docker build use default
+
+      - name: 🐋 Use docker buildx instance - after
+        run: |
+          docker buildx ls
+
       - name: 🐋🍳 Docker Bake Kubler portage
         run: |
           set -eux
