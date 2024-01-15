@@ -387,7 +387,7 @@ jobs:
           set -eux
           cd ../kubler/engine/docker/bob-stage3 || exit 1
           BASE_TAG=musl-hardened docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:$BOB_MUSL_STAGE3_DATE
-          BASE_TAG=hardened-nomultilib docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:BOB_STAGE3_DATE
+          BASE_TAG=hardened-nomultilib docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:$BOB_STAGE3_DATE
 
       - name: 🐋🍳 Docker Bake Kubler - images stage3
         run: |
