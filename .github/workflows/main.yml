@@ -538,6 +538,15 @@ jobs:
           export TERM
           kubler build -v tmux
 
+      - name: 🚧 Build Images - EVERYTHING
+        #if: ${{ false }}
+        id: everything
+        continue-on-error: true
+        run: |
+          #echo "kubler=build" >> $GITHUB_OUTPUT
+          export TERM
+          kubler build berney
+
       - name: 🔎 Post Build Inspect
         env:
           # This will contain double-quotes, which `echo` would eat, breaking `jq`
