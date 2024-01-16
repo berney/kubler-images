@@ -368,24 +368,23 @@ jobs:
           docker images
 
       - name: 🐋 Use docker buildx instance - before
-        # Disable
-        if: ${{ false }}
+        #if: ${{ false }}
         run: |
           docker buildx ls
 
       - name: 🐋 Use docker buildx instance
-        # Disable
-        if: ${{ false }}
+        #if: ${{ false }}
         run: |
           # the default docker builder instance can use local images as base images
           # but IIRC it cannot build multi-platform images
           # With the containerd snapshotter it should support multi-platform images
           # It does not support GHA Cache backend
+          #
+          # Still need this because of `kubler` behaviour with parent images in Dockerfiles.
           docker buildx use default
 
       - name: 🐋 Use docker buildx instance - after
-        # Disable
-        if: ${{ false }}
+        #if: ${{ false }}
         run: |
           docker buildx ls
 
