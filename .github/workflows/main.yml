@@ -486,9 +486,9 @@ jobs:
           export TERM
           kubler build -v kubler/busybox
 
-      - name: 🛑 STOP HERE
-        run: |
-          false
+      #- name: 🛑 STOP HERE
+      #  run: |
+      #    false
 
       - name: 🚧 Build Images - kubler/glibc
         #if: ${{ false }}
