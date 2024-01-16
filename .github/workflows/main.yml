@@ -398,11 +398,11 @@ jobs:
           # - Doing it this way results in one image (repository hash) with two tags
           # - doing separate `TAG=xxx docker buildx bake` commands results in two different images (repository hashes), with identical layers, and near identical metadata.
           #docker buildx bake --load --set kubler-portage.tags=kubler-gentoo/portage:latest --set kubler-portage.tags=kubler-gentoo/portage:$PORTAGE_DATE
-          # XXX could `--push` here
+          # XXX could `--push` here, but can't do both `--load` and `--push` at the same time.
           PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/portage:"${PORTAGE_DATE}"
           echo "PORTAGE_IMAGE=$PORTAGE_IMAGE"
           echo "PORTAGE_IMAGE=$PORTAGE_IMAGE" >> $GITHUB_ENV
-          docker buildx bake --load --push --set kubler-portage.tags="${PORTAGE_IMAGE}"
+          docker buildx bake --push --set kubler-portage.tags="${PORTAGE_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler - images portage
         run: |
@@ -432,13 +432,11 @@ jobs:
           BASE_TAG=musl-hardened \
             PORTAGE=$PORTAGE_IMAGE \
             docker buildx bake \
-              --load \
               --push \
               --set gentoo-stage3.tags="${STAGE3_MUSL_IMAGE}"
           BASE_TAG=hardened-nomultilib \
             PORTAGE=$PORTAGE_IMAGE \
             docker buildx bake \
-              --load \
               --push \
               --set gentoo-stage3.tags="${STAGE3_IMAGE}"
 
