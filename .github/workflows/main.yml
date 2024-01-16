@@ -389,18 +389,21 @@ jobs:
           # - doing separate `TAG=xxx docker buildx bake` commands results in two different images (repository hashes), with identical layers, and near identical metadata.
           #docker buildx bake --load --set kubler-portage.tags=kubler-gentoo/portage:latest --set kubler-portage.tags=kubler-gentoo/portage:$PORTAGE_DATE
           # XXX could `--push` here
-          docker buildx bake --load --set kubler-portage.tags=ghcr.io/${GITHUB_REPOSITORY}/portage:$PORTAGE_DATE
+          PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/portage:"${PORTAGE_DATE}"
+          echo "PORTAGE_IMAGE=$PORTAGE_IMAGE"
+          echo "PORTAGE_IMAGE=$PORTAGE_IMAGE" >> $GITHUB_ENV
+          docker buildx bake --load --set kubler-portage.tags="${PORTAGE_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler - images portage
         run: |
           pwd
           docker images
           #docker run --rm kubler-gentoo/portage grep TIMESTAMP /var/db/repos/gentoo/Manifest
-          docker run --rm ghcr.io/${GITHUB_REPOSITORY}/portage:$PORTAGE_DATE grep TIMESTAMP /var/db/repos/gentoo/Manifest
+          docker run --rm "${PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
 
       - name: 🛑 STOP HERE
         run: |
-          exit
+          false
 
       - name: 🐋🍳 Docker Bake Kubler stage3
         run: |
@@ -408,7 +411,13 @@ jobs:
           cd ../kubler/engine/docker/bob-stage3 || exit 1
           # XXX There is a disconnect here between base image this would use and the tag we give it
           # Base image would be gentoo/stage3:musl-hardened (e.g. latest musl hardened image)
+          # Could use `BASE_TAG=musl-hardened-20240102` (YYYYMMDD) to pin.
           # The stage3 date we tag it with might not be correct
+          #
+          # XXX These will default to using PORTAGE=gentoo/portage
+          # But Kubler portage applies some patches
+          # This is working because `kubler build` is mounting portage into container.
+          # We could set `PORTAGE` to the kubler-portage image, so that the patches are embedded.
           BASE_TAG=musl-hardened docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:$BOB_MUSL_STAGE3_DATE
           BASE_TAG=hardened-nomultilib docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:$BOB_STAGE3_DATE
 
