@@ -4,19 +4,10 @@ on:
     branches:
       - main
   workflow_dispatch:
-jobs:
-  amicontained:
-    runs-on: ubuntu-latest
-    steps:
-      - name: amicontained
-        run: |
-          date
-          hostname
-          pwd
-          ip link
-          ip addr
-          docker run --rm berne/amicontained ''
 
+# Jobs run in parallel
+# Jobs are independent with separate file systems, IP addresses, etc.
+jobs:
   kubler:
     runs-on: ubuntu-latest
     steps:
@@ -43,15 +34,6 @@ jobs:
           docker info
           pwd
           echo $PATH
-
-      - name: 🔎 amicontained
-        run: |
-          date
-          hostname
-          pwd
-          ip link
-          ip addr
-          docker run --rm berne/amicontained ''
 
       - name: Update Docker Engine
         run: |
@@ -405,7 +387,9 @@ jobs:
           # - https://github.com/docker/buildx/issues/872
           # - Doing it this way results in one image (repository hash) with two tags
           # - doing separate `TAG=xxx docker buildx bake` commands results in two different images (repository hashes), with identical layers, and near identical metadata.
-          docker buildx bake --load --set kubler-portage.tags=kubler-gentoo/portage:latest --set kubler-portage.tags=kubler-gentoo/portage:$PORTAGE_DATE
+          #docker buildx bake --load --set kubler-portage.tags=kubler-gentoo/portage:latest --set kubler-portage.tags=kubler-gentoo/portage:$PORTAGE_DATE
+          # XXX could `--push` here
+          docker buildx bake --load --set kubler-portage.tags=ghcr.io/${GITHUB_REPOSITORY}/portage:$PORTAGE_DATE
 
       - name: 🐋🍳 Docker Bake Kubler - images portage
         run: |
@@ -413,10 +397,17 @@ jobs:
           docker images
           docker run --rm kubler-gentoo/portage grep TIMESTAMP /var/db/repos/gentoo/Manifest
 
+      - name: 🛑 STOP HERE
+        run: |
+          exit
+
       - name: 🐋🍳 Docker Bake Kubler stage3
         run: |
           set -eux
           cd ../kubler/engine/docker/bob-stage3 || exit 1
+          # XXX There is a disconnect here between base image this would use and the tag we give it
+          # Base image would be gentoo/stage3:musl-hardened (e.g. latest musl hardened image)
+          # The stage3 date we tag it with might not be correct
           BASE_TAG=musl-hardened docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:$BOB_MUSL_STAGE3_DATE
           BASE_TAG=hardened-nomultilib docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:$BOB_STAGE3_DATE
 
