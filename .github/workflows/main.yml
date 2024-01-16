@@ -395,7 +395,8 @@ jobs:
         run: |
           pwd
           docker images
-          docker run --rm kubler-gentoo/portage grep TIMESTAMP /var/db/repos/gentoo/Manifest
+          #docker run --rm kubler-gentoo/portage grep TIMESTAMP /var/db/repos/gentoo/Manifest
+          docker run --rm ghcr.io/${GITHUB_REPOSITORY}/portage:$PORTAGE_DATE grep TIMESTAMP /var/db/repos/gentoo/Manifest
 
       - name: 🛑 STOP HERE
         run: |
