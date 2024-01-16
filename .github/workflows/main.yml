@@ -470,11 +470,6 @@ jobs:
           docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
           docker images
 
-      - name: 🛑 STOP HERE
-        run: |
-          false
-
-
       - name: 🚧 Build Images - kubler/busybox
         #if: ${{ false }}
         id: busybox
@@ -484,6 +479,10 @@ jobs:
           export TERM
           echo "$PORTAGE_DATE"
           kubler build -v kubler/busybox
+
+      - name: 🛑 STOP HERE
+        run: |
+          false
 
       - name: 🚧 Build Images - kubler/glibc
         #if: ${{ false }}
