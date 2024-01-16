@@ -605,7 +605,7 @@ jobs:
         run: |
           #echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
-          kubler build kubler-images -e nmap-musl-static
+          kubler build kubler-images -e kubler-images/nmap-musl-static
 
       - name: 🚧 Build Images - EVERYTHING
         #if: ${{ false }}
