@@ -36,6 +36,8 @@ jobs:
           echo $PATH
 
       - name: Update Docker Engine
+        # Disable
+        if: ${{ false }}
         run: |
           docker version
           docker info
