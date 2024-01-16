@@ -5,6 +5,18 @@ on:
       - main
   workflow_dispatch:
 jobs:
+  amicontained:
+    runs-on: ubuntu-latest
+    steps:
+      - name: amicontained
+        run: |
+          date
+          hostname
+          pwd
+          ip link
+          ip addr
+          docker run --rm -it berne/amicontained ''
+
   kubler:
     runs-on: ubuntu-latest
     steps:
@@ -31,6 +43,15 @@ jobs:
           docker info
           pwd
           echo $PATH
+
+      - name: 🔎 amicontained
+        run: |
+          date
+          hostname
+          pwd
+          ip link
+          ip addr
+          docker run --rm -it berne/amicontained ''
 
       - name: Update Docker Engine
         run: |
