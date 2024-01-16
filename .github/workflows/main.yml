@@ -366,16 +366,24 @@ jobs:
           docker images
 
       - name: 🐋 Use docker buildx instance - before
+        # Disable
+        if: ${{ false }}
         run: |
           docker buildx ls
 
       - name: 🐋 Use docker buildx instance
+        # Disable
+        if: ${{ false }}
         run: |
           # the default docker builder instance can use local images as base images
           # but IIRC it cannot build multi-platform images
+          # With the containerd snapshotter it should support multi-platform images
+          # It does not support GHA Cache backend
           docker buildx use default
 
       - name: 🐋 Use docker buildx instance - after
+        # Disable
+        if: ${{ false }}
         run: |
           docker buildx ls
 
@@ -401,10 +409,6 @@ jobs:
           #docker run --rm kubler-gentoo/portage grep TIMESTAMP /var/db/repos/gentoo/Manifest
           docker run --rm "${PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
 
-      - name: 🛑 STOP HERE
-        run: |
-          false
-
       - name: 🐋🍳 Docker Bake Kubler stage3
         run: |
           set -eux
@@ -418,15 +422,33 @@ jobs:
           # But Kubler portage applies some patches
           # This is working because `kubler build` is mounting portage into container.
           # We could set `PORTAGE` to the kubler-portage image, so that the patches are embedded.
-          BASE_TAG=musl-hardened docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-musl-hardened:$BOB_MUSL_STAGE3_DATE
-          BASE_TAG=hardened-nomultilib docker buildx bake --load --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:latest --set gentoo-stage3.tags=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc:$BOB_STAGE3_DATE
+          STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
+          echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE"
+          echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
+          STAGE3_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-hardened-nomultilib-openrc:"${PORTAGE_DATE}"
+          echo "STAGE3_IMAGE=$STAGE3_IMAGE"
+          echo "STAGE3_IMAGE=$STAGE3_IMAGE" >> $GITHUB_ENV
+          BASE_TAG=musl-hardened \
+            PORTAGE=$PORTAGE_IMAGE \
+            docker buildx bake \
+              --load \
+              --set gentoo-stage3.tags="${STAGE3_MUSL_IMAGE}"
+          BASE_TAG=hardened-nomultilib \
+            PORTAGE=$PORTAGE_IMAGE \
+            docker buildx bake \
+              --load \
+              --set gentoo-stage3.tags="${STAGE3_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler - images stage3
         run: |
           pwd
           docker images
-          docker run --rm kubler-gentoo/stage3-amd64-musl-hardened cat /etc/gentoo-release
-          docker run --rm kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc cat /etc/gentoo-release
+          docker run --rm "${STAGE3_MUSL_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${STAGE3_IMAGE}" cat /etc/gentoo-release
+
+      - name: 🛑 STOP HERE
+        run: |
+          false
 
       - name: 🐋🍳 Docker Bake Kubler bob-core
         run: |
