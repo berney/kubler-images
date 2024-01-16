@@ -473,6 +473,7 @@ jobs:
 
       - name: 🐋🍳 Docker Tag Images for Kubler Compatability
         run: |
+          docker tag "${PORTAGE_IMAGE}" kubler-gentoo/portage:latest
           docker tag "${BOB_CORE_MUSL_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
           docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
           docker images
