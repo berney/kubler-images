@@ -471,6 +471,12 @@ jobs:
           docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
           docker images
 
+      - name: 🐋🍳 Docker Tag Images for Kubler Compatability
+        run: |
+          docker tag "${BOB_CORE_MUSL_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
+          docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
+          docker images
+
       - name: 🚧 Build Images - kubler/busybox
         #if: ${{ false }}
         id: busybox
