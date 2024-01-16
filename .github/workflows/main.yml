@@ -335,7 +335,6 @@ jobs:
         run: |
           export TERM
           PORTAGE_DATE=$(kubler portage)
-          echo "PORTAGE_DATE=$PORTAGE_DATE"
           echo "PORTAGE_DATE=$PORTAGE_DATE" >> $GITHUB_ENV
 
       - name: 👷 Kubler Set kubler.conf PORTAGE_DATE
@@ -400,7 +399,6 @@ jobs:
           #docker buildx bake --load --set kubler-portage.tags=kubler-gentoo/portage:latest --set kubler-portage.tags=kubler-gentoo/portage:$PORTAGE_DATE
           # XXX could `--push` here, but can't do both `--load` and `--push` at the same time.
           PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/portage:"${PORTAGE_DATE}"
-          echo "PORTAGE_IMAGE=$PORTAGE_IMAGE"
           echo "PORTAGE_IMAGE=$PORTAGE_IMAGE" >> $GITHUB_ENV
           docker buildx bake --push --set kubler-portage.tags="${PORTAGE_IMAGE}"
 
@@ -424,10 +422,8 @@ jobs:
           # This is working because `kubler build` is mounting portage into container.
           # We could set `PORTAGE` to the kubler-portage image, so that the patches are embedded.
           STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
-          echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE"
           echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
           STAGE3_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-hardened-nomultilib-openrc:"${PORTAGE_DATE}"
-          echo "STAGE3_IMAGE=$STAGE3_IMAGE"
           echo "STAGE3_IMAGE=$STAGE3_IMAGE" >> $GITHUB_ENV
           BASE_TAG=musl-hardened \
             PORTAGE=$PORTAGE_IMAGE \
@@ -446,23 +442,37 @@ jobs:
           docker images
           docker run --rm "${STAGE3_MUSL_IMAGE}" cat /etc/gentoo-release
           docker run --rm "${STAGE3_IMAGE}" cat /etc/gentoo-release
-
-      - name: 🛑 STOP HERE
-        run: |
-          false
+          docker images
 
       - name: 🐋🍳 Docker Bake Kubler bob-core
         run: |
           set -eux
           cd ../kubler/engine/docker/bob-core || exit 1
-          DEF_CHOST=x86_64-gentoo-linux-musl BASE_IMAGE=kubler-gentoo/stage3-amd64-musl-hardened docker buildx bake --load --set core.tags=kubler/bob-musl-core:latest --set core.tags=kubler/bob-musl-core:$PORTAGE_DATE
-          BASE_IMAGE=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc docker buildx bake --load --set core.tags=kubler/bob-core:latest --set core.tags=kubler/bob-core:$PORTAGE_DATE
-          #docker images | grep kubler
+          BOB_CORE_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl-core:"${PORTAGE_DATE}"
+          echo "BOB_CORE_MUSL_IMAGE=$BOB_CORE_MUSL_IMAGE" >> $GITHUB_ENV
+          BOB_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-core:"${PORTAGE_DATE}"
+          echo "BOB_CORE_IMAGE=$BOB_CORE_IMAGE" >> $GITHUB_ENV
+          DEF_CHOST=x86_64-gentoo-linux-musl \
+            BASE_IMAGE=kubler-gentoo/stage3-amd64-musl-hardened \
+            docker buildx bake \
+              --push \
+              --set core.tags="${BOB_CORE_MUSL_IMAGE}"
+          BASE_IMAGE=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc \
+            docker buildx bake \
+              --push  \
+              --set core.tags="${BOB_CORE_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler - images bob-core
         run: |
           pwd
           docker images
+          docker run --rm "${BOB_CORE_MUSL_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
+          docker images
+
+      - name: 🛑 STOP HERE
+        run: |
+          false
 
 
       - name: 🚧 Build Images - kubler/busybox
