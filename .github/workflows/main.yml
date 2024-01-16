@@ -453,11 +453,11 @@ jobs:
           BOB_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-core:"${PORTAGE_DATE}"
           echo "BOB_CORE_IMAGE=$BOB_CORE_IMAGE" >> $GITHUB_ENV
           DEF_CHOST=x86_64-gentoo-linux-musl \
-            BASE_IMAGE=kubler-gentoo/stage3-amd64-musl-hardened \
+            BASE_IMAGE="${STAGE3_MUSL_IMAGE}" \
             docker buildx bake \
               --push \
               --set core.tags="${BOB_CORE_MUSL_IMAGE}"
-          BASE_IMAGE=kubler-gentoo/stage3-amd64-hardened-nomultilib-openrc \
+          BASE_IMAGE="${STAGE3_IMAGE}" \
             docker buildx bake \
               --push  \
               --set core.tags="${BOB_CORE_IMAGE}"
