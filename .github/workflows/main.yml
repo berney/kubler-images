@@ -546,6 +546,27 @@ jobs:
           grep DEFAULT_MUSL_BUILDER kubler.conf || true
           echo "DEFAULT_MUSL_BUILDER=$BOB_MUSL_IMAGE" >> kubler.conf
 
+      - name: 👷 Portage Container - eix-update - Populate /var/cache/eix
+        run: |
+          set -u
+          # Kubler building builders would use volume from portage container
+          # and run `eix-update` which would populate /var/cache/eix.
+          # But I'm building the builders directly with docker
+          # Docker build doesn't support mounting volumes during builds
+          # When using `kubler build` to build images with our builder,
+          # the builds fail with this error:
+          #
+          #   cannot open database file /var/cache/eix/portage.eix for reading
+          #
+          # So this step will fix this to make kubler build for images happy.
+          # kubler does `docker run --name name image true`, but I think `docker create` is more idiomatic
+          docker create --name kubler-gentoo-portage "${PORTAGE_IMAGE}"
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" eix-update
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
+
       - name: 🚧 Build Images - kubler/busybox
         #if: ${{ false }}
         id: busybox
