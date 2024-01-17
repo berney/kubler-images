@@ -470,11 +470,11 @@ jobs:
           docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
           docker images
 
-      - name: 🐋 Docker Build kubler builders - bob-musl
+      - name: 🐋 Docker Build kubler builder - bob-musl
         run: |
-          # Build kubler builders outside of kubler with native Docker tools
+          # Build kubler builder outside of kubler with native Docker tools
           # So that we can use the buildkit docker-container driver that supports GHA caching
-          cd builders/bob-musl || exit 1
+          cd builder/bob-musl || exit 1
           BOB_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl:"${PORTAGE_DATE}"
           echo "BOB_MUSL_IMAGE=$BOB_MUSL_IMAGE" >> $GITHUB_ENV
           # This dockerfile does similar to what kubler does to build a builder
@@ -487,12 +487,12 @@ jobs:
             -t "${BOB_MUSL_IMAGE}" \
             .
 
-      - name: 🐋 Docker Build kubler builders - bob
+      - name: 🐋 Docker Build kubler builder - bob
         if: ${{ false }}
         run: |
-          # Build kubler builders outside of kubler with native Docker tools
+          # Build kubler builder outside of kubler with native Docker tools
           # So that we can use the buildkit docker-container driver that supports GHA caching
-          cd builders/bob || exit 1
+          cd builder/bob || exit 1
           BOB_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob:"${PORTAGE_DATE}"
           echo "BOB_IMAGE=$BOB_IMAGE" >> $GITHUB_ENV
           # This dockerfile does similar to what kubler does to build a builder
