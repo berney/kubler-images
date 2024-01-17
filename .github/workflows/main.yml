@@ -559,8 +559,8 @@ jobs:
           #   cannot open database file /var/cache/eix/portage.eix for reading
           #
           # So this step will fix this to make kubler build for images happy.
-          # kubler does `docker run --name name image true`, but I think `docker create` is more idiomatic
-          docker create --name kubler-gentoo-portage "${PORTAGE_IMAGE}"
+          # kubler does `docker run`, but I think `docker create` is more idiomatic
+          docker create --name kubler-gentoo-portage "${PORTAGE_IMAGE}" true
           docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache
           docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
           docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" eix-update
