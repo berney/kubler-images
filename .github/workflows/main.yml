@@ -461,6 +461,7 @@ jobs:
               --push  \
               --set core.tags="${BOB_CORE_IMAGE}"
           docker run --rm "${BOB_CORE_MUSL_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${BOB_CORE_MUSL_IMAGE}" ls -l /var/cache/
           docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
 
       - name: 🐋🍳 Docker Bake Kubler - images bob-core
