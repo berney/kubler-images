@@ -540,6 +540,12 @@ jobs:
         run: |
           docker images
 
+      - name: 👷 Kubler Set kubler.conf DEFAULT_MUSL_BUILDER
+        if: ${{ false }}
+        run: |
+          grep DEFAULT_MUSL_BUILDER kubler.conf || true
+          echo "DEFAULT_MUSL_BUILDER=$BOB_MUSL_IMAGE" >> kubler.conf
+
       - name: 🚧 Build Images - kubler/busybox
         #if: ${{ false }}
         id: busybox
