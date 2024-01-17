@@ -23,7 +23,7 @@ jobs:
       # If there's no exact match, the most recent cache that partially matches will be used
       #
       - name: Cache Kubler Downloads
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.kubler/downloads/
           key: kubler-${{ github.sha }}
@@ -31,7 +31,7 @@ jobs:
             kubler-
 
       - name: Cache Kubler Gentoo Distfiles
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.kubler/distfiles/
           key: kubler-${{ github.sha }}
@@ -39,7 +39,7 @@ jobs:
             kubler-
 
       - name: Cache Kubler Gentoo Packages
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.kubler/packages/
           key: kubler-${{ github.sha }}
