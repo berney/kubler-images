@@ -460,6 +460,10 @@ jobs:
             docker buildx bake \
               --push  \
               --set core.tags="${BOB_CORE_IMAGE}"
+
+      - name: 🐋🍳 Docker Bake Kubler bob-core - test
+        run: |
+          set -eux
           docker run --rm "${BOB_CORE_MUSL_IMAGE}" cat /etc/gentoo-release
           docker run --rm "${BOB_CORE_MUSL_IMAGE}" ls -l /var/cache/
           docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
