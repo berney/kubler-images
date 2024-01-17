@@ -501,6 +501,7 @@ jobs:
           set -eux
           docker run --rm "${BOB_MUSL_IMAGE}" cat /etc/gentoo-release
           docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache
+          docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
 
       - name: 🐋 Docker Build kubler builder - bob
         if: ${{ false }}
@@ -520,7 +521,14 @@ jobs:
             --build-arg PARENT="${BOB_CORE_IMAGE}" \
             -t "${BOB_IMAGE}" \
             .
+
+      - name: 🐋 Docker Build kubler builder - bob - test
+        if: ${{ false }}
+        run: |
+          set -eux
           docker run --rm "${BOB_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${BOB_IMAGE}" ls -l /var/cache
+          docker run --rm "${BOB_IMAGE}" ls -l /var/cache/eix
 
       - name: 🐋🍳 Docker Images
         run: |
