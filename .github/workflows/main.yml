@@ -367,12 +367,12 @@ jobs:
           docker images
 
       - name: 🐋 Use docker buildx instance - before
-        if: ${{ false }}
+        #if: ${{ false }}
         run: |
           docker buildx ls
 
       - name: 🐋 Use docker buildx instance
-        if: ${{ false }}
+        #if: ${{ false }}
         run: |
           # the default docker builder instance can use local images as base images
           # but IIRC it cannot build multi-platform images
@@ -383,7 +383,7 @@ jobs:
           docker buildx use default
 
       - name: 🐋 Use docker buildx instance - after
-        if: ${{ false }}
+        #if: ${{ false }}
         run: |
           docker buildx ls
 
