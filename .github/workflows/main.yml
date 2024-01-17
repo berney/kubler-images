@@ -465,8 +465,9 @@ jobs:
         run: |
           set -eux
           docker run --rm "${BOB_CORE_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${BOB_CORE_MUSL_IMAGE}" ls -l /var/cache/
+          docker run --rm "${BOB_CORE_MUSL_IMAGE}" ls -l /var/cache
           docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${BOB_CORE_IMAGE}" ls -l /var/cache
 
       - name: 🐋🍳 Docker Bake Kubler - images bob-core
         run: |
@@ -490,7 +491,12 @@ jobs:
             --build-arg PARENT="${BOB_CORE_MUSL_IMAGE}" \
             -t "${BOB_MUSL_IMAGE}" \
             .
+
+      - name: 🐋 Docker Build kubler builder - bob-musl - test
+        run: |
+          set -eux
           docker run --rm "${BOB_MUSL_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache
 
       - name: 🐋 Docker Build kubler builder - bob
         if: ${{ false }}
