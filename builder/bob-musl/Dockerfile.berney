@@ -1,0 +1,18 @@
+ARG PARENT=berney/bob-musl-core:20240115
+FROM ${PARENT}
+LABEL maintainer="Berne Campbell <berne.campbell@gmail.com>"
+COPY PACKAGES.md /config/
+COPY build.sh /config/
+#RUN <<-EOF
+#RUN --mount=type=bind,target=/distfiles,from=distfiles,rw --mount=type=bind,target=/packages,from=packages,rw <<-EOF
+#RUN --mount=type=cache,target=/distfiles,from=distfiles --mount=type=cache,target=/packages,from=packages <<-EOF
+RUN --mount=type=cache,target=/distfiles --mount=type=cache,target=/packages <<-EOF
+  ls -l /config
+  ls -l /distfiles || true
+  ls -l /packages || true
+  BOB_CURRENT_TARGET=berney/bob-musl kubler-build-root
+EOF
+
+CMD ["/bin/bash"]
+
+LABEL kubler.build.timestamp=20240117105721

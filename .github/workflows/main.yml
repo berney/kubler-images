@@ -68,7 +68,7 @@ jobs:
 
       - name: 👷 Install Kubler
         run: |
-          cd ..
+          cd .. || exit 1
 
           ## Install from tarball
           #
@@ -81,7 +81,7 @@ jobs:
           ## Install from Git
           #
           git clone https://github.com/berney/kubler.git
-          cd kubler
+          cd kubler || exit 1
           # Using my branch to pick-up fixes until PRs are merged
           #git checkout f-berne
           git checkout f-experiment-buildx-bake
@@ -229,7 +229,7 @@ jobs:
 
       - name: 👷 Inspect Kubler Images
         run: |
-          cd ~/.kubler/namespaces/kubler/
+          cd ~/.kubler/namespaces/kubler/ || exit 1
           git remote -v
           git status
           git ls-files -o
@@ -237,7 +237,7 @@ jobs:
 
       - name: 👷 Get STAGE3_DATE
         run: |
-          cd ~/.kubler/namespaces/kubler/
+          cd ~/.kubler/namespaces/kubler/ || exit 1
           grep '^STAGE3_DATE=' builder/bob/build.conf
           grep '^STAGE3_DATE=' builder/bob-musl/build.conf
           bob=$(sed -n "s/^STAGE3_DATE='\(202[34][01][0-9]\{3\}T[0-9]\{6\}Z\)'$/\\1/p" builder/bob/build.conf)
@@ -252,7 +252,7 @@ jobs:
         # Disable
         if: ${{ false }}
         run: |
-          cd ~/.kubler/namespaces/kubler/
+          cd ~/.kubler/namespaces/kubler/ || exit 1
           git remote -v
           git remote add berney https://github.com/berney/kubler-images-1.git
           git fetch --all
@@ -263,7 +263,7 @@ jobs:
         # Disable
         if: ${{ false }}
         run: |
-          cd ~/.kubler/namespaces/kubler/
+          cd ~/.kubler/namespaces/kubler/ || exit 1
           git remote -v
           git remote add berney https://github.com/berney/kubler-images-1.git
           git fetch --all
@@ -368,12 +368,12 @@ jobs:
           docker images
 
       - name: 🐋 Use docker buildx instance - before
-        #if: ${{ false }}
+        if: ${{ false }}
         run: |
           docker buildx ls
 
       - name: 🐋 Use docker buildx instance
-        #if: ${{ false }}
+        if: ${{ false }}
         run: |
           # the default docker builder instance can use local images as base images
           # but IIRC it cannot build multi-platform images
@@ -384,7 +384,7 @@ jobs:
           docker buildx use default
 
       - name: 🐋 Use docker buildx instance - after
-        #if: ${{ false }}
+        if: ${{ false }}
         run: |
           docker buildx ls
 
@@ -470,11 +470,49 @@ jobs:
           docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
           docker images
 
+      - name: 🐋 Docker Build kubler builders - bob-musl
+        run: |
+          # Build kubler builders outside of kubler with native Docker tools
+          # So that we can use the buildkit docker-container driver that supports GHA caching
+          cd builders/bob-musl || exit 1
+          BOB_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl:"${PORTAGE_DATE}"
+          echo "BOB_MUSL_IMAGE=$BOB_MUSL_IMAGE" >> $GITHUB_ENV
+          # This dockerfile does similar to what kubler does to build a builder
+          # Difference is kubler uses docker run and mounts volumes, and then commits the container as an image
+          # We are building direct, so can't use volumes.
+          # I am hoping caching makes up for that.
+          docker buildx build \
+            -f Dockerfile.berney \
+            --build-arg PARENT="${BOB_CORE_MUSL_IMAGE}" \
+            -t "${BOB_MUSL_IMAGE}" \
+            .
+
+      - name: 🐋 Docker Build kubler builders - bob
+        if: ${{ false }}
+        run: |
+          # Build kubler builders outside of kubler with native Docker tools
+          # So that we can use the buildkit docker-container driver that supports GHA caching
+          cd builders/bob || exit 1
+          BOB_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob:"${PORTAGE_DATE}"
+          echo "BOB_IMAGE=$BOB_IMAGE" >> $GITHUB_ENV
+          # This dockerfile does similar to what kubler does to build a builder
+          # Difference is kubler uses docker run and mounts volumes, and then commits the container as an image
+          # We are building direct, so can't use volumes.
+          # I am hoping caching makes up for that.
+          docker buildx build \
+            -f Dockerfile.berney \
+            --build-arg PARENT="${BOB_CORE_IMAGE}" \
+            -t "${BOB_IMAGE}" \
+            .
+
       - name: 🐋🍳 Docker Tag Images for Kubler Compatability
         run: |
           docker tag "${PORTAGE_IMAGE}" kubler-gentoo/portage:latest
           docker tag "${BOB_CORE_MUSL_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
           docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
+          # My bob-musl builder
+          docker tag "${BOB_MUSL_IMAGE}" kubler/bob-musl:"${PORTAGE_DATE}"
+          #docker tag "${BOB_IMAGE}" kubler/bob:"${PORTAGE_DATE}"
           docker images
 
       - name: 🚧 Build Images - kubler/busybox
@@ -608,7 +646,7 @@ jobs:
           kubler build kubler-images -e kubler-images/nmap-musl-static
 
       - name: 🚧 Build Images - EVERYTHING
-        #if: ${{ false }}
+        if: ${{ false }}
         id: everything
         continue-on-error: true
         run: |
