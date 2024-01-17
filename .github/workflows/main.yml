@@ -401,12 +401,12 @@ jobs:
           PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/portage:"${PORTAGE_DATE}"
           echo "PORTAGE_IMAGE=$PORTAGE_IMAGE" >> $GITHUB_ENV
           docker buildx bake --push --set kubler-portage.tags="${PORTAGE_IMAGE}"
+          docker run --rm "${PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
 
       - name: 🐋🍳 Docker Bake Kubler - images portage
         run: |
           pwd
           docker images
-          docker run --rm "${PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
 
       - name: 🐋🍳 Docker Bake Kubler stage3
         run: |
@@ -435,13 +435,12 @@ jobs:
             docker buildx bake \
               --push \
               --set gentoo-stage3.tags="${STAGE3_IMAGE}"
+          docker run --rm "${STAGE3_MUSL_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${STAGE3_IMAGE}" cat /etc/gentoo-release
 
       - name: 🐋🍳 Docker Bake Kubler - images stage3
         run: |
           pwd
-          docker images
-          docker run --rm "${STAGE3_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${STAGE3_IMAGE}" cat /etc/gentoo-release
           docker images
 
       - name: 🐋🍳 Docker Bake Kubler bob-core
@@ -461,13 +460,12 @@ jobs:
             docker buildx bake \
               --push  \
               --set core.tags="${BOB_CORE_IMAGE}"
+          docker run --rm "${BOB_CORE_MUSL_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
 
       - name: 🐋🍳 Docker Bake Kubler - images bob-core
         run: |
           pwd
-          docker images
-          docker run --rm "${BOB_CORE_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
           docker images
 
       - name: 🐋 Docker Build kubler builder - bob-musl
@@ -482,10 +480,12 @@ jobs:
           # We are building direct, so can't use volumes.
           # I am hoping caching makes up for that.
           docker buildx build \
+            --push \
             -f Dockerfile.berney \
             --build-arg PARENT="${BOB_CORE_MUSL_IMAGE}" \
             -t "${BOB_MUSL_IMAGE}" \
             .
+          docker run --rm "${BOB_MUSL_IMAGE}" cat /etc/gentoo-release
 
       - name: 🐋 Docker Build kubler builder - bob
         if: ${{ false }}
@@ -500,10 +500,16 @@ jobs:
           # We are building direct, so can't use volumes.
           # I am hoping caching makes up for that.
           docker buildx build \
+            --push \
             -f Dockerfile.berney \
             --build-arg PARENT="${BOB_CORE_IMAGE}" \
             -t "${BOB_IMAGE}" \
             .
+          docker run --rm "${BOB_IMAGE}" cat /etc/gentoo-release
+
+      - name: 🐋🍳 Docker Images
+        run: |
+          docker images
 
       - name: 🐋🍳 Docker Tag Images for Kubler Compatability
         run: |
@@ -513,6 +519,10 @@ jobs:
           # My bob-musl builder
           docker tag "${BOB_MUSL_IMAGE}" kubler/bob-musl:"${PORTAGE_DATE}"
           #docker tag "${BOB_IMAGE}" kubler/bob:"${PORTAGE_DATE}"
+          docker images
+
+      - name: 🐋🍳 Docker Images
+        run: |
           docker images
 
       - name: 🚧 Build Images - kubler/busybox
