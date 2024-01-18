@@ -539,7 +539,7 @@ jobs:
           docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
           # My bob-musl builder
           docker tag "${BOB_MUSL_IMAGE}" kubler/bob-musl:"${PORTAGE_DATE}"
-          #docker tag "${BOB_IMAGE}" kubler/bob:"${PORTAGE_DATE}"
+          docker tag "${BOB_IMAGE}" kubler/bob:"${PORTAGE_DATE}"
           docker images
 
       - name: 🐋🍳 Docker Images
@@ -646,7 +646,7 @@ jobs:
         continue-on-error: true
         run: |
           export TERM
-          docker run --rm kubler-images/s6 ls
+          docker run --rm kubler-images/s6 s6-svscan -h
           # XXX Need to push or something so derived images can use it
 
       - name: 🚧 Build Images - coturn
