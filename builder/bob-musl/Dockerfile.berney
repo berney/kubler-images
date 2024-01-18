@@ -1,7 +1,7 @@
 ARG PARENT=berney/bob-musl-core:20240115
 FROM ${PARENT}
 LABEL maintainer="Berne Campbell <berne.campbell@gmail.com>"
-COPY PACKAGES.md /config/
+#COPY PACKAGES.md /config/
 COPY build.sh /config/
 #RUN <<-EOF
 #RUN --mount=type=bind,target=/distfiles,from=distfiles,rw --mount=type=bind,target=/packages,from=packages,rw <<-EOF
