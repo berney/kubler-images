@@ -645,10 +645,29 @@ jobs:
         id: s6-test
         continue-on-error: true
         run: |
-          export TERM
           docker run --rm kubler-images/s6 s6-svscan -h
-          # XXX Need to push or something so derived images can use it
+          # XXX Will need to push or something so derived images can use it
 
+      - name: 🚧 Build Images - s6 - push
+        #if: ${{ false }}
+        id: s6-push
+        continue-on-error: true
+        run: |
+          # The buildx docker-container driver can't pull from the local registry
+          # So we need to push the image
+          docker tag kubler-images/s6 ghcr.io/berney/kubler-images/s6
+          docker push ghcr.io/berney/kubler-images/s6
+
+      - name: 🚧 Build Images - s6-busybox
+        #if: ${{ false }}
+        id: s6-busybox
+        continue-on-error: true
+        run: |
+          echo "kubler=build" >> $GITHUB_OUTPUT
+          export TERM
+          kubler build -v s6-busybox
+
+      # This is based off s6
       - name: 🚧 Build Images - coturn
         #if: ${{ false }}
         id: coturn
@@ -657,6 +676,15 @@ jobs:
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
           kubler build -v coturn
+
+      - name: 🚧 Build Images - s6-coturn-busybox
+        #if: ${{ false }}
+        id: s6-coturn-busybox
+        continue-on-error: true
+        run: |
+          echo "kubler=build" >> $GITHUB_OUTPUT
+          export TERM
+          kubler build -v s6-coturn-busybox
 
       - name: 🚧 Build Images - nmap
         #if: ${{ false }}
@@ -675,24 +703,6 @@ jobs:
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
           kubler build -v nmap-musl-static
-
-      - name: 🚧 Build Images - s6-busybox
-        #if: ${{ false }}
-        id: s6-busybox
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v s6-busybox
-
-      - name: 🚧 Build Images - s6-coturn-busybox
-        #if: ${{ false }}
-        id: s6-coturn-busybox
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v s6-coturn-busybox
 
       - name: 🚧 Build Images - tmux
         #if: ${{ false }}
