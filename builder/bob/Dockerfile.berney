@@ -1,4 +1,4 @@
-ARG PARENT=berney/bob-musl-core:20240115
+ARG PARENT=berney/bob-core:20240115
 FROM ${PARENT}
 LABEL maintainer="Berne Campbell <berne.campbell@gmail.com>"
 COPY PACKAGES.md /config/
@@ -11,7 +11,7 @@ RUN --mount=type=cache,target=/distfiles --mount=type=cache,target=/packages <<-
   ls -l /config
   ls -l /distfiles || true
   ls -l /packages || true
-  BOB_CURRENT_TARGET=berney/bob-musl kubler-build-root
+  BOB_CURRENT_TARGET=berney/bob kubler-build-root
 EOF
 
 CMD ["/bin/bash"]

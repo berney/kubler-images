@@ -504,7 +504,6 @@ jobs:
           docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
 
       - name: 🐋 Docker Build kubler builder - bob
-        if: ${{ false }}
         run: |
           # Build kubler builder outside of kubler with native Docker tools
           # So that we can use the buildkit docker-container driver that supports GHA caching
@@ -523,7 +522,6 @@ jobs:
             .
 
       - name: 🐋 Docker Build kubler builder - bob - test
-        if: ${{ false }}
         run: |
           set -eux
           docker run --rm "${BOB_IMAGE}" cat /etc/gentoo-release
@@ -641,6 +639,15 @@ jobs:
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
           kubler build -v s6
+
+      - name: 🚧 Build Images - s6 - test
+        #if: ${{ false }}
+        id: s6-test
+        continue-on-error: true
+        run: |
+          export TERM
+          docker run --rm kubler-images/s6 ls
+          # XXX Need to push or something so derived images can use it
 
       - name: 🚧 Build Images - coturn
         #if: ${{ false }}
