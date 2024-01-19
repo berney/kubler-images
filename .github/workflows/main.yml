@@ -418,7 +418,7 @@ jobs:
           workdir: ../kubler/engine/docker/bob-portage
           push: true
           set: |
-            kubler-portage.tags=${PORTAGE_IMAGE}
+            kubler-portage.tags=${{ env.PORTAGE_IMAGE }}
 
       - name: 🐋🍳 Docker Bake Kubler portage - test
         run: |
