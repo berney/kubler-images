@@ -926,7 +926,10 @@ jobs:
         run: |
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
-          kubler build -v nmap-musl-static
+          DOCKER_BUILD_OPTS="--load"\
+          " --cache-from=type=gha,scope=nmap-musl-static"\
+          " --cache-to=type=gha,scope=nmap-musl-static" \
+            kubler build -v nmap-musl-static
 
       - name: 🚧 Build Images - tmux
         #if: ${{ false }}
