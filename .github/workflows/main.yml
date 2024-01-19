@@ -523,7 +523,11 @@ jobs:
         run: |
           set -eux
           docker run --rm "${STAGE3_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${STAGE3_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${STAGE3_IMAGE}" eselect profile show
           docker run --rm "${STAGE3_MUSL_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${STAGE3_MUSL_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${STAGE3_MUSL_IMAGE}" eselect profile show
 
       - name: 🐋🍳 Docker Bake Kubler - images stage3
         run: |
