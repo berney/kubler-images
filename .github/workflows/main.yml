@@ -523,10 +523,10 @@ jobs:
         run: |
           set -eux
           docker run --rm "${STAGE3_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${STAGE3_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${STAGE3_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${STAGE3_IMAGE}" eselect profile show
           docker run --rm "${STAGE3_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${STAGE3_MUSL_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${STAGE3_MUSL_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${STAGE3_MUSL_IMAGE}" eselect profile show
 
       - name: 🐋🍳 Docker Bake Kubler - images stage3
@@ -593,7 +593,7 @@ jobs:
         run: |
           set -eux
           docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${BOB_CORE_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${BOB_CORE_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${BOB_CORE_IMAGE}" eselect profile show
           docker run --rm "${BOB_CORE_IMAGE}" ls -l /var/cache
 
@@ -601,7 +601,7 @@ jobs:
         run: |
           set -eux
           docker run --rm "${BOB_CORE_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${BOB_CORE_MUSL_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${BOB_CORE_MUSL_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${BOB_CORE_MUSL_IMAGE}" eselect profile show
           docker run --rm "${BOB_CORE_MUSL_IMAGE}" ls -l /var/cache
 
@@ -656,7 +656,7 @@ jobs:
         run: |
           set -eux
           docker run --rm "${BOB_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${BOB_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${BOB_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${BOB_IMAGE}" eselect profile show
           docker run --rm "${BOB_IMAGE}" ls -l /var/cache
           docker run --rm "${BOB_IMAGE}" ls -l /var/cache/eix
@@ -704,7 +704,7 @@ jobs:
         run: |
           set -eux
           docker run --rm "${BOB_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${BOB_MUSL_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${BOB_MUSL_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${BOB_MUSL_IMAGE}" eselect profile show
           docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache
           docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
