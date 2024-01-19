@@ -429,7 +429,17 @@ jobs:
         run: |
           docker images
 
+      - name: 🐋🍳 Docker Bake Kubler stage3 - set ENV vars
+        run: |
+          set -eux
+          # XXX Not the tags I'm setting here, and the BASE_TAG I use later probably have a disconnect
+          STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
+          echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
+          STAGE3_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-hardened-nomultilib-openrc:"${PORTAGE_DATE}"
+          echo "STAGE3_IMAGE=$STAGE3_IMAGE" >> $GITHUB_ENV
+
       - name: 🐋🍳 Docker Bake Kubler stage3
+        if: ${{ false }}
         run: |
           set -eux
           cd ../kubler/engine/docker/bob-stage3 || exit 1
@@ -442,26 +452,44 @@ jobs:
           # But Kubler portage applies some patches
           # This is working because `kubler build` is mounting portage into container.
           # We could set `PORTAGE` to the kubler-portage image, so that the patches are embedded.
-          STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
-          echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
-          STAGE3_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-hardened-nomultilib-openrc:"${PORTAGE_DATE}"
-          echo "STAGE3_IMAGE=$STAGE3_IMAGE" >> $GITHUB_ENV
-          BASE_TAG=musl-hardened \
-            PORTAGE=$PORTAGE_IMAGE \
-            docker buildx bake \
-              --push \
-              --set gentoo-stage3.tags="${STAGE3_MUSL_IMAGE}"
           BASE_TAG=hardened-nomultilib \
             PORTAGE=$PORTAGE_IMAGE \
             docker buildx bake \
               --push \
               --set gentoo-stage3.tags="${STAGE3_IMAGE}"
+          BASE_TAG=musl-hardened \
+            PORTAGE=$PORTAGE_IMAGE \
+            docker buildx bake \
+              --push \
+              --set gentoo-stage3.tags="${STAGE3_MUSL_IMAGE}"
+
+      - name: 🐋🍳 Docker Bake Kubler stage3 - list targets
+        uses: docker/bake-action/subaction/list-targets@v4
+        with:
+          workdir: ../kubler/engine/docker/bob-stage3
+
+      - name: 🐋🍳 Docker Bake Kubler stage3 - hardened-nomultilib
+        uses: docker/bake-action@v4
+        with:
+          workdir: ../kubler/engine/docker/bob-stage3
+          push: true
+          set: |
+            gentoo-stage3.tags=${{ env.STAGE3_IMAGE }}
+
+      - name: 🐋🍳 Docker Bake Kubler stage3 - musl-hardened
+        uses: docker/bake-action@v4
+        with:
+          workdir: ../kubler/engine/docker/bob-stage3
+          push: true
+          set: |
+            gentoo-stage3.tags=${{ env.STAGE3_MUSL_IMAGE }}
+
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - test
         run: |
           set -eux
-          docker run --rm "${STAGE3_MUSL_IMAGE}" cat /etc/gentoo-release
           docker run --rm "${STAGE3_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${STAGE3_MUSL_IMAGE}" cat /etc/gentoo-release
 
       - name: 🐋🍳 Docker Bake Kubler - images stage3
         run: |
