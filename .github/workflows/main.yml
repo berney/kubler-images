@@ -574,9 +574,19 @@ jobs:
           docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache
           docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
 
-      - name: 🚧 Build Images - kubler/busybox
+      - name: 🚧 Build Images - berney/busybox
         #if: ${{ false }}
         id: busybox
+        continue-on-error: true
+        run: |
+          echo "kubler=build" >> $GITHUB_OUTPUT
+          export TERM
+          # This is my copy with small changes
+          kubler build -v busybox
+
+      - name: 🚧 Build Images - kubler/busybox
+        #if: ${{ false }}
+        id: kubler-busybox
         continue-on-error: true
         run: |
           echo "kubler=build" >> $GITHUB_OUTPUT
