@@ -497,8 +497,13 @@ jobs:
         with:
           workdir: ../kubler/engine/docker/bob-stage3
           push: true
+          # In the `docker-bake.hcl`
+          # There is a variable `BASE_TAG` and `BASE_IMAGE`. `BASE_IMAGE` interpolates `BASE_TAG`i
+          # These can be set with env vars when using `docker buildx bake` command
+          # For the gentoo-stage3 target there's no `BASE_TAG` arg, only `BASE_IMAGE` which defaults to `BASE_IMAGE` var
+          # When using bake-action we need to set the `BASE_IMAGE` arg, setting `BASE_TAG` arg won't do what we want.
           set: |
-            gentoo-stage3.args.BASE_TAG=hardened-nomultilib
+            gentoo-stage3.args.BASE_IMAGE=gentoo/stage3:hardened-nomultilib
             gentoo-stage3.args.PORTAGE=${{ env.PORTAGE_IMAGE }}
             gentoo-stage3.tags=${{ env.STAGE3_IMAGE }}
             gentoo-stage3.cache-from=type=gha,scope=portage
@@ -510,8 +515,13 @@ jobs:
         with:
           workdir: ../kubler/engine/docker/bob-stage3
           push: true
+          # In the `docker-bake.hcl`
+          # There is a variable `BASE_TAG` and `BASE_IMAGE`. `BASE_IMAGE` interpolates `BASE_TAG`i
+          # These can be set with env vars when using `docker buildx bake` command
+          # For the gentoo-stage3 target there's no `BASE_TAG` arg, only `BASE_IMAGE` which defaults to `BASE_IMAGE` var
+          # When using bake-action we need to set the `BASE_IMAGE` arg, setting `BASE_TAG` arg won't do what we want.
           set: |
-            gentoo-stage3.args.BASE_TAG=musl-hardened
+            gentoo-stage3.args.BASE_IMAGE=gentoo/stage3:musl-hardened
             gentoo-stage3.args.PORTAGE=${{ env.PORTAGE_IMAGE }}
             gentoo-stage3.tags=${{ env.STAGE3_MUSL_IMAGE }}
             gentoo-stage3.cache-from=type=gha,scope=portage
@@ -660,6 +670,7 @@ jobs:
           docker run --rm "${BOB_IMAGE}" eselect profile show
           docker run --rm "${BOB_IMAGE}" ls -l /var/cache
           docker run --rm "${BOB_IMAGE}" ls -l /var/cache/eix
+          docker run --rm "${BOB_IMAGE}" eix --selected -c
 
       - name: 🐋 Docker Build kubler builder - bob-musl - set ENV vars
         run: |
@@ -708,6 +719,7 @@ jobs:
           docker run --rm "${BOB_MUSL_IMAGE}" eselect profile show
           docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache
           docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
+          docker run --rm "${BOB_MUSL_IMAGE}" eix --selected -c
 
       - name: 🐋🍳 Docker Images
         run: |
