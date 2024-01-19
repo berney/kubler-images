@@ -31,4 +31,9 @@ configure_builder() {
     add_overlay musl
     add_overlay kubler https://github.com/edannenberg/kubler-overlay.git
     emerge dev-lang/go
+    # bdawg favs - I want these when doing `kubler build -i something`
+    # Workaround vim nls issues on musl
+    update_use app-editors/vim-core -nls
+    update_use app-editors/vim -nls
+    emerge app-editors/vim sys-apps/bat sys-apps/fd sys-apps/ripgrep
 }

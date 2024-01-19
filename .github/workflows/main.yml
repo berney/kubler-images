@@ -457,10 +457,10 @@ jobs:
         run: |
           set -eux
           # XXX Not the tags I'm setting here, and the BASE_TAG I use later probably have a disconnect
-          STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
-          echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
           STAGE3_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-hardened-nomultilib-openrc:"${PORTAGE_DATE}"
           echo "STAGE3_IMAGE=$STAGE3_IMAGE" >> $GITHUB_ENV
+          STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
+          echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
 
       - name: 🐋🍳 Docker Bake Kubler stage3
         if: ${{ false }}
@@ -533,68 +533,95 @@ jobs:
         run: |
           docker images
 
+      - name: 🐋🍳 Docker Bake Kubler bob-core - set ENV vars
+        run: |
+          set -eux
+          BOB_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-core:"${PORTAGE_DATE}"
+          echo "BOB_CORE_IMAGE=$BOB_CORE_IMAGE" >> $GITHUB_ENV
+          BOB_CORE_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl-core:"${PORTAGE_DATE}"
+          echo "BOB_CORE_MUSL_IMAGE=$BOB_CORE_MUSL_IMAGE" >> $GITHUB_ENV
+
       - name: 🐋🍳 Docker Bake Kubler bob-core
+        if: ${{ false }}
         run: |
           set -eux
           cd ../kubler/engine/docker/bob-core || exit 1
-          BOB_CORE_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl-core:"${PORTAGE_DATE}"
-          echo "BOB_CORE_MUSL_IMAGE=$BOB_CORE_MUSL_IMAGE" >> $GITHUB_ENV
-          BOB_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-core:"${PORTAGE_DATE}"
-          echo "BOB_CORE_IMAGE=$BOB_CORE_IMAGE" >> $GITHUB_ENV
+          BASE_IMAGE="${STAGE3_IMAGE}" \
+            docker buildx bake \
+              --push  \
+              --set core.tags="${BOB_CORE_IMAGE}"
           DEF_CHOST=x86_64-gentoo-linux-musl \
             BASE_IMAGE="${STAGE3_MUSL_IMAGE}" \
             docker buildx bake \
               --push \
               --set core.tags="${BOB_CORE_MUSL_IMAGE}"
-          BASE_IMAGE="${STAGE3_IMAGE}" \
-            docker buildx bake \
-              --push  \
-              --set core.tags="${BOB_CORE_IMAGE}"
+
+      - name: 🐋🍳 Docker Bake Kubler bob-core - list targets
+        uses: docker/bake-action/subaction/list-targets@v4
+        with:
+          workdir: ../kubler/engine/docker/bob-core
+
+      - name: 🐋🍳 Docker Bake Kubler bob-core
+        uses: docker/bake-action@v4
+        with:
+          workdir: ../kubler/engine/docker/bob-core
+          push: true
+          set: |
+            core.args.BASE_IMAGE=${{ env.STAGE3_IMAGE }}
+            core.tags=${{ env.BOB_CORE_IMAGE }}
+            core.cache-from=type=gha,scope=portage
+            core.cache-from=type=gha,scope=stage3-hardened-nomultilib
+            core.cache-from=type=gha,scope=bob-core
+            core.cache-to=type=gha,scope=bob-core
+
+      - name: 🐋🍳 Docker Bake Kubler bob-musl-core
+        uses: docker/bake-action@v4
+        with:
+          workdir: ../kubler/engine/docker/bob-core
+          push: true
+          set: |
+            core.args.DEF_CHOST=x86_64-gentoo-linux-musl
+            core.args.BASE_IMAGE=${{ env.STAGE3_MUSL_IMAGE }}
+            core.tags=${{ env.BOB_CORE_MUSL_IMAGE }}
+            core.cache-from=type=gha,scope=portage
+            core.cache-from=type=gha,scope=stage3-musl-hardened
+            core.cache-from=type=gha,scope=bob-musl-core
+            core.cache-to=type=gha,scope=bob-musl-core
+
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - test
         run: |
           set -eux
-          docker run --rm "${BOB_CORE_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${BOB_CORE_MUSL_IMAGE}" ls -l /var/cache
           docker run --rm "${BOB_CORE_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${BOB_CORE_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${BOB_CORE_IMAGE}" eselect profile show
           docker run --rm "${BOB_CORE_IMAGE}" ls -l /var/cache
+
+      - name: 🐋🍳 Docker Bake Kubler bob-musl-core - test
+        run: |
+          set -eux
+          docker run --rm "${BOB_CORE_MUSL_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${BOB_CORE_MUSL_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${BOB_CORE_MUSL_IMAGE}" eselect profile show
+          docker run --rm "${BOB_CORE_MUSL_IMAGE}" ls -l /var/cache
 
       - name: 🐋🍳 Docker Bake Kubler - images bob-core
         run: |
           docker images
 
-      - name: 🐋 Docker Build kubler builder - bob-musl
-        run: |
-          # Build kubler builder outside of kubler with native Docker tools
-          # So that we can use the buildkit docker-container driver that supports GHA caching
-          cd builder/bob-musl || exit 1
-          BOB_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl:"${PORTAGE_DATE}"
-          echo "BOB_MUSL_IMAGE=$BOB_MUSL_IMAGE" >> $GITHUB_ENV
-          # This dockerfile does similar to what kubler does to build a builder
-          # Difference is kubler uses docker run and mounts volumes, and then commits the container as an image
-          # We are building direct, so can't use volumes.
-          # I am hoping caching makes up for that.
-          docker buildx build \
-            --push \
-            -f Dockerfile.berney \
-            --build-arg PARENT="${BOB_CORE_MUSL_IMAGE}" \
-            -t "${BOB_MUSL_IMAGE}" \
-            .
-
-      - name: 🐋 Docker Build kubler builder - bob-musl - test
+      - name: 🐋 Docker Build kubler builder - bob - set ENV vars
         run: |
           set -eux
-          docker run --rm "${BOB_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache
-          docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
+          BOB_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob:"${PORTAGE_DATE}"
+          echo "BOB_IMAGE=$BOB_IMAGE" >> $GITHUB_ENV
 
       - name: 🐋 Docker Build kubler builder - bob
+        if: ${{ false }}
         run: |
+          set -eux
           # Build kubler builder outside of kubler with native Docker tools
           # So that we can use the buildkit docker-container driver that supports GHA caching
           cd builder/bob || exit 1
-          BOB_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob:"${PORTAGE_DATE}"
-          echo "BOB_IMAGE=$BOB_IMAGE" >> $GITHUB_ENV
           # This dockerfile does similar to what kubler does to build a builder
           # Difference is kubler uses docker run and mounts volumes, and then commits the container as an image
           # We are building direct, so can't use volumes.
@@ -606,12 +633,81 @@ jobs:
             -t "${BOB_IMAGE}" \
             .
 
+      - name: 🐋 Docker Build kubler builder - bob - list targets
+        uses: docker/bake-action/subaction/list-targets@v4
+        with:
+          workdir: builder/bob
+
+      - name: 🐋🍳 Docker Bake Kubler builder - bob
+        uses: docker/bake-action@v4
+        with:
+          workdir: builder/bob
+          push: true
+          set: |
+            bob.args.BASE_IMAGE=${{ env.BOB_CORE_IMAGE }}
+            bob.tags=${{ env.BOB_IMAGE }}
+            bob.cache-from=type=gha,scope=portage
+            bob.cache-from=type=gha,scope=stage3-hardened-nomultilib
+            bob.cache-from=type=gha,scope=bob-core
+            bob.cache-from=type=gha,scope=bob
+            bob.cache-to=type=gha,scope=bob
+
       - name: 🐋 Docker Build kubler builder - bob - test
         run: |
           set -eux
           docker run --rm "${BOB_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${BOB_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${BOB_IMAGE}" eselect profile show
           docker run --rm "${BOB_IMAGE}" ls -l /var/cache
           docker run --rm "${BOB_IMAGE}" ls -l /var/cache/eix
+
+      - name: 🐋 Docker Build kubler builder - bob-musl - set ENV vars
+        run: |
+          set -eux
+          BOB_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl:"${PORTAGE_DATE}"
+          echo "BOB_MUSL_IMAGE=$BOB_MUSL_IMAGE" >> $GITHUB_ENV
+
+      - name: 🐋 Docker Build kubler builder - bob-musl
+        if: ${{ false }}
+        run: |
+          set -eux
+          # Build kubler builder outside of kubler with native Docker tools
+          # So that we can use the buildkit docker-container driver that supports GHA caching
+          cd builder/bob-musl || exit 1
+          # This dockerfile does similar to what kubler does to build a builder
+          # Difference is kubler uses docker run and mounts volumes, and then commits the container as an image
+          # We are building direct, so can't use volumes.
+          # I am hoping caching makes up for that.
+          docker buildx build \
+            --push \
+            -f Dockerfile.berney \
+            --build-arg PARENT="${BOB_CORE_MUSL_IMAGE}" \
+            -t "${BOB_MUSL_IMAGE}" \
+            .
+
+      - name: 🐋🍳 Docker Bake Kubler builder - bob-musl
+        uses: docker/bake-action@v4
+        with:
+          workdir: builder/bob-musl
+          push: true
+          set: |
+            bob-musl.args.BASE_IMAGE=${{ env.BOB_CORE_MUSL_IMAGE }}
+            bob-musl.tags=${{ env.BOB_MUSL_IMAGE }}
+            bob-musl.cache-from=type=gha,scope=portage
+            bob-musl.cache-from=type=gha,scope=stage3-musl-hardened
+            bob-musl.cache-from=type=gha,scope=bob-musl-core
+            bob-musl.cache-from=type=gha,scope=bob-musl
+            bob-musl.cache-to=type=gha,scope=bob-musl
+
+
+      - name: 🐋 Docker Build kubler builder - bob-musl - test
+        run: |
+          set -eux
+          docker run --rm "${BOB_MUSL_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${BOB_MUSL_IMAGE}" grep 'Latest|stage3' /latest-stage3*.txt
+          docker run --rm "${BOB_MUSL_IMAGE}" eselect profile show
+          docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache
+          docker run --rm "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
 
       - name: 🐋🍳 Docker Images
         run: |

@@ -1,5 +1,5 @@
-ARG PARENT=berney/bob-musl-core:20240115
-FROM ${PARENT}
+ARG BASE_IMAGE=berney/bob-musl-core:20240115
+FROM ${BASE_IMAGE}
 LABEL maintainer="Berne Campbell <berne.campbell@gmail.com>"
 #COPY PACKAGES.md /config/
 COPY build.sh /config/

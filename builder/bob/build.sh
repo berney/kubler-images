@@ -32,4 +32,6 @@ configure_builder() {
     [[ "${BOB_UPDATE_WORLD}" == true ]] && emerge -vuND world
     add_overlay kubler https://github.com/edannenberg/kubler-overlay.git
     emerge dev-lang/go
+    # bdawg favs - I want these when doing `kubler build -i something`
+    emerge app-editors/vim sys-apps/bat sys-apps/fd sys-apps/ripgrep
 }
