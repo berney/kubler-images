@@ -497,10 +497,12 @@ jobs:
           workdir: ../kubler/engine/docker/bob-stage3
           push: true
           set: |
+            gentoo-stage3.args.BASE_TAG=hardened-nomultilib
+            gentoo-stage3.args.PORTAGE=${{ env.PORTAGE }}
             gentoo-stage3.tags=${{ env.STAGE3_IMAGE }}
-            kubler-portage.cache-from=type=gha,scope=portage
-            kubler-portage.cache-from=type=gha,scope=stage3-hardened-nomultilib
-            kubler-portage.cache-to=type=gha,scope=stage3-hardened-nomultilib
+            gentoo-stage3.cache-from=type=gha,scope=portage
+            gentoo-stage3.cache-from=type=gha,scope=stage3-hardened-nomultilib
+            gentoo-stage3.cache-to=type=gha,scope=stage3-hardened-nomultilib
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - musl-hardened
         uses: docker/bake-action@v4
@@ -508,11 +510,12 @@ jobs:
           workdir: ../kubler/engine/docker/bob-stage3
           push: true
           set: |
+            gentoo-stage3.args.BASE_TAG=musl-hardened
+            gentoo-stage3.args.PORTAGE=${{ env.PORTAGE }}
             gentoo-stage3.tags=${{ env.STAGE3_MUSL_IMAGE }}
-            kubler-portage.cache-from=type=gha,scope=portage
-            kubler-portage.cache-from=type=gha,scope=stage3-hardened-nomultilib
-            kubler-portage.cache-from=type=gha,scope=stage3-musl-hardened
-            kubler-portage.cache-to=type=gha,scope=stage3-musl-hardened
+            gentoo-stage3.cache-from=type=gha,scope=portage
+            gentoo-stage3.cache-from=type=gha,scope=stage3-musl-hardened
+            gentoo-stage3.cache-to=type=gha,scope=stage3-musl-hardened
 
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - test
