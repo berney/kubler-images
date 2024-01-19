@@ -4,6 +4,6 @@ MAINTAINER ${MAINTAINER}
 
 ADD rootfs.tar /
 
-USER busybox
+#USER busybox
 # -t0 is the default
 CMD ["/bin/s6-svscan", "/service"]
