@@ -887,7 +887,8 @@ jobs:
         run: |
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
-          kubler build -v coturn
+          DOCKER_BUILD_OPTS="--load --cache-from=type=gha,scope=coturn,cache-to=gha,scope=coturn" \
+            kubler build -v coturn
 
       - name: 🚧 Build Images - s6-coturn-busybox
         #if: ${{ false }}
