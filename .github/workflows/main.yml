@@ -498,7 +498,7 @@ jobs:
           push: true
           set: |
             gentoo-stage3.args.BASE_TAG=hardened-nomultilib
-            gentoo-stage3.args.PORTAGE=${{ env.PORTAGE }}
+            gentoo-stage3.args.PORTAGE=${{ env.PORTAGE_IMAGE }}
             gentoo-stage3.tags=${{ env.STAGE3_IMAGE }}
             gentoo-stage3.cache-from=type=gha,scope=portage
             gentoo-stage3.cache-from=type=gha,scope=stage3-hardened-nomultilib
@@ -511,7 +511,7 @@ jobs:
           push: true
           set: |
             gentoo-stage3.args.BASE_TAG=musl-hardened
-            gentoo-stage3.args.PORTAGE=${{ env.PORTAGE }}
+            gentoo-stage3.args.PORTAGE=${{ env.PORTAGE_IMAGE }}
             gentoo-stage3.tags=${{ env.STAGE3_MUSL_IMAGE }}
             gentoo-stage3.cache-from=type=gha,scope=portage
             gentoo-stage3.cache-from=type=gha,scope=stage3-musl-hardened
