@@ -34,6 +34,7 @@ jobs:
           docker info
           pwd
           echo $PATH
+          type goss
 
       - name: Update Docker Engine
         # Disable
