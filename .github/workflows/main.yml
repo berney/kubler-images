@@ -407,6 +407,27 @@ jobs:
           # XXX could `--push` here, but can't do both `--load` and `--push` at the same time.
           docker buildx bake --push --set kubler-portage.tags="${PORTAGE_IMAGE}"
 
+      - name: Check env before exposing GitHub Runtime - grep
+        run: |
+          env | grep ^ACTIONS
+
+      - name: Check env before exposing GitHub Runtime - full
+        run: |
+          env
+
+      # Needed for bake-action to use GHA cache
+      # XXX I think this may be a bit dangerous, exposing secrets to everything in the job
+      - name: Expose GitHub Runtime
+        uses: crazy-max/ghaction-github-runtime@v3
+
+      - name: Check env after exposed GitHub Runtime - grep
+        run: |
+          env | grep ^ACTIONS
+
+      - name: Check env after exposed GitHub Runtime - full
+        run: |
+          env
+
       - name: 🐋🍳 Docker Bake Kubler portage - list targets
         uses: docker/bake-action/subaction/list-targets@v4
         with:
@@ -419,6 +440,8 @@ jobs:
           push: true
           set: |
             kubler-portage.tags=${{ env.PORTAGE_IMAGE }}
+            kubler-portage.cache-from=type=gha,scope=portage
+            kubler-portage.cache-to=type=gha,scope=portage
 
       - name: 🐋🍳 Docker Bake Kubler portage - test
         run: |
@@ -475,6 +498,9 @@ jobs:
           push: true
           set: |
             gentoo-stage3.tags=${{ env.STAGE3_IMAGE }}
+            kubler-portage.cache-from=type=gha,scope=portage
+            kubler-portage.cache-from=type=gha,scope=stage3-hardened-nomultilib
+            kubler-portage.cache-to=type=gha,scope=stage3-hardened-nomultilib
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - musl-hardened
         uses: docker/bake-action@v4
@@ -483,6 +509,10 @@ jobs:
           push: true
           set: |
             gentoo-stage3.tags=${{ env.STAGE3_MUSL_IMAGE }}
+            kubler-portage.cache-from=type=gha,scope=portage
+            kubler-portage.cache-from=type=gha,scope=stage3-hardened-nomultilib
+            kubler-portage.cache-from=type=gha,scope=stage3-musl-hardened
+            kubler-portage.cache-to=type=gha,scope=stage3-musl-hardened
 
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - test
