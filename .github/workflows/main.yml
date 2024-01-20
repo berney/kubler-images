@@ -877,6 +877,9 @@ jobs:
         run: |
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
+          DOCKER_BUILD_OPTS="--load"\
+          " --cache-from=type=gha,scope=s6-busybox"\
+          " --cache-to=type=gha,scope=s6-busybox" \
           kubler build -v s6-busybox
 
       # This is based off s6
@@ -903,6 +906,7 @@ jobs:
           export TERM
           DOCKER_BUILD_OPTS="--load"\
           " --cache-from=type=gha,scope=coturn"\
+          " --cache-from=type=gha,scope=s6-busybox"\
           " --cache-from=type=gha,scope=s6-coturn-busybox"\
           " --cache-to=type=gha,scope=s6-coturn-busybox" \
             kubler build -v s6-coturn-busybox
