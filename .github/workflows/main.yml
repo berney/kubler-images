@@ -418,7 +418,7 @@ jobs:
       # Needed for bake-action to use GHA cache
       # XXX I think this may be a bit dangerous, exposing secrets to everything in the job
       - name: Expose GitHub Runtime
-        if: ${{ false }}
+        #if: ${{ false }}
         uses: crazy-max/ghaction-github-runtime@v3
 
       - name: Check env after exposed GitHub Runtime - grep
