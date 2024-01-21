@@ -36,6 +36,22 @@ jobs:
           echo $PATH
           type goss || true
 
+      - name: Install goss
+        run: |
+          # I do build my own goss, but chicken and the egg problem
+          curl -sSLO https://github.com/goss-org/goss/releases/latest/download/goss-linux-amd64
+          chmod +x goss-linux-amd64
+          mv goss-linux-amd64 /usr/local/bin/goss
+          type goss
+          goss --version
+          # Berney: I can't use upstream's `dgoss` as is because it assumes containers are daemon like
+          # and doesn't cater to tool like images that do a job and exit - e.g. figlet.
+          # So I have modified `dgoss` to suit my needs
+          #curl -sSLO https://raw.githubusercontent.com/goss-org/goss/master/extras/dgoss/dgoss
+          #chmod +x dgoss
+          #mv dgoss /usr/local/bin/
+          #type dgoss
+
       - name: Update Docker Engine
         # Disable
         if: ${{ false }}
@@ -824,6 +840,13 @@ jobs:
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
           kubler build -v figlet-musl
+
+      - name: Test Image - figlet-musl
+        id: test-figlet-musl
+        continue-on-error: true
+        run: |
+          cd images/figlet-musl/goss || false
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl validate --format documentation --color
 
       - name: 🚧 Build Images - figlet-musl-static
         #if: ${{ false }}
