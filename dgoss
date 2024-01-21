@@ -110,7 +110,7 @@ case "$1" in
         #info "Container health"
         # Berney: wait until goss has finished.
         #         we will get the exit code later
-        $CONTAINER_RUNTIME wait "$id"
+        $CONTAINER_RUNTIME wait "$id" > /dev/null
         if [ "true" != "$($CONTAINER_RUNTIME inspect -f '{{.State.Running}}' "$id")" ]; then
             $CONTAINER_RUNTIME logs "$id" >&2
             # Berney: We expect container to have exited, since we started `goss` directly.
