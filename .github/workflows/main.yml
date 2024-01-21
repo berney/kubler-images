@@ -845,7 +845,7 @@ jobs:
         id: test-figlet-musl
         continue-on-error: true
         run: |
-          cd images/figlet-musl/goss || false
+          cd images/figlet-musl || false
           GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl validate --format documentation --color
 
       - name: 🚧 Build Images - figlet-musl-static
