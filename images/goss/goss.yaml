@@ -1,0 +1,14 @@
+---
+file:
+  /goss:
+    exists: true
+    mode: "0755"
+    #size: 10240000
+    # goss calls `getent` which doesn't exit
+    # `/etc/passwd` also doesn't exist
+    # I want goss to compare raw numbers
+    # but it always tries to translate with `getent`.
+    #owner: 0
+    #group: 0
+    filetype: file
+    contains: []

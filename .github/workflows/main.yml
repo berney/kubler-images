@@ -834,6 +834,15 @@ jobs:
           export TERM
           kubler build -v figlet-musl-static
 
+      - name: 🚧 Build Images - goss
+        #if: ${{ false }}
+        id: goss
+        continue-on-error: true
+        run: |
+          echo "kubler=build" >> $GITHUB_OUTPUT
+          export TERM
+          kubler build -v goss
+
       - name: 🚧 Build Images - fd
         #if: ${{ false }}
         id: fd
