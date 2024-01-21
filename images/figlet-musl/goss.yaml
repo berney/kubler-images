@@ -1,0 +1,8 @@
+file:
+  /usr/bin/figlet:
+    exists: true
+    mode: "0755"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
