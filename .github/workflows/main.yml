@@ -914,6 +914,16 @@ jobs:
           " --cache-to=type=gha,scope=s6-busybox" \
           kubler build -v s6-busybox
 
+      - name: 🚧 Build Images - s6-busybox - push
+        #if: ${{ false }}
+        id: s6-busybox-push
+        continue-on-error: true
+        run: |
+          # The buildx docker-container driver can't pull from the local registry
+          # So we need to push the image
+          docker tag kubler-images/s6-busybox ghcr.io/berney/kubler-images/s6-busybox
+          docker push ghcr.io/berney/kubler-images/s6-busybox
+
       # This is based off s6
       - name: 🚧 Build Images - coturn
         #if: ${{ false }}
