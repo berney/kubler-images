@@ -823,6 +823,13 @@ jobs:
           export TERM
           kubler build -v figlet
 
+      - name: Test Image - figlet
+        id: test-figlet
+        continue-on-error: true
+        run: |
+          cd images/figlet || false
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet validate --format documentation --color
+
       - name: 🚧 Build Images - figlet-user
         #if: ${{ false }}
         id: figlet-user
