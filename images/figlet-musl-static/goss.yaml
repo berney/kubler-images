@@ -9,7 +9,7 @@ file:
 command:
   figlet:
     exit-status: 0
-    exec: [figlet, test]
+    exec: [/figlet, test]
     # Because of space on first line, it breaks automatic detection of indetantion
     # So need to explicit Block Indentation Indicator
     # Also need to include the trailing whitespace that figlet produces
