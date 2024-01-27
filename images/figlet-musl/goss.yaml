@@ -6,3 +6,17 @@ file:
     group: root
     filetype: file
     contains: []
+command:
+  figlet:
+    exit-status: 0
+    exec: [figlet, test]
+    # Because of space on first line, it breaks automatic detection of indetantion
+    # So need to explicit Block Indentation Indicator
+    # Also need to include the trailing whitespace that figlet produces
+    stdout: |2
+       _            _   
+      | |_ ___  ___| |_ 
+      | __/ _ \/ __| __|
+      | ||  __/\__ \ |_ 
+       \__\___||___/\__|
+                        

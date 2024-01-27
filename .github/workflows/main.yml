@@ -37,6 +37,7 @@ jobs:
           type goss || true
 
       - name: Install goss
+        if: ${{ false }}
         run: |
           # I do build my own goss, but chicken and the egg problem
           curl -sSLO https://github.com/goss-org/goss/releases/latest/download/goss-linux-amd64
@@ -51,6 +52,17 @@ jobs:
           #chmod +x dgoss
           #mv dgoss /usr/local/bin/
           #type dgoss
+
+      - name: Install goss from berne/goss
+        if: ${{ false }}
+        run: |
+          # This is a modified goss
+          docker pull berne/goss
+          docker create --name goss berne/goss
+          docker cp goss:/bin/goss /usr/local/bin/
+          docker rm goss
+          type goss
+          goss --version
 
       - name: Update Docker Engine
         # Disable
