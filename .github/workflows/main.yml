@@ -851,6 +851,13 @@ jobs:
           export TERM
           kubler build -v figlet-user
 
+      - name: Test Image - figlet-user
+        id: test-figlet-user
+        continue-on-error: true
+        run: |
+          cd images/figlet-user || false
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-user validate --format documentation --color
+
       - name: 🚧 Build Images - figlet-musl
         #if: ${{ false }}
         id: figlet-musl
@@ -875,6 +882,13 @@ jobs:
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
           kubler build -v figlet-musl-static
+
+      - name: Test Image - figlet-musl-static
+        id: test-figlet-musl-static
+        continue-on-error: true
+        run: |
+          cd images/figlet-musl-static || false
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl-static validate --format documentation --color
 
       - name: 🚧 Build Images - goss
         #if: ${{ false }}

@@ -1,5 +1,5 @@
 file:
-  /usr/bin/figlet:
+  /figlet:
     exists: true
     mode: "0755"
     owner: root
