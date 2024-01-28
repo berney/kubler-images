@@ -179,7 +179,7 @@ file:
             export GENTOO_MIRRORS="${BOB_GENTOO_MIRRORS:-ftp://ftp.wh2.tu-dresden.de/pub/mirrors/gentoo ftp://ftp-stud.fht-esslingen.de/pub/Mirrors/gentoo/}"
 
             export DISTDIR="/distfiles"
-    /latest-stage3-amd64-hardened-nomultilib-openrc.txt:
+    /latest-stage3-amd64-musl-hardened.txt:
         exists: true
         mode: "0644"
         owner: root
@@ -189,7 +189,7 @@ file:
             - '# Latest as of '
             # Need to quote to be a string
             - '2024'
-            - stage3-amd64-hardened-nomultilib-openrc-2024
+            - stage3-amd64-musl-hardened-2024
     /root/.bashrc:
         exists: true
         mode: "0644"
@@ -207,7 +207,7 @@ file:
         mode: "0777"
         owner: root
         group: root
-        linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/13/gcc
+        linked-to: /usr/x86_64-gentoo-linux-musl/gcc-bin/13/gcc
         filetype: symlink
         contents: null
     /usr/local/bin/kubler-build-root:
@@ -286,13 +286,9 @@ file:
         group: portage
         filetype: directory
         contents: []
+    # this is a glibc thing, so shouldn't exist in musl
     /var/cache/ldconfig:
-        exists: true
-        mode: "0700"
-        owner: root
-        group: root
-        filetype: directory
-        contents: []
+        exists: false
     /var/cache/man:
         exists: true
         mode: "0755"
@@ -384,7 +380,7 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-    '[ "${DEF_BUILDER_CHOST}" = "x86_64-pc-linux-gnu" ]':
+    '[ "${DEF_BUILDER_CHOST}" = "x86_64-gentoo-linux-musl" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
@@ -399,7 +395,7 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-    '[ "${DEF_CHOST}" = "x86_64-pc-linux-gnu" ]':
+    '[ "${DEF_CHOST}" = "x86_64-gentoo-linux-musl" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
@@ -409,7 +405,7 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-    '[ "${PKGDIR}" = "/packages/x86_64-pc-linux-gnu" ]':
+    '[ "${PKGDIR}" = "/packages/x86_64-gentoo-linux-musl" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
@@ -502,7 +498,7 @@ command:
             - -lua_single_target_lua5-4
             - -lua_single_target_luajit
             - -minimal
-            - +nls
+            - -nls
             - -perl
             - -python
             - -python_single_target_python3_10
@@ -618,7 +614,7 @@ command:
         exit-status: 0
         stdout:
             - 'Current /etc/portage/make.profile symlink:'
-            - default/linux/amd64/17.1/no-multilib/hardened
+            - default/linux/amd64/17.0/musl/hardened
         stderr: ""
         timeout: 10000
     fd --version:
@@ -655,12 +651,12 @@ command:
             - go version go1.21.5 linux/amd64
         stderr: ""
         timeout: 10000
-    grep -E 'Latest|stage3' /latest-stage3-amd64-hardened-nomultilib-openrc.txt:
+    grep -E 'Latest|stage3' /latest-stage3-amd64-musl-hardened.txt:
         exit-status: 0
         stdout:
             - '# Latest as of '
             - '2024'
-            - stage3-amd64-hardened-nomultilib-openrc-2024
+            - stage3-amd64-musl-hardened-2024
         stderr: ""
         timeout: 10000
     jq --version:
@@ -763,7 +759,7 @@ command:
             - +autochdir         +folding           +multi_lang        -terminal
             - -autoservername    -footer            -mzscheme          +terminfo
             - -balloon_eval      +fork()            +netbeans_intg     +termresponse
-            - +balloon_eval_term +gettext           +num64             +textobjects
+            - +balloon_eval_term -gettext           +num64             +textobjects
             - -browse            -hangul_input      +packages          +textprop
             - ++builtin_terms    +iconv             +path_extra        +timers
             - +byte_offset       +insert_expand     -perl              +title
@@ -796,7 +792,7 @@ command:
             - 'user exrc file: "$HOME/.exrc"'
             - 'defaults file: "$VIMRUNTIME/defaults.vim"'
             - 'fall-back for $VIM: "/usr/share/vim"'
-            - 'Compilation: x86_64-pc-linux-gnu-gcc -c -I. -Iproto -DHAVE_CONFIG_H -mtune=generic -O2 -pipe -D_REENTRANT -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1'
-            - 'Linking: x86_64-pc-linux-gnu-gcc -Wl,-O1 -Wl,--as-needed -L/usr/local/lib -o vim -lm -ltinfo -lsodium -lacl -lattr'
+            - 'Compilation: x86_64-gentoo-linux-musl-gcc -c -I. -Iproto -DHAVE_CONFIG_H -mtune=generic -O2 -pipe -D_REENTRANT -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1'
+            - 'Linking: x86_64-gentoo-linux-musl-gcc -Wl,-O1 -Wl,--as-needed -L/usr/local/lib -o vim -lm -ltinfo -lsodium -lacl -lattr'
         stderr: ""
         timeout: 10000
