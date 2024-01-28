@@ -505,7 +505,9 @@ jobs:
           #   2. Rebuild againt with different name/tag, which should use the cache
           #
           # BTW skopeo inspect is povo mixing manifest and arch
-          apt install -y skopeo
+          # `sudo apt-get update` is in previous step earlier - but that step is disabled
+          sudo apt-get update
+          sudo apt-get install -y skopeo
           skopeo copy docker://"${TMP_PORTAGE_IMAGE}" docker://"${PORTAGE_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler - images portage
