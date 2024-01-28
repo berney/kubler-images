@@ -675,8 +675,8 @@ jobs:
           set -eux
           TMP_BOB_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/bob-core:"${PORTAGE_DATE}"
           echo "TMP_BOB_CORE_IMAGE=$TMP_BOB_CORE_IMAGE" >> $GITHUB_ENV
-          TMP_BOB_CORE_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/bob-musl-core:"${PORTAGE_DATE}"
-          echo "TMP_BOB_CORE_MUSL_IMAGE=$TMP_BOB_CORE_MUSL_IMAGE" >> $GITHUB_ENV
+          TMP_BOB_MUSL_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/bob-musl-core:"${PORTAGE_DATE}"
+          echo "TMP_BOB_MUSL_CORE_IMAGE=$TMP_BOB_MUSL_CORE_IMAGE" >> $GITHUB_ENV
 
       - name: 🐋🍳 Docker Bake Kubler bob-core
         if: ${{ false }}
@@ -691,7 +691,7 @@ jobs:
             BASE_IMAGE="${STAGE3_MUSL_IMAGE}" \
             docker buildx bake \
               --push \
-              --set core.tags="${TMP_BOB_CORE_MUSL_IMAGE}"
+              --set core.tags="${TMP_BOB_MUSL_CORE_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - list targets
         uses: docker/bake-action/subaction/list-targets@v4
@@ -718,14 +718,16 @@ jobs:
           docker run --rm "${TMP_BOB_CORE_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${TMP_BOB_CORE_IMAGE}" eselect profile show
           docker run --rm "${TMP_BOB_CORE_IMAGE}" ls -l /var/cache
+          cd core/bob-core || exit 1
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_CORE_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - set ENV vars
         run: |
           set -eux
           BOB_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-core:"${PORTAGE_DATE}"
           echo "BOB_CORE_IMAGE=$BOB_CORE_IMAGE" >> $GITHUB_ENV
-          BOB_CORE_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl-core:"${PORTAGE_DATE}"
-          echo "BOB_CORE_MUSL_IMAGE=$BOB_CORE_MUSL_IMAGE" >> $GITHUB_ENV
+          BOB_MUSL_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl-core:"${PORTAGE_DATE}"
+          echo "BOB_MUSL_CORE_IMAGE=$BOB_MUSL_CORE_IMAGE" >> $GITHUB_ENV
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - oras cp
         run: |
@@ -740,7 +742,7 @@ jobs:
           set: |
             core.args.DEF_CHOST=x86_64-gentoo-linux-musl
             core.args.BASE_IMAGE=${{ env.STAGE3_MUSL_IMAGE }}
-            core.tags=${{ env.TMP_BOB_CORE_MUSL_IMAGE }}
+            core.tags=${{ env.TMP_BOB_MUSL_CORE_IMAGE }}
             core.cache-from=type=gha,scope=portage
             core.cache-from=type=gha,scope=stage3-musl-hardened
             core.cache-from=type=gha,scope=bob-musl-core
@@ -750,15 +752,17 @@ jobs:
       - name: 🐋🍳 Docker Bake Kubler bob-musl-core - test
         run: |
           set -eux
-          docker run --rm "${TMP_BOB_CORE_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${TMP_BOB_CORE_MUSL_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
-          docker run --rm "${TMP_BOB_CORE_MUSL_IMAGE}" eselect profile show
-          docker run --rm "${TMP_BOB_CORE_MUSL_IMAGE}" ls -l /var/cache
+          docker run --rm "${TMP_BOB_MUSL_CORE_IMAGE}" cat /etc/gentoo-release
+          docker run --rm "${TMP_BOB_MUSL_CORE_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
+          docker run --rm "${TMP_BOB_MUSL_CORE_IMAGE}" eselect profile show
+          docker run --rm "${TMP_BOB_MUSL_CORE_IMAGE}" ls -l /var/cache
+          cd core/bob-musl-core || exit 1
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_MUSL_CORE_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-musl-core - oras cp
         run: |
           set -eux
-          oras cp -v "$TMP_BOB_CORE_MUSL_IMAGE" "$BOB_CORE_MUSL_IMAGE"
+          oras cp -v "$TMP_BOB_MUSL_CORE_IMAGE" "$BOB_MUSL_CORE_IMAGE"
 
       - name: 🐋🍳 Docker Bake Kubler - images bob-core
         run: |
@@ -848,7 +852,7 @@ jobs:
           docker buildx build \
             --push \
             -f Dockerfile.berney \
-            --build-arg PARENT="${BOB_CORE_MUSL_IMAGE}" \
+            --build-arg PARENT="${BOB_MUSL_CORE_IMAGE}" \
             -t "${TMP_BOB_MUSL_IMAGE}" \
             .
 
@@ -858,7 +862,7 @@ jobs:
           workdir: builder/bob-musl
           push: true
           set: |
-            bob-musl.args.BASE_IMAGE=${{ env.BOB_CORE_MUSL_IMAGE }}
+            bob-musl.args.BASE_IMAGE=${{ env.BOB_MUSL_CORE_IMAGE }}
             bob-musl.tags=${{ env.TMP_BOB_MUSL_IMAGE }}
             bob-musl.cache-from=type=gha,scope=portage
             bob-musl.cache-from=type=gha,scope=stage3-musl-hardened
@@ -898,12 +902,12 @@ jobs:
           # We build tmp image and use oras to copy it, so we don't have it locally
           docker pull "${PORTAGE_IMAGE}"
           docker pull "${BOB_CORE_IMAGE}"
-          docker pull "${BOB_CORE_MUSL_IMAGE}"
+          docker pull "${BOB_MUSL_CORE_IMAGE}"
           docker pull "${BOB_IMAGE}"
           docker pull "${BOB_MUSL_IMAGE}"
           docker tag "${PORTAGE_IMAGE}" kubler-gentoo/portage:latest
           docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
-          docker tag "${BOB_CORE_MUSL_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
+          docker tag "${BOB_MUSL_CORE_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
           docker tag "${BOB_IMAGE}" kubler/bob:"${PORTAGE_DATE}"
           docker tag "${BOB_MUSL_IMAGE}" kubler/bob-musl:"${PORTAGE_DATE}"
           docker images
