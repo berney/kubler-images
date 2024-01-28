@@ -508,7 +508,8 @@ jobs:
           # `sudo apt-get update` is in previous step earlier - but that step is disabled
           sudo apt-get update
           sudo apt-get install -y skopeo
-          skopeo copy docker://"${TMP_PORTAGE_IMAGE}" docker://"${PORTAGE_IMAGE}"
+          # Without `--all` it won't copy the attestation, and will flatten the manifest
+          skopeo copy --all docker://"${TMP_PORTAGE_IMAGE}" docker://"${PORTAGE_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler - images portage
         run: |
