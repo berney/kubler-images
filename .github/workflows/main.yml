@@ -488,8 +488,25 @@ jobs:
       - name: 🐋🍳 Docker Bake Kubler portage - re-tag and push
         run: |
           set -eux
-          docker tag "${TMP_PORTAGE_IMAGE}" "${PORTAGE_IMAGE}"
-          docker push "${PORTAGE_IMAGE}"
+          # Simple `docker tag` fails with copying the SLSA attestation.
+          #
+          #docker tag "${TMP_PORTAGE_IMAGE}" "${PORTAGE_IMAGE}"
+          #docker push "${PORTAGE_IMAGE}"
+          #
+          # To me this is a bug, considering it is docker tools default to add the attestation.
+          #
+          # Options are either:
+          #   1. Use a more powerful tool:
+          #       - skopeo - https://github.com/containers/skopeo
+          #       - oras - https://github.com/oras-project/oras
+          #       - crane - https://github.com/google/go-containerregistry (GGCR)
+          #       - regctl - https://github.com/regclient/regclient
+          #       - maybe img from containerd
+          #   2. Rebuild againt with different name/tag, which should use the cache
+          #
+          # BTW skopeo inspect is povo mixing manifest and arch
+          apt install -y skopeo
+          skopeo copy docker://"${TMP_PORTAGE_IMAGE}" docker://"${PORTAGE_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler - images portage
         run: |
