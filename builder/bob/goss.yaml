@@ -466,18 +466,18 @@ command:
     eix -c --selected:
         exit-status: 0
         stdout:
-            - '[I] app-editors/vim (9.0.2167@01/28/2024): Vim, an improved vi-style text editor'
-            - '[I] app-eselect/eselect-repository (14@01/28/2024): Manage repos.conf via eselect'
-            - '[I] app-misc/jq (1.7@01/28/2024): A lightweight and flexible command-line JSON processor'
-            - '[I] app-portage/eix (0.36.7@01/28/2024): Search and query ebuilds'
-            - '[I] app-portage/flaggie (0.99.8@01/28/2024): A smart CLI mangler for package.* files'
-            - '[I] app-portage/gentoolkit (0.6.3-r1@01/28/2024): Collection of administration scripts for Gentoo'
-            - '[I] app-shells/bash-completion (2.11@01/28/2024): Programmable Completion for bash'
-            - '[I] dev-lang/go (1.21.5(0/1.21.5)@01/28/2024): A concurrent garbage collected and typesafe programming language'
-            - '[I] dev-vcs/git (2.43.0@01/28/2024): Stupid content tracker: distributed VCS designed for speed and efficiency'
-            - '[I] sys-apps/bat (0.23.0-r1@01/28/2024): cat(1) clone with syntax highlighting and Git integration'
-            - '[I] sys-apps/fd (8.7.0@01/28/2024): Alternative to find that provides sensible defaults for 80% of the use cases'
-            - '[I] sys-apps/ripgrep (13.0.0@01/28/2024): Search tool that combines the usability of ag with the raw speed of grep'
+            - '[I] app-editors/vim'
+            - '[I] app-eselect/eselect-repository'
+            - '[I] app-misc/jq'
+            - '[I] app-portage/eix'
+            - '[I] app-portage/flaggie'
+            - '[I] app-portage/gentoolkit'
+            - '[I] app-shells/bash-completion'
+            - '[I] dev-lang/go'
+            - '[I] dev-vcs/git'
+            - '[I] sys-apps/bat'
+            - '[I] sys-apps/fd'
+            - '[I] sys-apps/ripgrep'
             - Found 12 matches
         stderr: ""
         timeout: 10000
