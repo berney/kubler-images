@@ -416,11 +416,11 @@ jobs:
         run: |
           docker buildx ls
 
-      - name: 🐋🍳 Docker Bake Kubler portage - set PORTAGE_IMAGE
+      - name: 🐋🍳 Docker Bake Kubler portage - set TMP_PORTAGE_IMAGE
         run: |
           set -eux
-          PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/portage:"${PORTAGE_DATE}"
-          echo "PORTAGE_IMAGE=$PORTAGE_IMAGE" >> $GITHUB_ENV
+          TMP_PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/portage:"${PORTAGE_DATE}"
+          echo "TMP_PORTAGE_IMAGE=$TMP_PORTAGE_IMAGE" >> $GITHUB_ENV
 
       - name: 🐋🍳 Docker Bake Kubler portage
         if: ${{ false }}
@@ -433,7 +433,7 @@ jobs:
           # - doing separate `TAG=xxx docker buildx bake` commands results in two different images (repository hashes), with identical layers, and near identical metadata.
           #docker buildx bake --load --set kubler-portage.tags=kubler-gentoo/portage:latest --set kubler-portage.tags=kubler-gentoo/portage:$PORTAGE_DATE
           # XXX could `--push` here, but can't do both `--load` and `--push` at the same time.
-          docker buildx bake --push --set kubler-portage.tags="${PORTAGE_IMAGE}"
+          docker buildx bake --push --set kubler-portage.tags="${TMP_PORTAGE_IMAGE}"
 
       - name: Check env before exposing GitHub Runtime - grep
         run: |
@@ -468,14 +468,28 @@ jobs:
           workdir: ../kubler/engine/docker/bob-portage
           push: true
           set: |
-            kubler-portage.tags=${{ env.PORTAGE_IMAGE }}
+            kubler-portage.tags=${{ env.TMP_PORTAGE_IMAGE }}
             kubler-portage.cache-from=type=gha,scope=portage
             kubler-portage.cache-to=type=gha,scope=portage
 
       - name: 🐋🍳 Docker Bake Kubler portage - test
         run: |
           set -eux
-          docker run --rm "${PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
+          docker run --rm "${TMP_PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
+          cd portage || exit 1
+          GOSS_FILES_STRATEGY=cp ../dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --format documentation --color
+
+      - name: 🐋🍳 Docker Bake Kubler portage - set PORTAGE_IMAGE
+        run: |
+          set -eux
+          PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/portage:"${PORTAGE_DATE}"
+          echo "PORTAGE_IMAGE=$PORTAGE_IMAGE" >> $GITHUB_ENV
+
+      - name: 🐋🍳 Docker Bake Kubler portage - re-tag and push
+        run: |
+          set -eux
+          docker tag "${TMP_PORTAGE_IMAGE}" "${PORTAGE_IMAGE}"
+          docker push "${PORTAGE_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler - images portage
         run: |
