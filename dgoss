@@ -51,6 +51,8 @@ run(){
       cp)
         info "Creating $CONTAINER_RUNTIME container"
         id=$($CONTAINER_RUNTIME create "${@:2}")
+        image=$($CONTAINER_RUNTIME inspect -f '{{.Config.Image}}' "$id")
+        info "Container image: $image"
         info "Copy goss files into container"
         $CONTAINER_RUNTIME cp "$tmp_dir/." "$id:/goss"
         info "Starting $CONTAINER_RUNTIME container"
