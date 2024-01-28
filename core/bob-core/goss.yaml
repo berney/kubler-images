@@ -27,17 +27,17 @@ file:
         group: root
         filetype: file
         contents: |
-          COLOR_INST_VERSION="white,1;blue|33,1;%{BG1}|black;green|30,1;%{BG3}"
+            COLOR_INST_VERSION="white,1;blue|33,1;%{BG1}|black;green|30,1;%{BG3}"
 
-          BG0=none;
-          BG1=none;
-          BG2=none;
-          BG3=none;
+            BG0=none;
+            BG1=none;
+            BG2=none;
+            BG3=none;
 
-          COLORSCHEME0=0;
-          COLORSCHEME1=0;
-          COLORSCHEME2=0;
-          COLORSCHEME3=0;
+            COLORSCHEME0=0;
+            COLORSCHEME1=0;
+            COLORSCHEME2=0;
+            COLORSCHEME3=0;
     /etc/gentoo-release:
         exists: true
         mode: "0644"
@@ -45,8 +45,8 @@ file:
         group: root
         filetype: file
         contents:
-          #- "Gentoo Base System release 2.14"
-          - "Gentoo Base System release"
+            - Gentoo Base System release
+            - Gentoo Base System release 2.14
     /etc/portage:
         exists: true
         mode: "0755"
@@ -61,23 +61,23 @@ file:
         group: root
         filetype: file
         contents: |
-          # These settings were set by the catalyst build script that automatically
-          # built this stage.
-          # Please consult /usr/share/portage/config/make.conf.example for a more
-          # detailed example.
-          # These are the USE flags that were used in addition to what is provided by the
-          # profile used for building.
-          USE="bindist threads
-              -X -gnome -gtk -kde -qt4 -cups -alsa -cups -ipv6 -pppd
-              -gdbm -gpm -pam -ncurses"
+            # These settings were set by the catalyst build script that automatically
+            # built this stage.
+            # Please consult /usr/share/portage/config/make.conf.example for a more
+            # detailed example.
+            # These are the USE flags that were used in addition to what is provided by the
+            # profile used for building.
+            USE="bindist threads
+                -X -gnome -gtk -kde -qt4 -cups -alsa -cups -ipv6 -pppd
+                -gdbm -gpm -pam -ncurses"
 
-          NODOC=true
-          NOINFO=true
-          NOMAN=true
+            NODOC=true
+            NOINFO=true
+            NOMAN=true
 
-          LINGUAS="en"
+            LINGUAS="en"
 
-          ACCEPT_LICENSE="*"
+            ACCEPT_LICENSE="*"
     /etc/portage/postsync.d:
         exists: true
         mode: "0755"
@@ -92,14 +92,14 @@ file:
         group: root
         filetype: file
         contents: |
-          #!/bin/sh
-          if [[ -e /var/cache/eix/portage.eix ]]; then
-              cp -a /var/cache/eix/portage.eix /var/cache/eix/previous.eix;
-          fi
-          eix-update
-          if [[ -e /var/cache/eix/previous.eix ]]; then
-              eix-diff;
-          fi
+            #!/bin/sh
+            if [[ -e /var/cache/eix/portage.eix ]]; then
+                cp -a /var/cache/eix/portage.eix /var/cache/eix/previous.eix;
+            fi
+            eix-update
+            if [[ -e /var/cache/eix/previous.eix ]]; then
+                eix-diff;
+            fi
     /etc/portage/repos.conf:
         exists: true
         mode: "0755"
@@ -114,31 +114,31 @@ file:
         group: root
         filetype: file
         contents: |
-          [DEFAULT]
-          main-repo   = gentoo
+            [DEFAULT]
+            main-repo   = gentoo
 
-          [gentoo]
-          location    = /var/db/repos/gentoo
-          #sync-type  = rsync
-          #sync-uri   = rsync://rsync.europe.gentoo.org/gentoo-portage
-          sync-type   = git
-          sync-uri    = https://github.com/gentoo-mirror/gentoo.git
-          auto-sync   = yes
-          sync-rsync-verify-jobs = 1
-          sync-rsync-verify-metamanifest = yes
-          sync-rsync-verify-max-age = 24
-          sync-openpgp-key-path = /usr/share/openpgp-keys/gentoo-release.asc
-          sync-openpgp-keyserver = hkps://keys.gentoo.org
-          sync-openpgp-key-refresh-retry-count = 40
-          sync-openpgp-key-refresh-retry-overall-timeout = 1200
-          sync-openpgp-key-refresh-retry-delay-exp-base = 2
-          sync-openpgp-key-refresh-retry-delay-max = 60
-          sync-openpgp-key-refresh-retry-delay-mult = 4
-          sync-webrsync-verify-signature = yes
+            [gentoo]
+            location    = /var/db/repos/gentoo
+            #sync-type  = rsync
+            #sync-uri   = rsync://rsync.europe.gentoo.org/gentoo-portage
+            sync-type   = git
+            sync-uri    = https://github.com/gentoo-mirror/gentoo.git
+            auto-sync   = yes
+            sync-rsync-verify-jobs = 1
+            sync-rsync-verify-metamanifest = yes
+            sync-rsync-verify-max-age = 24
+            sync-openpgp-key-path = /usr/share/openpgp-keys/gentoo-release.asc
+            sync-openpgp-keyserver = hkps://keys.gentoo.org
+            sync-openpgp-key-refresh-retry-count = 40
+            sync-openpgp-key-refresh-retry-overall-timeout = 1200
+            sync-openpgp-key-refresh-retry-delay-exp-base = 2
+            sync-openpgp-key-refresh-retry-delay-max = 60
+            sync-openpgp-key-refresh-retry-delay-mult = 4
+            sync-webrsync-verify-signature = yes
 
-          # For daily squashfs snapshots
-          #sync-type  = squashdelta
-          #sync-uri   = mirror://gentoo/../snapshots/squashfs
+            # For daily squashfs snapshots
+            #sync-type  = squashdelta
+            #sync-uri   = mirror://gentoo/../snapshots/squashfs
     /etc/profile.d:
         exists: true
         mode: "0755"
@@ -153,32 +153,32 @@ file:
         group: root
         filetype: file
         contents: |
-          #!/usr/bin/env bash
+            #!/usr/bin/env bash
 
-          # make.conf doesn't support POSIX parameter expansion, ENV does ;p
-          # on the downside this needs to be sourced before building anything
+            # make.conf doesn't support POSIX parameter expansion, ENV does ;p
+            # on the downside this needs to be sourced before building anything
 
-          if [[ -z "${USE_BUILDER_FLAGS}" ]]; then
-              export CFLAGS="${DEF_CFLAGS:--mtune=generic -O2 -pipe}"
-              export CXXFLAGS="${DEF_CXXFLAGS:-${CFLAGS}}"
+            if [[ -z "${USE_BUILDER_FLAGS}" ]]; then
+                export CFLAGS="${DEF_CFLAGS:--mtune=generic -O2 -pipe}"
+                export CXXFLAGS="${DEF_CXXFLAGS:-${CFLAGS}}"
 
-              export CHOST="${DEF_CHOST:-x86_64-pc-linux-gnu}"
-          else
-              # when using crossdev this configures the "host" compiler
-              export CFLAGS="${DEF_BUILDER_CFLAGS:--mtune=generic -O2 -pipe}"
-              export CXXFLAGS="${DEF_BUILDER_CXXFLAGS:-${CFLAGS}}"
+                export CHOST="${DEF_CHOST:-x86_64-pc-linux-gnu}"
+            else
+                # when using crossdev this configures the "host" compiler
+                export CFLAGS="${DEF_BUILDER_CFLAGS:--mtune=generic -O2 -pipe}"
+                export CXXFLAGS="${DEF_BUILDER_CXXFLAGS:-${CFLAGS}}"
 
-              export CHOST="${DEF_BUILDER_CHOST:-x86_64-pc-linux-gnu}"
-          fi
+                export CHOST="${DEF_BUILDER_CHOST:-x86_64-pc-linux-gnu}"
+            fi
 
-          export MAKEOPTS="${BOB_MAKEOPTS:--j9}"
+            export MAKEOPTS="${BOB_MAKEOPTS:--j9}"
 
-          export FEATURES="${BOB_FEATURES:-parallel-fetch nodoc noinfo noman -ipc-sandbox -network-sandbox -pid-sandbox}"
-          export EMERGE_DEFAULT_OPTS="${BOB_EMERGE_DEFAULT_OPTS:--b -k}"
+            export FEATURES="${BOB_FEATURES:-parallel-fetch nodoc noinfo noman -ipc-sandbox -network-sandbox -pid-sandbox}"
+            export EMERGE_DEFAULT_OPTS="${BOB_EMERGE_DEFAULT_OPTS:--b -k}"
 
-          export GENTOO_MIRRORS="${BOB_GENTOO_MIRRORS:-ftp://ftp.wh2.tu-dresden.de/pub/mirrors/gentoo ftp://ftp-stud.fht-esslingen.de/pub/Mirrors/gentoo/}"
+            export GENTOO_MIRRORS="${BOB_GENTOO_MIRRORS:-ftp://ftp.wh2.tu-dresden.de/pub/mirrors/gentoo ftp://ftp-stud.fht-esslingen.de/pub/Mirrors/gentoo/}"
 
-          export DISTDIR="/distfiles"
+            export DISTDIR="/distfiles"
     /latest-stage3-amd64-hardened-nomultilib-openrc.txt:
         exists: true
         mode: "0644"
@@ -186,18 +186,10 @@ file:
         group: root
         filetype: file
         contents:
-          - "# Latest as of "
-          # Need to quote to be a string
-          - "2024"
-          - stage3-amd64-hardened-nomultilib-openrc-2024
-    /usr/bin/gcc:
-        exists: true
-        mode: "0777"
-        owner: root
-        group: root
-        #linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/13/gcc
-        #filetype: symlink
-        #contents: []
+            - '# Latest as of '
+            # Need to quote to be a string
+            - '2024'
+            - stage3-amd64-hardened-nomultilib-openrc-2024
     /root/.bashrc:
         exists: true
         mode: "0644"
@@ -205,11 +197,19 @@ file:
         group: root
         filetype: file
         contents:
-          - '#!/usr/bin/env bash'
-          - '# take care of some boiler plate for interactive build containers'
-          - source /etc/profile
-          - source /config/build.sh
-          - source /usr/local/bin/kubler-build-root --source-mode
+            - '#!/usr/bin/env bash'
+            - '# take care of some boiler plate for interactive build containers'
+            - source /etc/profile
+            - source /config/build.sh
+            - source /usr/local/bin/kubler-build-root --source-mode
+    /usr/bin/gcc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/13/gcc
+        filetype: symlink
+        contents: null
     /usr/local/bin/kubler-build-root:
         exists: true
         mode: "0755"
@@ -217,12 +217,12 @@ file:
         group: root
         filetype: file
         contents:
-          - '#!/usr/bin/env bash'
-          - '# Copyright (c) 2014-2019, Erik Dannenberg <erik.dannenberg@xtrade-gmbh.de>'
-          - 'function main() {'
-          - BOB_IS_DEBUG
-          - BOB_IS_INTERACTIVE
-          - '*** Build finished, skipped rootfs.tar and PACKAGES.md'
+            - '#!/usr/bin/env bash'
+            - '# Copyright (c) 2014-2019, Erik Dannenberg <erik.dannenberg@xtrade-gmbh.de>'
+            - function main() {
+            - BOB_IS_DEBUG
+            - BOB_IS_INTERACTIVE
+            - '*** Build finished, skipped rootfs.tar and PACKAGES.md'
     /usr/local/bin/portage-git-sync:
         exists: true
         mode: "0755"
@@ -230,9 +230,9 @@ file:
         group: root
         filetype: file
         contents:
-          - '#!/usr/bin/env bash'
-          - "# check for existing git repo, create one if it doesn't exist"
-          - 'echo "--> switch portage container to git"'
+            - '#!/usr/bin/env bash'
+            - '# check for existing git repo, create one if it doesn''t exist'
+            - echo "--> switch portage container to git"
     /usr/local/bin/sed-or-die:
         exists: true
         mode: "0755"
@@ -240,10 +240,10 @@ file:
         group: root
         filetype: file
         contents:
-          - '#!/usr/bin/env sh'
-          - '# Replace all matches for given sed regex with given replace_value.'
-          - '# Replace all matches for given sed regex with given replace_value. Script is aborted on no match or missing file.'
-          - 'usage: sed-or-die <regex> <replace_value> <target_file> [sed_separator, optional, default: %]'
+            - '#!/usr/bin/env sh'
+            - '# Replace all matches for given sed regex with given replace_value.'
+            - '# Replace all matches for given sed regex with given replace_value. Script is aborted on no match or missing file.'
+            - 'usage: sed-or-die <regex> <replace_value> <target_file> [sed_separator, optional, default: %]'
     /var:
         exists: true
         mode: "0755"
@@ -374,45 +374,44 @@ file:
         filetype: directory
         contents: []
 command:
-    eselect profile show:
-        exit-status: 0
-        stdout:
-            - 'Current /etc/portage/make.profile symlink:'
-            - default/linux/amd64/17.1/no-multilib/hardened
-        stderr: ""
-        timeout: 10000
-    grep -E 'Latest|stage3' /latest-stage3-amd64-hardened-nomultilib-openrc.txt:
-        exit-status: 0
-        stdout:
-            - '# Latest as of '
-            - '2024'
-            - stage3-amd64-hardened-nomultilib-openrc-2024
-        stderr: ""
-        timeout: 10000
-    gcc --version:
-        exit-status: 0
-        stdout:
-            - gcc (Gentoo Hardened
-            - Copyright (C)
-            - Free Software Foundation, Inc.
-            - This is free software; see the source for copying conditions.  There is NO
-            - warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-        stderr: ""
-        timeout: 10000
-    type gcc:
-        exit-status: 0
-        stdout:
-            - gcc is /usr/bin/gcc
-        stderr: ""
-        timeout: 10000
-    # Set and not empty
-    '[ -n "${DEF_BUILDER_CFLAGS}" ]':
+    # Check values are expected
+    '[ "${DEF_BUILDER_CFLAGS}" = "-mtune=generic -O2 -pipe" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
         timeout: 10000
-    # This one might be empty, but should be set
-    '[ -z "${DEF_BUILDER_CXXFLAGS}" ]':
+    '[ "${DEF_BUILDER_CHOST}" = "x86_64-pc-linux-gnu" ]':
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+    '[ "${DEF_BUILDER_CXXFLAGS}" = "" ]':
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+    '[ "${DEF_CFLAGS}" = "-mtune=generic -O2 -pipe" ]':
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+    '[ "${DEF_CHOST}" = "x86_64-pc-linux-gnu" ]':
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+    '[ "${DEF_CXXFLAGS}" = "-mtune=generic -O2 -pipe" ]':
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+    '[ "${PKGDIR}" = "/packages/x86_64-pc-linux-gnu" ]':
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+    # Set and not empty
+    '[ -n "${DEF_BUILDER_CFLAGS}" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
@@ -427,12 +426,12 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-    '[ -n "${DEF_CXXFLAGS}" ]':
+    '[ -n "${DEF_CHOST}" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
         timeout: 10000
-    '[ -n "${DEF_CHOST}" ]':
+    '[ -n "${DEF_CXXFLAGS}" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
@@ -440,5 +439,42 @@ command:
     '[ -n "${PKGDIR}" ]':
         exit-status: 0
         stdout: ""
+        stderr: ""
+        timeout: 10000
+    # This one might be empty, but should be set
+    '[ -z "${DEF_BUILDER_CXXFLAGS}" ]':
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+    eselect profile show:
+        exit-status: 0
+        stdout:
+            - 'Current /etc/portage/make.profile symlink:'
+            - default/linux/amd64/17.1/no-multilib/hardened
+        stderr: ""
+        timeout: 10000
+    gcc --version:
+        exit-status: 0
+        stdout:
+            - gcc (Gentoo Hardened
+            - Copyright (C)
+            - Free Software Foundation, Inc.
+            - This is free software; see the source for copying conditions.  There is NO
+            - warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        stderr: ""
+        timeout: 10000
+    grep -E 'Latest|stage3' /latest-stage3-amd64-hardened-nomultilib-openrc.txt:
+        exit-status: 0
+        stdout:
+            - '# Latest as of '
+            - '2024'
+            - stage3-amd64-hardened-nomultilib-openrc-2024
+        stderr: ""
+        timeout: 10000
+    type gcc:
+        exit-status: 0
+        stdout:
+            - gcc is /usr/bin/gcc
         stderr: ""
         timeout: 10000
