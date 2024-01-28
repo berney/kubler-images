@@ -1,0 +1,124 @@
+file:
+    /etc/gentoo-release:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents:
+          #- "Gentoo Base System release 2.14"
+          - "Gentoo Base System release"
+    /latest-stage3-amd64-hardened-nomultilib-openrc.txt:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents:
+          - "# Latest as of "
+          # Need to quote to be a string
+          - "2024"
+          - stage3-amd64-hardened-nomultilib-openrc-2024
+    /usr/bin/gcc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        #linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/13/gcc
+        #filetype: symlink
+        #contents: []
+    # I bake in portage, so check it
+    /var/db/repos/gentoo:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/db/repos/gentoo/.editorconfig:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/Manifest:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/Manifest.files.gz:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/app-text:
+        exists: true
+        mode: "0755"
+        filetype: directory
+        contents: []
+    /var/db/repos/gentoo/dev-build:
+        exists: true
+        mode: "0755"
+        filetype: directory
+        contents: []
+    /var/db/repos/gentoo/dev-lang:
+        exists: true
+        mode: "0755"
+        filetype: directory
+        contents: []
+    /var/db/repos/gentoo/header.txt:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/profiles:
+        exists: true
+        mode: "0755"
+        filetype: directory
+        contents: []
+    /var/db/repos/gentoo/skel.ebuild:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/skel.metadata.xml:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/sys-apps:
+        exists: true
+        mode: "0755"
+        filetype: directory
+        contents: []
+command:
+    eselect profile show:
+        exit-status: 0
+        stdout:
+            - 'Current /etc/portage/make.profile symlink:'
+            - default/linux/amd64/17.1/no-multilib/hardened
+        stderr: ""
+        timeout: 10000
+    grep -E 'Latest|stage3' /latest-stage3-amd64-hardened-nomultilib-openrc.txt:
+        exit-status: 0
+        stdout:
+            - '# Latest as of '
+            - '2024'
+            - stage3-amd64-hardened-nomultilib-openrc-2024
+        stderr: ""
+        timeout: 10000
+    gcc --version:
+        exit-status: 0
+        stdout:
+            - gcc (Gentoo Hardened
+            - Copyright (C)
+            - Free Software Foundation, Inc.
+            - This is free software; see the source for copying conditions.  There is NO
+            - warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+        stderr: ""
+        timeout: 10000
+    type gcc:
+        exit-status: 0
+        stdout:
+            - gcc is /usr/bin/gcc
+        stderr: ""
+        timeout: 10000
