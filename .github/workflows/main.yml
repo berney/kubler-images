@@ -485,7 +485,8 @@ jobs:
           PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/portage:"${PORTAGE_DATE}"
           echo "PORTAGE_IMAGE=$PORTAGE_IMAGE" >> $GITHUB_ENV
 
-      - name: 🐋🍳 Docker Bake Kubler portage - re-tag and push
+      - name: 🐋🍳 Docker Bake Kubler portage - skopeo re-tag and push
+        if: ${{ false }}
         run: |
           set -eux
           # Simple `docker tag` fails with copying the SLSA attestation.
@@ -510,6 +511,44 @@ jobs:
           sudo apt-get install -y skopeo
           # Without `--all` it won't copy the attestation, and will flatten the manifest
           skopeo copy --all docker://"${TMP_PORTAGE_IMAGE}" docker://"${PORTAGE_IMAGE}"
+          # Fails with this error:
+          # time="2024-01-28T12:18:57Z" level=fatal msg="creating an updated image manifest: preparing updated manifest, layer \"sha256:d70a7eb0a9bff363aec36a597932c7a76ef49dd763f61ba4d690ff979163323b\": unsupported MIME type for compression: application/vnd.in-toto+json"
+
+      - name: Install oras
+        run: |
+          set -eux
+          # Simple `docker tag` gets an error on the attestation layer
+          # `skopeo copy` works but strips the attestation
+          # `skopeo copy --all` attempts to copy the attestation and gets an error because it doesn't support the MIME type
+          VERSION="1.1.0"
+          KEYID="BE6F A8DD A48D 4C23 0091 A0A9 276D 8A72 4CE1 C704"
+          FILE="oras_${VERSION}_linux_amd64.tar.gz"
+          SIG_FILE="oras_${VERSION}_linux_amd64.tar.gz.asc"
+          curl -sSf https://github.com/qweeah.gpg | gpg --import
+          curl -LO "https://github.com/oras-project/oras/releases/download/v${VERSION}/${FILE}"
+          curl -LO "https://github.com/oras-project/oras/releases/download/v${VERSION}/${SIG_FILE}"
+          verify_output=$(gpg --verify "$SIG_FILE" "$FILE" 2>&1)
+          if echo "$verify_output" | grep -q "^gpg: Good signature from "; then
+            echo "Signature is good"
+          else
+            echo "Signature verification failed"
+            exit 1
+          fi
+          if echo "$verify_output" | grep -q "^Primary key fingerprint: ${KEYID}$";  then
+            echo "Signed by expected key"
+          else
+            echo "Signature not made by expected key"
+            exit 1
+          fi
+          tar -zxf oras_${VERSION}_*.tar.gz -C /usr/local/bin/ oras
+          rm "${FILE}" "${SIG_FILE}"
+          type oras
+          oras version
+
+      - name: 🐋🍳 Docker Bake Kubler portage - oras re-tag and push
+        run: |
+          set -eux
+          oras cp -v "$TMP_PORTAGE_IMAGE" "$PORTAGE_IMAGE"
 
       - name: 🐋🍳 Docker Bake Kubler - images portage
         run: |
