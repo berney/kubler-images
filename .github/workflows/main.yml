@@ -820,6 +820,8 @@ jobs:
           docker run --rm "${TMP_BOB_IMAGE}" ls -l /var/cache
           docker run --rm "${TMP_BOB_IMAGE}" ls -l /var/cache/eix
           docker run --rm "${TMP_BOB_IMAGE}" eix --selected -c
+          cd builder/bob || exit 1
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_IMAGE}" validate --format documentation --color
 
       - name: 🐋 Docker Build kubler builder - bob - set ENV vars
         run: |
