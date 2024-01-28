@@ -1,0 +1,63 @@
+file:
+    /var/db/repos/gentoo:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/db/repos/gentoo/.editorconfig:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/Manifest:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/Manifest.files.gz:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/app-text:
+        exists: true
+        mode: "0755"
+        filetype: directory
+        contents: []
+    /var/db/repos/gentoo/dev-build:
+        exists: true
+        mode: "0755"
+        filetype: directory
+        contents: []
+    /var/db/repos/gentoo/dev-lang:
+        exists: true
+        mode: "0755"
+        filetype: directory
+        contents: []
+    /var/db/repos/gentoo/header.txt:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/profiles:
+        exists: true
+        mode: "0755"
+        filetype: directory
+        contents: []
+    /var/db/repos/gentoo/skel.ebuild:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/skel.metadata.xml:
+        exists: true
+        mode: "0644"
+        filetype: file
+        contents: []
+    /var/db/repos/gentoo/sys-apps:
+        exists: true
+        mode: "0755"
+        filetype: directory
+        contents: []
