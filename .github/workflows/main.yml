@@ -840,6 +840,7 @@ jobs:
         continue-on-error: true
         run: |
           cd images/figlet || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
           GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet validate --format documentation --color
 
       - name: 🚧 Build Images - figlet-user
@@ -856,6 +857,7 @@ jobs:
         continue-on-error: true
         run: |
           cd images/figlet-user || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
           GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-user validate --format documentation --color
 
       - name: 🚧 Build Images - figlet-musl
@@ -872,6 +874,7 @@ jobs:
         continue-on-error: true
         run: |
           cd images/figlet-musl || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
           GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl validate --format documentation --color
 
       - name: 🚧 Build Images - figlet-musl-static
@@ -888,6 +891,7 @@ jobs:
         continue-on-error: true
         run: |
           cd images/figlet-musl-static || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
           GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl-static validate --format documentation --color
 
       - name: 🚧 Build Images - goss
@@ -1070,14 +1074,30 @@ jobs:
           # https://stackoverflow.com/a/72955840
           STEPS: ${{ toJSON(steps) }}
         run: |
-          echo "# Successful Steps"
+          echo "# Successful Build Steps"
           printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key | sub("^"; "* ")) | join("\n")'
-          echo "# Failed Steps"
+          echo "# Failed Build Steps"
           printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key | sub("^"; "* ")) | join("\n")'
 
-          echo "# Successful Steps" >> $GITHUB_STEP_SUMMARY
+          echo "# Successful Build Steps" >> $GITHUB_STEP_SUMMARY
           printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key | sub("^"; "* ")) | join("\n")' >> $GITHUB_STEP_SUMMARY
-          echo "# Failed Steps" >> $GITHUB_STEP_SUMMARY
+          echo "# Failed Build Steps" >> $GITHUB_STEP_SUMMARY
           printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key | sub("^"; "* ")) | join("\n")' >> $GITHUB_STEP_SUMMARY
+
+      - name: 🔎 Sumarise Test Status
+        env:
+          # This will contain double-quotes, which `echo` would eat, breaking `jq`
+          # https://stackoverflow.com/a/72955840
+          STEPS: ${{ toJSON(steps) }}
+        run: |
+          echo "# Successful Test Steps"
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "test" and .outcome == "success").key | sub("^"; "* ")) | join("\n")'
+          echo "# Failed Test Steps"
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "test" and .outcome != "success").key | sub("^"; "* ")) | join("\n")'
+
+          echo "# Successful Test Steps" >> $GITHUB_STEP_SUMMARY
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "test" and .outcome == "success").key | sub("^"; "* ")) | join("\n")' >> $GITHUB_STEP_SUMMARY
+          echo "# Failed Test Steps" >> $GITHUB_STEP_SUMMARY
+          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "test" and .outcome != "success").key | sub("^"; "* ")) | join("\n")' >> $GITHUB_STEP_SUMMARY
 
       - run: echo "🍏 This job's status is ${{ job.status }}."
