@@ -521,7 +521,7 @@ jobs:
           # `skopeo copy` works but strips the attestation
           # `skopeo copy --all` attempts to copy the attestation and gets an error because it doesn't support the MIME type
           VERSION="1.1.0"
-          KEYID="BE6F A8DD A48D 4C23 0091 A0A9 276D 8A72 4CE1 C704"
+          KEYID="BE6F A8DD A48D 4C23 0091  A0A9 276D 8A72 4CE1 C704"
           FILE="oras_${VERSION}_linux_amd64.tar.gz"
           SIG_FILE="oras_${VERSION}_linux_amd64.tar.gz.asc"
           curl -sSf https://github.com/qweeah.gpg | gpg --import
