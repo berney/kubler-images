@@ -1,0 +1,3351 @@
+file:
+    /bin:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /bin/[:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/[[:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ar:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/arch:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ascii:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ash:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/awk:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/base32:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/base64:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/basename:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/bb:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/bbconfig:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/bbsh:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/bc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/blkdiscard:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/bunzip2:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/busybox:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /bin/bzcat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/bzip2:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/cal:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/cat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/chattr:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/chgrp:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/chmod:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/chown:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/chpst:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/chrt:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/chvt:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/cksum:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/clear:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/cmp:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/comm:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/conspy:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/cp:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/cpio:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/crc32:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/cryptpw:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/cttyhack:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/cut:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/date:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/dd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/deallocvt:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/df:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/diff:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/dirname:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/dmesg:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/dnsdomainname:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/dos2unix:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/du:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/dumpkmap:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/dumpleases:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/echo:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ed:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/egrep:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/eject:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/env:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/envdir:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/envuidgid:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/expand:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/expr:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/factor:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/fallocate:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/false:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/fatattr:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/fdflush:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/fgconsole:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/fgrep:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/find:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/flock:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/free:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/fsync:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/fuser:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/getopt:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/grep:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/groups:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/gsed:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /bin/gunzip:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/gzip:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/hd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/head:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/hexdump:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/hexedit:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/hostname:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/id:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/install:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ionice:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/iostat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ipcrm:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ipcs:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/kbd_mode:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/kill:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/killall:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/less:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/link:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/linux32:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/linux64:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ln:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/login:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lpq:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lpr:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ls:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lsattr:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lsof:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lspci:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lsscsi:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lsusb:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lzcat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lzma:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lzop:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/lzopcat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/man:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/md5sum:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mesg:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/microcom:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/minips:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mkdir:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mkfifo:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mknod:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mkpasswd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mktemp:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/more:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mount:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mountpoint:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mpstat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mt:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/mv:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/nc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/netcat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/netstat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/nice:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/nl:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/nmeter:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/nohup:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/nproc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/nsenter:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/nslookup:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/nuke:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/openvt:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/passwd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/paste:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/patch:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/pgrep:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/pidof:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ping:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ping6:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/pipe_progress:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/pkill:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/pmap:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/printenv:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/printf:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ps:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/pscan:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/pstree:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/pwd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/pwdx:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/readlink:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/realpath:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/renice:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/reset:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/resize:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/resume:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/rev:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/rm:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/rmdir:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/rx:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/script:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/scriptreplay:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/sed:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: gsed
+        filetype: symlink
+        contents: []
+    /bin/seq:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/setarch:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/setfattr:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/setkeycodes:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/setpriv:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/setserial:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/setsid:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/setuidgid:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/sh:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/sha1sum:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/sha3sum:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/sha256sum:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/sha512sum:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/showkey:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/shred:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/shuf:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/sleep:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/softlimit:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/sort:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/split:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ssl_client:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/stat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/strings:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/stty:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/su:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/sum:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/svc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/svok:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/sync:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/tac:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/tail:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/tar:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/tee:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/telnet:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/test:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/tftp:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/time:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/timeout:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/top:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/touch:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/tr:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/traceroute:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/traceroute6:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/tree:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/true:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/truncate:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ts:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/tsort:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/tty:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/ttysize:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/udhcpc6:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/umount:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/uname:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/uncompress:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/unexpand:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/uniq:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/unit:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/unix2dos:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/unlink:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/unlzma:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/unlzop:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/unshare:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/unxz:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/unzip:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/uptime:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/usleep:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/vi:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/vlock:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/volname:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/watch:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/wc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/wget:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/which:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/whoami:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/whois:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/xargs:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/xxd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/xz:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/xzcat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/yes:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /bin/zcat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: busybox
+        filetype: symlink
+        contents: []
+    /etc:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /etc/conf.d:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /etc/conf.d/busybox-crond:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/conf.d/busybox-ntpd:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/conf.d/busybox-watchdog:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/csh.env:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/env.d:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /etc/environment.d:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /etc/environment.d/10-gentoo-env.conf:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/group:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/ld.so.conf:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/passwd:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/profile.env:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/udhcpd.conf:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /linuxrc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: bin/busybox
+        filetype: symlink
+        contents: []
+    /root:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /run:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /sbin:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /sbin/acpid:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/addgroup:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/adduser:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/adjtimex:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/arp:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/arping:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/blkid:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/blockdev:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/brctl:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/chat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/chpasswd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/chroot:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/crond:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/delgroup:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/deluser:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/depmod:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/devmem:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/dhcprelay:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ether-wake:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/fbset:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/fdformat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/fdisk:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/findfs:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/flash_eraseall:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/flash_lock:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/flash_unlock:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/flashcp:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/freeramdisk:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/fsck:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/fsfreeze:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/fstrim:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ftpd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/getty:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ginit:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/halt:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/hdparm:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/httpd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/hwclock:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/i2cdetect:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/i2cdump:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/i2cget:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/i2cset:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/i2ctransfer:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ifconfig:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ifdown:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ifenslave:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ifplugd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ifup:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/init:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/insmod:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ip:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ipaddr:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/iplink:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ipneigh:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/iproute:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/iprule:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/iptunnel:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/killall5:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/loadfont:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/loadkmap:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/logread:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/losetup:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/lsmod:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/makedevs:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/mdev:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/mim:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/mkdosfs:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/mke2fs:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/mkfs.ext2:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/mkfs.reiser:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/mkfs.vfat:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/mkswap:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/modinfo:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/modprobe:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/nameif:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/nanddump:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/nandwrite:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/nbd-client:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/nologin:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ntpd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/partprobe:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/pivot_root:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/popmaildir:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/poweroff:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/powertop:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/raidautorun:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/rdate:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/readahead:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/reboot:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/rmmod:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/route:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/rtcwake:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/run-init:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/seedrng:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/sendmail:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/setconsole:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/setfont:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/setlogcons:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/start-stop-daemon:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/swapoff:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/swapon:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/switch_root:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/sysctl:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/tc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/telnetd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/tftpd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/tunctl:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/tune2fs:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ubiattach:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ubidetach:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ubimkvol:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ubirename:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ubirmvol:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ubirsvol:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/ubiupdatevol:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/udhcpc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/udhcpd:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/uevent:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/vconfig:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/watchdog:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /sbin/zcip:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../bin/busybox
+        filetype: symlink
+        contents: []
+    /usr:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/bin:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/bin/env:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: /bin/env
+        filetype: symlink
+        contents: []
+    /usr/bin/readlink:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../bin/busybox
+        filetype: symlink
+        contents: []
+    /usr/local:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/local/bin:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/local/bin/sed-or-die:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/share:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/share/busybox:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/share/udhcpc:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/share/udhcpc/default.script:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /var:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/cache:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/db:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/db/pkg:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/lib:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/log:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/run:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../run
+        filetype: symlink
+        contents: []
+    /var/spool:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/spool/cron:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/spool/cron/crontabs:
+        exists: true
+        mode: "0600"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+command:
+    /bin/sed --version:
+        exit-status: 0
+        stdout:
+            - \/bin/sed (GNU sed)
+            - Copyright (C)
+            - Free Software Foundation, Inc.
+            - 'License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.'
+            - 'This is free software: you are free to change and redistribute it.'
+            - There is NO WARRANTY, to the extent permitted by law.
+            - Written by Jay Fenlason, Tom Lord, Ken Pizzini,
+            - Paolo Bonzini, Jim Meyering, and Assaf Gordon.
+            - This sed program was built without SELinux support.
+            - 'GNU sed home page: <https://www.gnu.org/software/sed/>.'
+            - 'General help using GNU software: <https://www.gnu.org/gethelp/>.'
+            - 'E-mail bug reports to: <bug-sed@gnu.org>.'
+        stderr: ""
+        timeout: 10000
+    /bin/sed --version | grep -q 'GNU sed':
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+    '[ "$(sh -c ''echo hithere'')" == "hithere" ]':
+        exit-status: 0
+        stdout: ""
+        stderr: ""
+        timeout: 10000
+    busybox --help:
+        exit-status: 0
+        stdout:
+            - BusyBox v
+            - multi-call binary.
+            - BusyBox is copyrighted by many authors between
+            - Licensed under GPLv2. See source distribution for detailed
+            - copyright notices.
+            - 'Usage: busybox [function [arguments]...]'
+            - 'or: busybox --list[-full]'
+            - 'or: busybox --show SCRIPT'
+            - 'or: busybox --install [-s] [DIR]'
+            - 'or: function [arguments]...'
+            - BusyBox is a multi-call binary that combines many common Unix
+            - utilities into a single executable.  Most people will create a
+            - link to busybox for each function they wish to use and BusyBox
+            - will act like whatever it was invoked as.
+            - 'Currently defined functions:'
+            - '[, [[, acpid, addgroup, adduser, adjtimex, ar, arch, arp, arping,'
+            - ascii, ash, awk, base32, base64, basename, bb, bbconfig, bbsh, bc,
+            - blkdiscard, blkid, blockdev, brctl, bunzip2, bzcat, bzip2, cal, cat,
+            - chat, chattr, chgrp, chmod, chown, chpasswd, chpst, chroot, chrt, chvt,
+            - cksum, clear, cmp, comm, conspy, cp, cpio, crc32, crond, cryptpw,
+            - cttyhack, cut, date, dd, deallocvt, delgroup, deluser, depmod, devmem,
+            - df, dhcprelay, diff, dirname, dmesg, dnsdomainname, dos2unix, du,
+            - dumpkmap, dumpleases, echo, ed, egrep, eject, env, envdir, envuidgid,
+            - ether-wake, expand, expr, factor, fallocate, false, fatattr, fbset,
+            - fdflush, fdformat, fdisk, fgconsole, fgrep, find, findfs,
+            - flash_eraseall, flash_lock, flash_unlock, flashcp, flock, free,
+            - freeramdisk, fsck, fsfreeze, fstrim, fsync, ftpd, fuser, getopt, getty,
+            - ginit, grep, groups, gunzip, gzip, halt, hd, hdparm, head, hexdump,
+            - hexedit, hostname, httpd, hwclock, i2cdetect, i2cdump, i2cget, i2cset,
+            - i2ctransfer, id, ifconfig, ifdown, ifenslave, ifplugd, ifup, init,
+            - insmod, install, ionice, iostat, ip, ipaddr, ipcrm, ipcs, iplink,
+            - ipneigh, iproute, iprule, iptunnel, kbd_mode, kill, killall, killall5,
+            - less, link, linux32, linux64, linuxrc, ln, loadfont, loadkmap, login,
+            - logread, losetup, lpq, lpr, ls, lsattr, lsmod, lsof, lspci, lsscsi,
+            - lsusb, lzcat, lzma, lzop, lzopcat, makedevs, man, md5sum, mdev, mesg,
+            - microcom, mim, minips, mkdir, mkdosfs, mke2fs, mkfifo, mkfs.ext2,
+            - mkfs.reiser, mkfs.vfat, mknod, mkpasswd, mkswap, mktemp, modinfo,
+            - modprobe, more, mount, mountpoint, mpstat, mt, mv, nameif, nanddump,
+            - nandwrite, nbd-client, nc, netcat, netstat, nice, nl, nmeter, nohup,
+            - nologin, nproc, nsenter, nslookup, ntpd, nuke, openvt, partprobe,
+            - passwd, paste, patch, pgrep, pidof, ping, ping6, pipe_progress,
+            - pivot_root, pkill, pmap, popmaildir, poweroff, powertop, printenv,
+            - printf, ps, pscan, pstree, pwd, pwdx, raidautorun, rdate, readahead,
+            - readlink, realpath, reboot, renice, reset, resize, resume, rev, rm,
+            - rmdir, rmmod, route, rtcwake, run-init, rx, script, scriptreplay, sed,
+            - seedrng, sendmail, seq, setarch, setconsole, setfattr, setfont,
+            - setkeycodes, setlogcons, setpriv, setserial, setsid, setuidgid, sh,
+            - sha1sum, sha256sum, sha3sum, sha512sum, showkey, shred, shuf, sleep,
+            - softlimit, sort, split, ssl_client, start-stop-daemon, stat, strings,
+            - stty, su, sum, svc, svok, swapoff, swapon, switch_root, sync, sysctl,
+            - tac, tail, tar, tc, tee, telnet, telnetd, test, tftp, tftpd, time,
+            - timeout, top, touch, tr, traceroute, traceroute6, tree, true, truncate,
+            - ts, tsort, tty, ttysize, tunctl, tune2fs, ubiattach, ubidetach,
+            - ubimkvol, ubirename, ubirmvol, ubirsvol, ubiupdatevol, udhcpc, udhcpc6,
+            - udhcpd, uevent, umount, uname, uncompress, unexpand, uniq, unit,
+            - unix2dos, unlink, unlzma, unlzop, unshare, unxz, unzip, uptime, usleep,
+            - vconfig, vi, vlock, volname, watch, watchdog, wc, wget, which, whoami,
+            - whois, xargs, xxd, xz, xzcat, yes, zcat, zcip
+        stderr: ""
+        timeout: 10000
+    sed --version:
+        exit-status: 0
+        stdout:
+            - sed (GNU sed)
+            - Copyright (C)
+            - Free Software Foundation, Inc.
+            - 'License GPLv3+: GNU GPL version 3 or later <https://gnu.org/licenses/gpl.html>.'
+            - 'This is free software: you are free to change and redistribute it.'
+            - There is NO WARRANTY, to the extent permitted by law.
+            - Written by Jay Fenlason, Tom Lord, Ken Pizzini,
+            - Paolo Bonzini, Jim Meyering, and Assaf Gordon.
+            - This sed program was built without SELinux support.
+            - 'GNU sed home page: <https://www.gnu.org/software/sed/>.'
+            - 'General help using GNU software: <https://www.gnu.org/gethelp/>.'
+            - 'E-mail bug reports to: <bug-sed@gnu.org>.'
+        stderr: ""
+        timeout: 10000
