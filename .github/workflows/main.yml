@@ -995,6 +995,14 @@ jobs:
           export TERM
           kubler build -v kubler/glibc
 
+      - name: Test Image - kubler/glibc
+        id: test-kubler-glibc
+        continue-on-error: true
+        run: |
+          cd images/glibc || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler/glibc validate --format documentation --color
+
       - name: 🚧 Build Images - figlet
         #if: ${{ false }}
         id: figlet

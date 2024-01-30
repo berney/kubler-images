@@ -1,0 +1,815 @@
+file:
+    /etc:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /etc/env.d:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /etc/env.d/00glibc:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/gai.conf:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/host.conf:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/ld.so.cache:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/ld.so.conf:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/locale.gen:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/localtime:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/nsswitch.conf:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/rpc:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /etc/timezone:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /lib64/ld-linux-x86-64.so.2:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/ld-lsb-x86-64.so.3:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ld-linux-x86-64.so.2
+        filetype: symlink
+        contents: []
+    /lib64/libBrokenLocale.so.1:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libanl.so.1:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libc.so.6:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libc_malloc_debug.so.0:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libcrypt.so.1:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: libcrypt.so.1.1.0
+        filetype: symlink
+        contents: []
+    /lib64/libcrypt.so.1.1.0:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libcrypt.so.2:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: libcrypt.so.2.0.0
+        filetype: symlink
+        contents: []
+    /lib64/libcrypt.so.2.0.0:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libdl.so.2:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libm.so.6:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libmemusage.so:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libmvec.so.1:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libnsl.so.1:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libnss_compat.so.2:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libnss_db.so.2:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libnss_dns.so.2:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libnss_files.so.2:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libnss_hesiod.so.2:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libowcrypt.so.1:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: libcrypt.so.1
+        filetype: symlink
+        contents: []
+    /lib64/libpcprofile.so:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libpthread.so.0:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libresolv.so.2:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/librt.so.1:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libthread_db.so.1:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /lib64/libutil.so.1:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /sbin:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /sbin/ldconfig:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /sbin/sln:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/bin:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/bin/gencat:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/getconf:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/getent:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/iconv:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/ld.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/ld-linux-x86-64.so.2
+        filetype: symlink
+        contents: []
+    /usr/bin/ldd:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/locale:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/localedef:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/makedb:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/pcprofiledump:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/pldd:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/sotruss:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/sprof:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/bin/xtrace:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/include:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/lib:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/lib/locale:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/lib/locale/locale-archive:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/lib64/Mcrt1.o:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/Scrt1.o:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/audit:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/lib64/audit/sotruss-lib.so:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/crt1.o:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/crti.o:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/crtn.o:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/gconv:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/lib64/gcrt1.o:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/glibc-2.38:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/lib64/grcrt1.o:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/libBrokenLocale.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libBrokenLocale.so.1
+        filetype: symlink
+        contents: []
+    /usr/lib64/libanl.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libanl.so.1
+        filetype: symlink
+        contents: []
+    /usr/lib64/libc.so:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/libc_malloc_debug.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libc_malloc_debug.so.0
+        filetype: symlink
+        contents: []
+    /usr/lib64/libcrypt.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libcrypt.so.2.0.0
+        filetype: symlink
+        contents: []
+    /usr/lib64/libidn2.so.0.3.8:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/libm.so:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/libmvec.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libmvec.so.1
+        filetype: symlink
+        contents: []
+    /usr/lib64/libnss_compat.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libnss_compat.so.2
+        filetype: symlink
+        contents: []
+    /usr/lib64/libnss_db.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libnss_db.so.2
+        filetype: symlink
+        contents: []
+    /usr/lib64/libnss_hesiod.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libnss_hesiod.so.2
+        filetype: symlink
+        contents: []
+    /usr/lib64/libowcrypt.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libcrypt.so.2.0.0
+        filetype: symlink
+        contents: []
+    /usr/lib64/libresolv.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libresolv.so.2
+        filetype: symlink
+        contents: []
+    /usr/lib64/libthread_db.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: ../../lib64/libthread_db.so.1
+        filetype: symlink
+        contents: []
+    /usr/lib64/libunistring.so.5.0.0:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/misc:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/lib64/misc/glibc:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/lib64/misc/glibc/getconf:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/lib64/misc/glibc/getconf/POSIX_V6_LP64_OFF64:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/misc/glibc/getconf/POSIX_V7_LP64_OFF64:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/misc/glibc/getconf/XBS5_LP64_OFF64:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/lib64/rcrt1.o:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/sbin:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/sbin/iconvconfig:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/share:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/share/i18n:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/share/i18n/SUPPORTED:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/share/i18n/charmaps:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/share/i18n/charmaps/UTF-8.gz:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/share/i18n/locales:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/share/locale:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/share/locale/en_GB:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/share/locale/en_GB/LC_MESSAGES:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /usr/share/locale/en_GB/LC_MESSAGES/libc.mo:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/share/locale/locale.alias:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /usr/share/zoneinfo/Australia/Sydney:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
+    /var:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/db:
+        exists: true
+        mode: "0755"
+        owner: root
+        group: root
+        filetype: directory
+        contents: []
+    /var/db/Makefile:
+        exists: true
+        mode: "0644"
+        owner: root
+        group: root
+        filetype: file
+        contents: []
