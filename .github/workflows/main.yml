@@ -974,6 +974,14 @@ jobs:
           export TERM
           kubler build -v kubler/busybox
 
+      - name: Test Image - kubler/busybox
+        id: test-kubler-busybox
+        continue-on-error: true
+        run: |
+          cd images/busybox || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler/busybox validate --format documentation --color
+
       #- name: 🛑 STOP HERE
       #  run: |
       #    false
