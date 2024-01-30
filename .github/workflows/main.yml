@@ -957,6 +957,14 @@ jobs:
           # This is my copy with small changes
           kubler build -v busybox
 
+      - name: Test Image - berney/busybox
+        id: test-busybox
+        continue-on-error: true
+        run: |
+          cd images/busybox || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/busybox validate --format documentation --color
+
       - name: 🚧 Build Images - kubler/busybox
         #if: ${{ false }}
         id: kubler-busybox
