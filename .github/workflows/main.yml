@@ -1116,14 +1116,6 @@ jobs:
           echo "kubler=test" >> $GITHUB_OUTPUT
           GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/s6 validate --format documentation --color
 
-      - name: 🚧 Build Images - s6 - test
-        #if: ${{ false }}
-        id: s6-test
-        continue-on-error: true
-        run: |
-          docker run --rm kubler-images/s6 s6-svscan -h
-          # XXX Will need to push or something so derived images can use it
-
       - name: 🚧 Build Images - s6 - push
         #if: ${{ false }}
         id: s6-push
@@ -1145,6 +1137,14 @@ jobs:
           " --cache-from=type=gha,scope=s6-busybox"\
           " --cache-to=type=gha,scope=s6-busybox" \
           kubler build -v s6-busybox
+
+      - name: Test Image - s6-busybox
+        id: test-s6-busybox
+        continue-on-error: true
+        run: |
+          cd images/s6-busybox || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
+          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/s6-busybox validate --format documentation --color
 
       - name: 🚧 Build Images - s6-busybox - push
         #if: ${{ false }}
