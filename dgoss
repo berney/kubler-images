@@ -4,6 +4,7 @@ set -e
 
 USAGE="USAGE: $(basename "$0") [run|edit] <docker_run_params>"
 GOSS_FILES_PATH="${GOSS_FILES_PATH:-.}"
+CONTAINER_GOSS_PATH="${CONTAINER_GOSS_PATH:-/goss}"
 
 # Container runtime
 CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
@@ -54,7 +55,7 @@ run(){
         image=$($CONTAINER_RUNTIME inspect -f '{{.Config.Image}}' "$id")
         info "Container image: $image"
         info "Copy goss files into container"
-        $CONTAINER_RUNTIME cp "$tmp_dir/." "$id:/goss"
+        $CONTAINER_RUNTIME cp "$tmp_dir/." "${id}:${CONTAINER_GOSS_PATH}"
         info "Starting $CONTAINER_RUNTIME container"
         $CONTAINER_RUNTIME start "$id" > /dev/null
         ;;

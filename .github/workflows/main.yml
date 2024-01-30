@@ -1080,6 +1080,16 @@ jobs:
           export TERM
           kubler build -v goss
 
+      - name: Test Image - goss
+        id: test-goss
+        continue-on-error: true
+        run: |
+          cd images/goss || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
+          # Because the image is already using `/goss` (and it's a file), we need `dgoss` to use a different directory
+          # I've added teh `CONTAINER_GOSS_PATH` env var to allow overriding the default
+          GOSS_FILES_STRATEGY=cp CONTAINER_GOSS_PATH=/goss2 ../../dgoss run -w /goss2 --entrypoint /goss2/goss kubler-images/goss validate --format documentation --color
+
       - name: 🚧 Build Images - fd
         #if: ${{ false }}
         id: fd
