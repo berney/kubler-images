@@ -811,11 +811,31 @@ jobs:
         run: |
           docker images
 
-      - name: 🐋 Docker Build kubler builder - bob - set tmp ENV vars
+      - name: 🐋 Docker Build kubler builder - bob - set ENV vars
         run: |
           set -eux
           TMP_BOB_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/bob:"${PORTAGE_DATE}"
           echo "TMP_BOB_IMAGE=$TMP_BOB_IMAGE" >> $GITHUB_ENV
+          BOB_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob:"${PORTAGE_DATE}"
+          echo "BOB_IMAGE=$BOB_IMAGE" >> $GITHUB_ENV
+          TMP_BOB_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/bob-musl:"${PORTAGE_DATE}"
+          echo "TMP_BOB_MUSL_IMAGE=$TMP_BOB_MUSL_IMAGE" >> $GITHUB_ENV
+          BOB_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl:"${PORTAGE_DATE}"
+          echo "BOB_MUSL_IMAGE=$BOB_MUSL_IMAGE" >> $GITHUB_ENV
+
+      - name: 🐋 Docker Pull bob
+        id: bob-pull
+        continue-on-error: true
+        run: |
+          set -eu
+          docker pull "$BOB_IMAGE"
+
+      - name: 🐋 Docker Pull bob-musl
+        id: bob-musl-pull
+        continue-on-error: true
+        run: |
+          set -eu
+          docker pull "$BOB_MUSL_IMAGE"
 
       - name: 🐋 Docker Build kubler builder - bob
         if: ${{ false }}
@@ -836,11 +856,13 @@ jobs:
             .
 
       - name: 🐋 Docker Build kubler builder - bob - list targets
+        if: ${{ steps.bob-pull.outcome == 'failure' }}
         uses: docker/bake-action/subaction/list-targets@v4
         with:
           workdir: builder/bob
 
       - name: 🐋🍳 Docker Bake Kubler builder - bob
+        if: ${{ steps.bob-pull.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: builder/bob
@@ -866,22 +888,11 @@ jobs:
           cd builder/bob || exit 1
           CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_IMAGE}" validate --format documentation --color
 
-      - name: 🐋 Docker Build kubler builder - bob - set ENV vars
-        run: |
-          set -eux
-          BOB_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob:"${PORTAGE_DATE}"
-          echo "BOB_IMAGE=$BOB_IMAGE" >> $GITHUB_ENV
-
       - name: 🐋🍳 Docker Bake Kubler builder - bob - oras cp
+        if: ${{ steps.bob-pull.outcome == 'failure' }}
         run: |
           set -eux
           oras cp -v "$TMP_BOB_IMAGE" "$BOB_IMAGE"
-
-      - name: 🐋 Docker Build kubler builder - bob-musl - set ENV vars
-        run: |
-          set -eux
-          TMP_BOB_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/bob-musl:"${PORTAGE_DATE}"
-          echo "TMP_BOB_MUSL_IMAGE=$TMP_BOB_MUSL_IMAGE" >> $GITHUB_ENV
 
       - name: 🐋 Docker Build kubler builder - bob-musl
         if: ${{ false }}
@@ -902,6 +913,7 @@ jobs:
             .
 
       - name: 🐋🍳 Docker Bake Kubler builder - bob-musl
+        if: ${{ steps.bob-musl-pull.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: builder/bob-musl
@@ -928,13 +940,8 @@ jobs:
           cd builder/bob-musl || exit 1
           CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_MUSL_IMAGE}" validate --format documentation --color
 
-      - name: 🐋 Docker Build kubler builder - bob-musl - set ENV vars
-        run: |
-          set -eux
-          BOB_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl:"${PORTAGE_DATE}"
-          echo "BOB_MUSL_IMAGE=$BOB_MUSL_IMAGE" >> $GITHUB_ENV
-
       - name: 🐋🍳 Docker Bake Kubler builder - bob-musl - oras cp
+        if: ${{ steps.bob-musl-pull.outcome == 'failure' }}
         run: |
           set -eux
           oras cp -v "$TMP_BOB_MUSL_IMAGE" "$BOB_MUSL_IMAGE"
