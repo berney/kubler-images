@@ -1149,7 +1149,8 @@ jobs:
         run: |
           cd images/s6-busybox || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          dgoss run kubler-images/s6-busybox
+          # ash needs a terminal to start
+          dgoss run -t kubler-images/s6-busybox
 
       - name: 🚧 Build Images - s6-busybox - push
         #if: ${{ false }}
