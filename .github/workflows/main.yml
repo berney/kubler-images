@@ -684,13 +684,31 @@ jobs:
         run: |
           docker images
 
-      - name: 🐋🍳 Docker Bake Kubler bob-core - set tmp ENV vars
+      - name: 🐋🍳 Docker Bake Kubler bob-core - set ENV vars
         run: |
           set -eux
           TMP_BOB_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/bob-core:"${PORTAGE_DATE}"
           echo "TMP_BOB_CORE_IMAGE=$TMP_BOB_CORE_IMAGE" >> $GITHUB_ENV
           TMP_BOB_MUSL_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/bob-musl-core:"${PORTAGE_DATE}"
           echo "TMP_BOB_MUSL_CORE_IMAGE=$TMP_BOB_MUSL_CORE_IMAGE" >> $GITHUB_ENV
+          BOB_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-core:"${PORTAGE_DATE}"
+          echo "BOB_CORE_IMAGE=$BOB_CORE_IMAGE" >> $GITHUB_ENV
+          BOB_MUSL_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl-core:"${PORTAGE_DATE}"
+          echo "BOB_MUSL_CORE_IMAGE=$BOB_MUSL_CORE_IMAGE" >> $GITHUB_ENV
+
+      - name: 🐋 Docker Pull bob-core
+        id: bob-core-pull
+        continue-on-error: true
+        run: |
+          set -eu
+          docker pull "$BOB_CORE_IMAGE"
+
+      - name: 🐋 Docker Pull bob-musl-core
+        id: bob-musl-core-pull
+        continue-on-error: true
+        run: |
+          set -eu
+          docker pull "$BOB_MUSL_CORE_IMAGE"
 
       - name: 🐋🍳 Docker Bake Kubler bob-core
         if: ${{ false }}
@@ -708,11 +726,13 @@ jobs:
               --set core.tags="${TMP_BOB_MUSL_CORE_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - list targets
+        if: ${{ steps.bob-core-pull.outcome == 'failure' }}
         uses: docker/bake-action/subaction/list-targets@v4
         with:
           workdir: ../kubler/engine/docker/bob-core
 
       - name: 🐋🍳 Docker Bake Kubler bob-core
+        if: ${{ steps.bob-core-pull.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: ../kubler/engine/docker/bob-core
@@ -735,20 +755,14 @@ jobs:
           cd core/bob-core || exit 1
           CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_CORE_IMAGE}" validate --format documentation --color
 
-      - name: 🐋🍳 Docker Bake Kubler bob-core - set ENV vars
-        run: |
-          set -eux
-          BOB_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-core:"${PORTAGE_DATE}"
-          echo "BOB_CORE_IMAGE=$BOB_CORE_IMAGE" >> $GITHUB_ENV
-          BOB_MUSL_CORE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/bob-musl-core:"${PORTAGE_DATE}"
-          echo "BOB_MUSL_CORE_IMAGE=$BOB_MUSL_CORE_IMAGE" >> $GITHUB_ENV
-
       - name: 🐋🍳 Docker Bake Kubler bob-core - oras cp
+        if: ${{ steps.bob-core-pull.outcome == 'failure' }}
         run: |
           set -eux
           oras cp -v "$TMP_BOB_CORE_IMAGE" "$BOB_CORE_IMAGE"
 
       - name: 🐋🍳 Docker Bake Kubler bob-musl-core
+        if: ${{ steps.bob-musl-core-pull.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: ../kubler/engine/docker/bob-core
@@ -774,6 +788,7 @@ jobs:
           CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_MUSL_CORE_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-musl-core - oras cp
+        if: ${{ steps.bob-musl-core-pull.outcome == 'failure' }}
         run: |
           set -eux
           oras cp -v "$TMP_BOB_MUSL_CORE_IMAGE" "$BOB_MUSL_CORE_IMAGE"
