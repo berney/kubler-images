@@ -1,3 +1,5 @@
+# goss needs `getent` to lookup user/group name, other than `root`
+# The docker image doesn't have `getent` so this won't work
 file:
     /bin:
         exists: true
@@ -732,8 +734,8 @@ file:
     /etc:
         exists: true
         mode: "2755"
-        owner: busybox
-        group: busybox
+        #owner: busybox
+        #group: busybox
         filetype: directory
         contents: []
     /etc/csh.env:
@@ -786,30 +788,30 @@ file:
     /etc/service:
         exists: true
         mode: "2755"
-        owner: busybox
-        group: busybox
+        #owner: busybox
+        #group: busybox
         filetype: directory
         contents: []
     /etc/service/busybox:
         exists: true
         mode: "2755"
-        owner: busybox
-        group: busybox
+        #owner: busybox
+        #group: busybox
         filetype: directory
         contents: []
     /etc/service/busybox/finish:
         exists: true
         mode: "0777"
         owner: root
-        group: busybox
+        #group: busybox
         linked-to: /etc/s6_finish_default
         filetype: symlink
         contents: []
     /etc/service/busybox/run:
         exists: true
         mode: "0755"
-        owner: busybox
-        group: busybox
+        #owner: busybox
+        #group: busybox
         filetype: file
         contents:
           - "#!/bin/sh"
