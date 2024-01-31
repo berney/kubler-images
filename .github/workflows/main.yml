@@ -973,8 +973,13 @@ jobs:
       - name: 👷 Kubler Set kubler.conf DEFAULT_MUSL_BUILDER
         #if: ${{ false }}
         run: |
+          # If we don't set the default musl builder, some images will fallback to using bob (glibc) builder
           grep DEFAULT_MUSL_BUILDER kubler.conf || true
-          echo "DEFAULT_MUSL_BUILDER=$BOB_MUSL_IMAGE" >> kubler.conf
+          #echo "DEFAULT_MUSL_BUILDER=$BOB_MUSL_IMAGE" >> kubler.conf
+          # Kubler doesn't understand fully qualified names
+          # Gets error `fatal: Couldn't read namespace conf /kubler.conf`
+          # We have retagged images to have compat names
+          echo "DEFAULT_MUSL_BUILDER=kubler/bob-musl" >> kubler.conf
 
       - name: 👷 Portage Container - eix-update - Populate /var/cache/eix
         run: |
