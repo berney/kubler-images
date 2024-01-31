@@ -529,6 +529,7 @@ jobs:
 
       - name: Install oras
         # XXX Started failing with `gpg: Can't check signature: No public key`
+        # Because his old key expired 2024-02-28
         continue-on-error: true
         id: install-oras
         run: |
@@ -541,6 +542,10 @@ jobs:
           FILE="oras_${VERSION}_linux_amd64.tar.gz"
           SIG_FILE="oras_${VERSION}_linux_amd64.tar.gz.asc"
           curl -sSf https://github.com/qweeah.gpg | gpg --import
+          echo "::group::GPG Public Keys (all)"
+          gpg --list-public-keys
+          echo "::endgroup::"
+          gpg --list-public-keys "$KEYID"
           curl -LO "https://github.com/oras-project/oras/releases/download/v${VERSION}/${FILE}"
           curl -LO "https://github.com/oras-project/oras/releases/download/v${VERSION}/${SIG_FILE}"
           verify_output=$(gpg --verify "$SIG_FILE" "$FILE" 2>&1)
