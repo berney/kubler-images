@@ -2,12 +2,34 @@
 
 set -e
 
-USAGE="USAGE: $(basename "$0") [run|edit] <docker_run_params>"
-GOSS_FILES_PATH="${GOSS_FILES_PATH:-.}"
-CONTAINER_GOSS_PATH="${CONTAINER_GOSS_PATH:-/goss}"
-
-# Container runtime
-CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
+USAGE=$(printf "%s\n" \
+    "USAGE: $(basename "$0") [run|edit] <docker_run_params>" \
+    '' \
+    "ENVVARS:" \
+    '   GOSS_PATH               Location of `goss` executable (Default: tries `which goss`)' \
+    '   GOSS_OPTS               Options for `goss` (Default: `--color --format documentation`)' \
+    '   GOSS_WAIT_OPTS          Wait options for goss, used if goss files has a `goss_wait.yaml` file (Default: `-r 30s -s 1s > /dev/null`)' \
+    '   GOSS_SLEEP              Sleep delay before running `goss` (Default: `0.2`)' \
+    '   GOSS_FILE               Goss file to use (Default: `goss.yaml`)' \
+    '   GOSS_VARS               Optional goss vars file (Default: none)' \
+    '   GOSS_FILES_PATH         Directory to load goss files from (Default: `.`)' \
+    '   CONTAINER_GOSS_PATH     Directory inside container to copy goss files to (Default: `/goss`)' \
+    '   GOSS_FILES_STRATEGY     The strategy to get goss files into the container, ether `mount` or `cp` (Default: `mount`)' \
+    '   DGOSS_TEMP_DIR          Temporary directory for staging files for dgoss (Default: `/tmp.XXXXXXXXXX`)' \
+    '   CONTAINER_MODE          Mode to goss inside container, either `inject` or `entrypoint` (Default: `inject`)' \
+    '                           - Inject mode will start the container with your parameters and then execute `goss` inside it.' \
+    '                             This is the typical mode for daemon like containers (e.g. nginx).' \
+    '                           - Entrypoint mode is when you `goss` is the entrypoint.' \
+    '                             This mode always uses GOSS_FILES_STRATEGY=cp - it will force it' \
+    '                             The user has to give the docker run arguments to make `goss` the entrypoint.' \
+    '                             e.g. `--entrypoint /goss/goss`' \
+    '                             The user has to give `goss` arguments.' \
+    '                             Full example: `CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss berney/s6 validate -f documentation --color`' \
+    '                             This mode is useful for tool like containers that are not long lived and will exit immediately.' \
+    '   CONTAINER_RUNTIME           Container runtime e.g. `docker`, `podman`, etc. (Default: `docker`)' \
+    '   CONTAINER_LOG_OUTPUT    Optional filepath to copy docker output logs to (Default: none)' \
+    ''
+)
 
 info() {
     echo -e "INFO: $*" >&2;
@@ -16,6 +38,28 @@ error() {
     echo -e "ERROR: $*" >&2;
     exit 1;
 }
+
+GOSS_FILES_PATH="${GOSS_FILES_PATH:-.}"
+CONTAINER_GOSS_PATH="${CONTAINER_GOSS_PATH:-/goss}"
+# Either `inject` or `entrypoint`
+CONTAINER_MODE=${CONTAINER_MODE:-inject}
+case "$CONTAINER_MODE" in
+    inject)
+        GOSS_FILES_STRATEGY=${GOSS_FILES_STRATEGY:="mount"}
+        ;;
+    entrypoint)
+        info "Entrypoint mode forcing files strategy cp"
+        # shellcheck disable=SC2209
+        GOSS_FILES_STRATEGY=cp
+        ;;
+    *)
+        error 'Wrong dgoss container mode, only `inject` or `entrypoint`'
+        ;;
+esac
+
+# Container runtime
+CONTAINER_RUNTIME="${CONTAINER_RUNTIME:-docker}"
+
 
 cleanup() {
     set +e
@@ -39,11 +83,10 @@ run(){
     [[ -n "${GOSS_VARS}" ]] && [[ -e "${GOSS_FILES_PATH}/${GOSS_VARS}" ]] && cp "${GOSS_FILES_PATH}/${GOSS_VARS}" "$tmp_dir" && chmod 644 "$tmp_dir/${GOSS_VARS}"
 
     # Switch between mount or cp files strategy
-    GOSS_FILES_STRATEGY=${GOSS_FILES_STRATEGY:="mount"}
     case "$GOSS_FILES_STRATEGY" in
       mount)
         info "Starting $CONTAINER_RUNTIME container"
-        if [ "$CONTAINER_RUNTIME" == "podman" -a $# == 2 ]; then
+        if [ "$CONTAINER_RUNTIME" == "podman" ] && [ $# == 2 ]; then
             id=$($CONTAINER_RUNTIME run -d -v "$tmp_dir:/goss:z" "${@:2}" sleep infinity)
         else
             id=$($CONTAINER_RUNTIME run -d -v "$tmp_dir:/goss:z" "${@:2}")
@@ -79,65 +122,104 @@ get_docker_file() {
     fi
 }
 
-# Main
-tmp_dir=$(mktemp -d ${DGOSS_TEMP_DIR:-/tmp}/tmp.XXXXXXXXXX)
-chmod 777 "$tmp_dir"
-trap 'ret=$?;cleanup;exit $ret' EXIT
+inject_mode() {
+    info "Inject mode"
+    info "Container health"
+    if [ "true" != "$($CONTAINER_RUNTIME inspect -f '{{.State.Running}}' "$id")" ]; then
+        $CONTAINER_RUNTIME logs "$id" >&2
+        error "the container failed to start"
+    fi
+    info "Running Tests"
+    if [[ -z "${GOSS_VARS}" ]]; then
+        $CONTAINER_RUNTIME exec "$id" sh -c "/goss/goss -g /goss/goss.yaml validate $GOSS_OPTS"
+    else
+        $CONTAINER_RUNTIME exec "$id" sh -c "/goss/goss -g /goss/goss.yaml --vars='/goss/${GOSS_VARS}' validate $GOSS_OPTS"
+    fi
+}
 
-GOSS_PATH="${GOSS_PATH:-$(which goss 2> /dev/null || true)}"
-[[ $GOSS_PATH ]] || { error "Couldn't find goss installation, please set GOSS_PATH to it"; }
-[[ ${GOSS_OPTS+x} ]] || GOSS_OPTS="--color --format documentation"
-[[ ${GOSS_WAIT_OPTS+x} ]] || GOSS_WAIT_OPTS="-r 30s -s 1s > /dev/null"
-GOSS_SLEEP=${GOSS_SLEEP:-0.2}
+entrypoint_mode() {
+   info "Entrypoint mode"
+    # Berney: wait until goss has finished.
+    #         we will get the exit code later
+    $CONTAINER_RUNTIME wait "$id" > /dev/null
+    if [ "true" != "$($CONTAINER_RUNTIME inspect -f '{{.State.Running}}' "$id")" ]; then
+        $CONTAINER_RUNTIME logs "$id" >&2
+        # Berney: We expect container to have exited, since we started `goss` directly.
+        # Propagate exit code - if goss checks pass/failed
+        exit "$($CONTAINER_RUNTIME inspect -f '{{ .State.ExitCode }}' "$id")"
+    else
+        # This generally shouldn't happen
+        error "Container still running, after wait..."
+    fi
+}
 
-[[ $CONTAINER_RUNTIME =~ ^(docker|podman)$ ]] || { error "Runtime must be one of docker or podman"; }
-
-case "$1" in
-    run)
-        run "$@"
-        if [[ -e "${GOSS_FILES_PATH}/goss_wait.yaml" ]]; then
-            info "Found goss_wait.yaml, waiting for it to pass before running tests"
-            if [[ -z "${GOSS_VARS}" ]]; then
-                if ! $CONTAINER_RUNTIME exec "$id" sh -c "/goss/goss -g /goss/goss_wait.yaml validate $GOSS_WAIT_OPTS"; then
-                    $CONTAINER_RUNTIME logs "$id" >&2
-                    error "goss_wait.yaml never passed"
-                fi
-            else
-                if ! $CONTAINER_RUNTIME exec "$id" sh -c "/goss/goss -g /goss/goss_wait.yaml --vars='/goss/${GOSS_VARS}' validate $GOSS_WAIT_OPTS"; then
-                    $CONTAINER_RUNTIME logs "$id" >&2
-                    error "goss_wait.yaml never passed"
-                fi
+dgoss_run() {
+    run "$@"
+    if [[ -e "${GOSS_FILES_PATH}/goss_wait.yaml" ]]; then
+        info "Found goss_wait.yaml, waiting for it to pass before running tests"
+        if [[ -z "${GOSS_VARS}" ]]; then
+            if ! $CONTAINER_RUNTIME exec "$id" sh -c "/goss/goss -g /goss/goss_wait.yaml validate $GOSS_WAIT_OPTS"; then
+                $CONTAINER_RUNTIME logs "$id" >&2
+                error "goss_wait.yaml never passed"
+            fi
+        else
+            if ! $CONTAINER_RUNTIME exec "$id" sh -c "/goss/goss -g /goss/goss_wait.yaml --vars='/goss/${GOSS_VARS}' validate $GOSS_WAIT_OPTS"; then
+                $CONTAINER_RUNTIME logs "$id" >&2
+                error "goss_wait.yaml never passed"
             fi
         fi
-        [[ $GOSS_SLEEP ]] && { info "Sleeping for $GOSS_SLEEP"; sleep "$GOSS_SLEEP"; }
-        #info "Container health"
-        # Berney: wait until goss has finished.
-        #         we will get the exit code later
-        $CONTAINER_RUNTIME wait "$id" > /dev/null
-        if [ "true" != "$($CONTAINER_RUNTIME inspect -f '{{.State.Running}}' "$id")" ]; then
-            $CONTAINER_RUNTIME logs "$id" >&2
-            # Berney: We expect container to have exited, since we started `goss` directly.
-            #error "the container failed to start"
-            # Propagate exit code - if goss checks pass/failed
-            exit "$($CONTAINER_RUNTIME inspect -f '{{ .State.ExitCode }}' "$id")"
-        fi
-        #info "Running Tests"
-        #if [[ -z "${GOSS_VARS}" ]]; then
-        #    $CONTAINER_RUNTIME exec "$id" sh -c "/goss/goss -g /goss/goss.yaml validate $GOSS_OPTS"
-        #else
-        #    $CONTAINER_RUNTIME exec "$id" sh -c "/goss/goss -g /goss/goss.yaml --vars='/goss/${GOSS_VARS}' validate $GOSS_OPTS"
-        #fi
-        ;;
-    edit)
-        run "$@"
-        info "Run goss add/autoadd to add resources"
-        $CONTAINER_RUNTIME exec -it "$id" sh -c 'cd /goss; PATH="/goss:$PATH" exec sh'
-        get_docker_file "$id" "/goss/goss.yaml" "${GOSS_FILES_PATH}/${GOSS_FILE:-goss.yaml}"
-        get_docker_file "$id" "/goss/goss_wait.yaml" "${GOSS_FILES_PATH}/goss_wait.yaml"
-        if [[ -n "${GOSS_VARS}" ]]; then
-            get_docker_file "$id" "/goss/${GOSS_VARS}" "${GOSS_FILES_PATH}/${GOSS_VARS}"
-        fi
-        ;;
-    *)
-        error "$USAGE"
-esac
+    fi
+    [[ $GOSS_SLEEP ]] && { info "Sleeping for $GOSS_SLEEP"; sleep "$GOSS_SLEEP"; }
+
+    case "$CONTAINER_MODE" in
+        inject)
+            inject_mode
+            ;;
+        entrypoint)
+            entrypoint_mode
+            ;;
+        *)
+            error 'Wrong dgoss container mode, only `inject` or `entrypoint`'
+            ;;
+    esac
+}
+
+dgoss_edit() {
+    run "$@"
+    info "Run goss add/autoadd to add resources"
+    $CONTAINER_RUNTIME exec -it "$id" sh -c 'cd /goss; PATH="/goss:$PATH" exec sh'
+    get_docker_file "$id" "/goss/goss.yaml" "${GOSS_FILES_PATH}/${GOSS_FILE:-goss.yaml}"
+    get_docker_file "$id" "/goss/goss_wait.yaml" "${GOSS_FILES_PATH}/goss_wait.yaml"
+    if [[ -n "${GOSS_VARS}" ]]; then
+        get_docker_file "$id" "/goss/${GOSS_VARS}" "${GOSS_FILES_PATH}/${GOSS_VARS}"
+    fi
+}
+
+# Main
+main() {
+    local dgoss_mode=$1
+    tmp_dir=$(mktemp -d "${DGOSS_TEMP_DIR:-/tmp}"/tmp.XXXXXXXXXX)
+    chmod 777 "$tmp_dir"
+    trap 'ret=$?;cleanup;exit $ret' EXIT
+
+    GOSS_PATH="${GOSS_PATH:-$(which goss 2> /dev/null || true)}"
+    [[ $GOSS_PATH ]] || { error "Couldn't find goss installation, please set GOSS_PATH to it"; }
+    [[ ${GOSS_OPTS+x} ]] || GOSS_OPTS="--color --format documentation"
+    [[ ${GOSS_WAIT_OPTS+x} ]] || GOSS_WAIT_OPTS="-r 30s -s 1s > /dev/null"
+    GOSS_SLEEP=${GOSS_SLEEP:-0.2}
+
+    [[ $CONTAINER_RUNTIME =~ ^(docker|podman)$ ]] || { error "Runtime must be one of docker or podman"; }
+
+    case "$dgoss_mode" in
+        run)
+            dgoss_run "$@"
+            ;;
+        edit)
+            dgoss_edit "$@"
+            ;;
+        *)
+            error "$USAGE"
+    esac
+}
+
+main "$@"
