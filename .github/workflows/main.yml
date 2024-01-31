@@ -543,9 +543,9 @@ jobs:
           SIG_FILE="oras_${VERSION}_linux_amd64.tar.gz.asc"
           curl -sSf https://github.com/qweeah.gpg | gpg --import
           echo "::group::GPG Public Keys (all)"
-          gpg --list-public-keys
+          gpg --list-public-keys || true
           echo "::endgroup::"
-          gpg --list-public-keys "$KEYID"
+          gpg --list-public-keys "$KEYID" || true
           curl -LO "https://github.com/oras-project/oras/releases/download/v${VERSION}/${FILE}"
           curl -LO "https://github.com/oras-project/oras/releases/download/v${VERSION}/${SIG_FILE}"
           verify_output=$(gpg --verify "$SIG_FILE" "$FILE" 2>&1)
