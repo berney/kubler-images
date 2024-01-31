@@ -64,6 +64,11 @@ jobs:
           type goss
           goss --version
 
+      - name: Install dgoss
+        #if: ${{ false }}
+        run: |
+          cp dgoss /usr/local/bin/
+
       - name: Update Docker Engine
         # Disable
         if: ${{ false }}
@@ -477,7 +482,7 @@ jobs:
           set -eux
           docker run --rm "${TMP_PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
           cd portage || exit 1
-          GOSS_FILES_STRATEGY=cp ../dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler portage - set PORTAGE_IMAGE
         run: |
@@ -618,7 +623,7 @@ jobs:
           docker run --rm "${TMP_STAGE3_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${TMP_STAGE3_IMAGE}" eselect profile show
           cd stage3/amd64-hardened-nomultilib-openrc || exit 1
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss "${TMP_STAGE3_IMAGE}" validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_STAGE3_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - set ENV vars
         run: |
@@ -659,7 +664,7 @@ jobs:
           docker run --rm "${TMP_STAGE3_MUSL_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${TMP_STAGE3_MUSL_IMAGE}" eselect profile show
           cd stage3/amd64-musl-hardened || exit 1
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss "${TMP_STAGE3_MUSL_IMAGE}" validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_STAGE3_MUSL_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler stage3 musl - oras cp
         run: |
@@ -719,7 +724,7 @@ jobs:
           docker run --rm "${TMP_BOB_CORE_IMAGE}" eselect profile show
           docker run --rm "${TMP_BOB_CORE_IMAGE}" ls -l /var/cache
           cd core/bob-core || exit 1
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_CORE_IMAGE}" validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_CORE_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - set ENV vars
         run: |
@@ -757,7 +762,7 @@ jobs:
           docker run --rm "${TMP_BOB_MUSL_CORE_IMAGE}" eselect profile show
           docker run --rm "${TMP_BOB_MUSL_CORE_IMAGE}" ls -l /var/cache
           cd core/bob-musl-core || exit 1
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_MUSL_CORE_IMAGE}" validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_MUSL_CORE_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-musl-core - oras cp
         run: |
@@ -821,7 +826,7 @@ jobs:
           docker run --rm "${TMP_BOB_IMAGE}" ls -l /var/cache/eix
           docker run --rm "${TMP_BOB_IMAGE}" eix --selected -c
           cd builder/bob || exit 1
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_IMAGE}" validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_IMAGE}" validate --format documentation --color
 
       - name: 🐋 Docker Build kubler builder - bob - set ENV vars
         run: |
@@ -883,7 +888,7 @@ jobs:
           docker run --rm "${TMP_BOB_MUSL_IMAGE}" ls -l /var/cache/eix
           docker run --rm "${TMP_BOB_MUSL_IMAGE}" eix --selected -c
           cd builder/bob-musl || exit 1
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_MUSL_IMAGE}" validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_MUSL_IMAGE}" validate --format documentation --color
 
       - name: 🐋 Docker Build kubler builder - bob-musl - set ENV vars
         run: |
@@ -963,7 +968,7 @@ jobs:
         run: |
           cd images/busybox || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/busybox validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/busybox validate --format documentation --color
 
       - name: 🚧 Build Images - kubler/busybox
         #if: ${{ false }}
@@ -980,7 +985,7 @@ jobs:
         run: |
           cd images/busybox || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler/busybox validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler/busybox validate --format documentation --color
 
       #- name: 🛑 STOP HERE
       #  run: |
@@ -1001,7 +1006,7 @@ jobs:
         run: |
           cd images/glibc || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler/glibc validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler/glibc validate --format documentation --color
 
       - name: 🚧 Build Images - figlet
         #if: ${{ false }}
@@ -1018,7 +1023,7 @@ jobs:
         run: |
           cd images/figlet || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet validate --format documentation --color
 
       - name: 🚧 Build Images - figlet-user
         #if: ${{ false }}
@@ -1052,7 +1057,7 @@ jobs:
         run: |
           cd images/figlet-musl || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl validate --format documentation --color
 
       - name: 🚧 Build Images - figlet-musl-static
         #if: ${{ false }}
@@ -1069,7 +1074,7 @@ jobs:
         run: |
           cd images/figlet-musl-static || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl-static validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl-static validate --format documentation --color
 
       - name: 🚧 Build Images - goss
         #if: ${{ false }}
@@ -1088,7 +1093,7 @@ jobs:
           echo "kubler=test" >> $GITHUB_OUTPUT
           # Because the image is already using `/goss` (and it's a file), we need `dgoss` to use a different directory
           # I've added teh `CONTAINER_GOSS_PATH` env var to allow overriding the default
-          GOSS_FILES_STRATEGY=cp CONTAINER_GOSS_PATH=/goss2 ../../dgoss run -w /goss2 --entrypoint /goss2/goss kubler-images/goss validate --format documentation --color
+          CONTAINER_MODE=entrypoint CONTAINER_GOSS_PATH=/goss2 dgoss run -w /goss2 --entrypoint /goss2/goss kubler-images/goss validate --format documentation --color
 
       - name: 🚧 Build Images - fd
         #if: ${{ false }}
@@ -1114,7 +1119,7 @@ jobs:
         run: |
           cd images/s6 || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/s6 validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/s6 validate --format documentation --color
 
       - name: 🚧 Build Images - s6 - push
         #if: ${{ false }}
@@ -1144,7 +1149,7 @@ jobs:
         run: |
           cd images/s6-busybox || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/s6-busybox validate --format documentation --color
+          dgoss run kubler-images/s6-busybox
 
       - name: 🚧 Build Images - s6-busybox - push
         #if: ${{ false }}
