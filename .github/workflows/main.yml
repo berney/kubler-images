@@ -421,11 +421,13 @@ jobs:
         run: |
           docker buildx ls
 
-      - name: 🐋🍳 Docker Bake Kubler portage - set TMP_PORTAGE_IMAGE
+      - name: 🐋🍳 Docker Bake Kubler portage - set PORTAGE_IMAGE env vars
         run: |
           set -eux
           TMP_PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/portage:"${PORTAGE_DATE}"
+          PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/portage:"${PORTAGE_DATE}"
           echo "TMP_PORTAGE_IMAGE=$TMP_PORTAGE_IMAGE" >> $GITHUB_ENV
+          echo "PORTAGE_IMAGE=$PORTAGE_IMAGE" >> $GITHUB_ENV
 
       - name: 🐋🍳 Docker Bake Kubler portage
         if: ${{ false }}
@@ -462,12 +464,21 @@ jobs:
         run: |
           env
 
+      - name: 🐋 Docker Pull Portage
+        id: portage-pull
+        continue-on-error: true
+        run: |
+          set -eu
+          docker pull "$PORTAGE_IMAGE"
+
       - name: 🐋🍳 Docker Bake Kubler portage - list targets
+        if: ${{ steps.portage-pull.outcome == 'failure' }}
         uses: docker/bake-action/subaction/list-targets@v4
         with:
           workdir: ../kubler/engine/docker/bob-portage
 
       - name: 🐋🍳 Docker Bake Kubler portage
+        if: ${{ steps.portage-pull.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: ../kubler/engine/docker/bob-portage
@@ -477,18 +488,15 @@ jobs:
             kubler-portage.cache-from=type=gha,scope=portage
             kubler-portage.cache-to=type=gha,scope=portage
 
+      # We always test, even if we pulled
+      # A pushed image should have been tested before being pushed.
+      # But re-testing for extra safety and in case tests have changed in between.
       - name: 🐋🍳 Docker Bake Kubler portage - test
         run: |
           set -eux
           docker run --rm "${TMP_PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
           cd portage || exit 1
           CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --format documentation --color
-
-      - name: 🐋🍳 Docker Bake Kubler portage - set PORTAGE_IMAGE
-        run: |
-          set -eux
-          PORTAGE_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/portage:"${PORTAGE_DATE}"
-          echo "PORTAGE_IMAGE=$PORTAGE_IMAGE" >> $GITHUB_ENV
 
       - name: 🐋🍳 Docker Bake Kubler portage - skopeo re-tag and push
         if: ${{ false }}
@@ -551,6 +559,7 @@ jobs:
           oras version
 
       - name: 🐋🍳 Docker Bake Kubler portage - oras cp
+        if: ${{ steps.portage-pull.outcome == 'failure' }}
         run: |
           set -eux
           oras cp -v "$TMP_PORTAGE_IMAGE" "$PORTAGE_IMAGE"
