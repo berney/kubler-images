@@ -568,7 +568,7 @@ jobs:
         run: |
           docker images
 
-      - name: 🐋🍳 Docker Bake Kubler stage3 - set tmp ENV vars
+      - name: 🐋🍳 Docker Bake Kubler stage3 - set ENV vars
         run: |
           set -eux
           # XXX Not the tags I'm setting here, and the BASE_TAG I use later probably have a disconnect
@@ -576,6 +576,24 @@ jobs:
           echo "TMP_STAGE3_IMAGE=$TMP_STAGE3_IMAGE" >> $GITHUB_ENV
           TMP_STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
           echo "TMP_STAGE3_MUSL_IMAGE=$TMP_STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
+          STAGE3_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-hardened-nomultilib-openrc:"${PORTAGE_DATE}"
+          echo "STAGE3_IMAGE=$STAGE3_IMAGE" >> $GITHUB_ENV
+          STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
+          echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
+
+      - name: 🐋 Docker Pull stage3
+        id: stage3-pull
+        continue-on-error: true
+        run: |
+          set -eu
+          docker pull "$STAGE3_IMAGE"
+
+      - name: 🐋 Docker Pull stage3 musl
+        id: stage3-musl-pull
+        continue-on-error: true
+        run: |
+          set -eu
+          docker pull "$STAGE3_MUSL_IMAGE"
 
       - name: 🐋🍳 Docker Bake Kubler stage3
         if: ${{ false }}
@@ -603,11 +621,13 @@ jobs:
               --set gentoo-stage3.tags="${TMP_STAGE3_MUSL_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - list targets
+        if: ${{ steps.stage3-pull.outcome == 'failure' }}
         uses: docker/bake-action/subaction/list-targets@v4
         with:
           workdir: ../kubler/engine/docker/bob-stage3
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - hardened-nomultilib
+        if: ${{ steps.stage3-pull.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: ../kubler/engine/docker/bob-stage3
@@ -634,21 +654,14 @@ jobs:
           cd stage3/amd64-hardened-nomultilib-openrc || exit 1
           CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_STAGE3_IMAGE}" validate --format documentation --color
 
-      - name: 🐋🍳 Docker Bake Kubler stage3 - set ENV vars
-        run: |
-          set -eux
-          # XXX Not the tags I'm setting here, and the BASE_TAG I use later probably have a disconnect
-          STAGE3_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-hardened-nomultilib-openrc:"${PORTAGE_DATE}"
-          echo "STAGE3_IMAGE=$STAGE3_IMAGE" >> $GITHUB_ENV
-          STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
-          echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
-
       - name: 🐋🍳 Docker Bake Kubler stage3 - oras cp
+        if: ${{ steps.stage3-pull.outcome == 'failure' }}
         run: |
           set -eux
           oras cp -v "$TMP_STAGE3_IMAGE" "$STAGE3_IMAGE"
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - musl-hardened
+        if: ${{ steps.stage3-musl-pull.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: ../kubler/engine/docker/bob-stage3
@@ -676,6 +689,7 @@ jobs:
           CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_STAGE3_MUSL_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler stage3 musl - oras cp
+        if: ${{ steps.stage3-musl-pull.outcome == 'failure' }}
         run: |
           set -eux
           oras cp -v "$TMP_STAGE3_MUSL_IMAGE" "$STAGE3_MUSL_IMAGE"
