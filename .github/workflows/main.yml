@@ -1040,7 +1040,7 @@ jobs:
         run: |
           cd images/figlet-user || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          GOSS_FILES_STRATEGY=cp ../../dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-user validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-user validate --format documentation --color
 
       - name: 🚧 Build Images - figlet-musl
         #if: ${{ false }}
