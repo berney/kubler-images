@@ -733,9 +733,9 @@ file:
         contents: []
     /etc:
         exists: true
-        mode: "2755"
-        #owner: busybox
-        #group: busybox
+        mode: "0755"
+        #owner: root
+        #group: root
         filetype: directory
         contents: []
     /etc/csh.env:
@@ -787,10 +787,25 @@ file:
         contents: []
     /etc/service:
         exists: true
-        mode: "2755"
-        #owner: busybox
-        #group: busybox
+        mode: "0755"
+        #owner: root
+        #group: root
         filetype: directory
+        contents: []
+    /etc/service/.s6-svscan:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: directory
+        contents: []
+    /etc/service/.s6-svscan/finish:
+        exists: true
+        mode: "0777"
+        #owner: root
+        #group: root
+        linked-to: /etc/s6_finish_default
+        filetype: symlink
         contents: []
     /lib:
         exists: true
