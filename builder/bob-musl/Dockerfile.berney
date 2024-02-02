@@ -9,9 +9,11 @@ COPY build.sh /config/
 RUN --mount=type=cache,target=/distfiles --mount=type=cache,target=/packages <<-EOF
   env | grep -E '^((BOB|DEF)_|PKGDIR)'
   ls -l /config
-  ls -l /distfiles || true
-  ls -l /packages || true
+  ls -ltra /distfiles | tail || true
+  ls -ltra /packages | tail || true
   BOB_CURRENT_TARGET=berney/bob-musl kubler-build-root
+  ls -ltra /distfiles | tail || true
+  ls -ltra /packages | tail || true
 EOF
 
 CMD ["/bin/bash"]

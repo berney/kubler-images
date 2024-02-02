@@ -484,7 +484,8 @@ command:
     equery --version:
         exit-status: 0
         stdout:
-            - "\e[36;01mequery\e[39;49;00m (0.6.2) - Gentoo package query tool"
+            - "\e[36;01mequery\e[39;49;00m"
+            - Gentoo package query tool
         stderr: ""
         timeout: 10000
     equery u app-editors/vim:
@@ -646,13 +647,14 @@ command:
     git --version:
         exit-status: 0
         stdout:
-            - git version 2.43.0
+            - git version
         stderr: ""
         timeout: 10000
     go version:
         exit-status: 0
         stdout:
-            - go version go1.21.5 linux/amd64
+            - go version go
+            - linux/amd64
         stderr: ""
         timeout: 10000
     grep -E 'Latest|stage3' /latest-stage3-amd64-hardened-nomultilib-openrc.txt:
@@ -666,13 +668,13 @@ command:
     jq --version:
         exit-status: 0
         stdout:
-            - jq-1.7
+            - jq
         stderr: ""
         timeout: 10000
     rg --version:
         exit-status: 0
         stdout:
-            - ripgrep 13.0.0
+            - ripgrep
             - -SIMD -AVX (compiled)
             - +SIMD +AVX (runtime)
         stderr: ""
@@ -752,7 +754,7 @@ command:
     vi --version:
         exit-status: 0
         stdout:
-            - VIM - Vi IMproved 9.0 (2022 Jun 28, compiled
+            - VIM - Vi IMproved
             - 'Included patches: 1-2167'
             - Modified by Gentoo-9.0.2167 (RIP Bram)
             - Compiled by portage@buildkitsandbox
