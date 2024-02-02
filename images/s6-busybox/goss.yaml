@@ -733,7 +733,7 @@ file:
         contents: []
     /etc:
         exists: true
-        mode: "2755"
+        mode: "0755"
         #owner: busybox
         #group: busybox
         filetype: directory
@@ -787,7 +787,7 @@ file:
         contents: []
     /etc/service:
         exists: true
-        mode: "2755"
+        mode: "0755"
         #owner: busybox
         #group: busybox
         filetype: directory
@@ -809,7 +809,7 @@ file:
         contents: []
     /etc/service/busybox:
         exists: true
-        mode: "2755"
+        mode: "0755"
         #owner: busybox
         #group: busybox
         filetype: directory
