@@ -205,6 +205,11 @@ jobs:
               image: ghcr.io/${{ github.repository }}/bob-core:${{ needs.setup.outputs.portage_date }}
               cache: bob-core
               goss: core/bob-core
+            bob:
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/bob:${{ needs.setup.outputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
+              cache: bob
+              goss: builder/bob
           - name: bob-musl
             stage3:
               base: gentoo/stage3:musl-hardened
@@ -217,6 +222,11 @@ jobs:
               image: ghcr.io/${{ github.repository }}/bob-musl-core:${{ needs.setup.outputs.portage_date }}
               cache: bob-musl-core
               goss: core/bob-musl-core
+            bob:
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-musl:${{ needs.setup.outputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
+              cache: bob-musl
+              goss: builder/bob-musl
     steps:
       - name: Set up QEMU
         id: qemu
@@ -360,6 +370,67 @@ jobs:
         run: |
           set -eux
           oras cp -v "${{ matrix.core.tmp_image }}" "${{ matrix.core.image }}"
+
+      - name: 🐋 Docker Pull bob
+        id: bob-pull
+        continue-on-error: true
+        run: |
+          set -eu
+          docker pull "${{ matrix.bob.image }}"
+
+      - name: 🐋 Docker Build kubler builder - bob - test pulled
+        id: bob-pull-test
+        if: ${{ steps.bob-pull.outcome == 'success' }}
+        run: |
+          set -eux
+          docker run --rm "${{ matrix.bob.image }}" cat /etc/gentoo-release
+          docker run --rm "${{ matrix.bob.image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
+          docker run --rm "${{ matrix.bob.image }}" eselect profile show
+          docker run --rm "${{ matrix.bob.image }}" ls -l /var/cache
+          docker run --rm "${{ matrix.bob.image }}" ls -l /var/cache/eix
+          docker run --rm "${{ matrix.bob.image }}" eix --selected -c
+          cd "${{ matrix.bob.goss }}" || exit 1
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.image }}" validate --format documentation --color
+
+      - name: 🐋 Docker Build kubler builder - bob - list targets
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        uses: docker/bake-action/subaction/list-targets@v4
+        with:
+          workdir: ${{ matrix.bob.goss }}
+
+      - name: 🐋🍳 Docker Bake Kubler builder - bob
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        uses: docker/bake-action@v4
+        with:
+          workdir: ${{ matrix.bob.goss }}
+          push: true
+          set: |
+            bob.args.BASE_IMAGE=${{ matrix.core.image }}
+            bob.tags=${{ matrix.bob.tmp_image }}
+            bob.cache-from=type=gha,scope=portage
+            bob.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
+            bob.cache-from=type=gha,scope=${{ matrix.core.cache }}
+            bob.cache-from=type=gha,scope=${{ matrix.bob.cache }}
+            bob.cache-to=type=gha,scope=${{ matrix.bob.cache }}
+
+      - name: 🐋 Docker Build kubler builder - bob - test baked
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        run: |
+          set -eux
+          docker run --rm "${{ matrix.bob.tmp_image }}" cat /etc/gentoo-release
+          docker run --rm "${{ matrix.bob.tmp_image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
+          docker run --rm "${{ matrix.bob.tmp_image }}" eselect profile show
+          docker run --rm "${{ matrix.bob.tmp_image }}" ls -l /var/cache
+          docker run --rm "${{ matrix.bob.tmp_image }}" ls -l /var/cache/eix
+          docker run --rm "${{ matrix.bob.tmp_image }}" eix --selected -c
+          cd "${{ matrix.bob.goss }}" || exit 1
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.tmp_image }}" validate --format documentation --color
+
+      - name: 🐋🍳 Docker Bake Kubler builder - bob - oras cp
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        run: |
+          set -eux
+          oras cp -v "${{ matrix.bob.tmp_image }}" "${{ matrix.bob.image }}"
 
   kubler:
     runs-on: ubuntu-latest
@@ -672,12 +743,6 @@ jobs:
           gpg --list-public-keys --with-subkey-fingerprint --fingerprint
           # we just need the key, we don't need to sign/trust it
 
-      - name: 👷 Kubler Get Latest Portage Date
-        run: |
-          export TERM
-          PORTAGE_DATE=$(kubler portage)
-          echo "PORTAGE_DATE=$PORTAGE_DATE" >> $GITHUB_ENV
-
       - name: 👷 Kubler Set kubler.conf PORTAGE_DATE
         run: |
           grep PORTAGE_DATE kubler.conf || true
@@ -763,10 +828,6 @@ jobs:
           set -eu
           docker pull "$BOB_MUSL_CORE_IMAGE"
 
-      - name: 🐋🍳 Docker Bake Kubler - images bob-core
-        run: |
-          docker images
-
       - name: 🐋 Docker Build kubler builder - bob - set ENV vars
         run: |
           set -eux
@@ -792,115 +853,6 @@ jobs:
         run: |
           set -eu
           docker pull "$BOB_MUSL_IMAGE"
-
-      - name: 🐋 Docker Build kubler builder - bob
-        if: ${{ false }}
-        run: |
-          set -eux
-          # Build kubler builder outside of kubler with native Docker tools
-          # So that we can use the buildkit docker-container driver that supports GHA caching
-          cd builder/bob || exit 1
-          # This dockerfile does similar to what kubler does to build a builder
-          # Difference is kubler uses docker run and mounts volumes, and then commits the container as an image
-          # We are building direct, so can't use volumes.
-          # I am hoping caching makes up for that.
-          docker buildx build \
-            --push \
-            -f Dockerfile.berney \
-            --build-arg PARENT="${BOB_CORE_IMAGE}" \
-            -t "${TMP_BOB_IMAGE}" \
-            .
-
-      - name: 🐋 Docker Build kubler builder - bob - list targets
-        if: ${{ steps.bob-pull.outcome == 'failure' }}
-        uses: docker/bake-action/subaction/list-targets@v4
-        with:
-          workdir: builder/bob
-
-      - name: 🐋🍳 Docker Bake Kubler builder - bob
-        if: ${{ steps.bob-pull.outcome == 'failure' }}
-        uses: docker/bake-action@v4
-        with:
-          workdir: builder/bob
-          push: true
-          set: |
-            bob.args.BASE_IMAGE=${{ env.BOB_CORE_IMAGE }}
-            bob.tags=${{ env.TMP_BOB_IMAGE }}
-            bob.cache-from=type=gha,scope=portage
-            bob.cache-from=type=gha,scope=stage3-hardened-nomultilib
-            bob.cache-from=type=gha,scope=bob-core
-            bob.cache-from=type=gha,scope=bob
-            bob.cache-to=type=gha,scope=bob
-
-      - name: 🐋 Docker Build kubler builder - bob - test
-        run: |
-          set -eux
-          docker run --rm "${TMP_BOB_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${TMP_BOB_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
-          docker run --rm "${TMP_BOB_IMAGE}" eselect profile show
-          docker run --rm "${TMP_BOB_IMAGE}" ls -l /var/cache
-          docker run --rm "${TMP_BOB_IMAGE}" ls -l /var/cache/eix
-          docker run --rm "${TMP_BOB_IMAGE}" eix --selected -c
-          cd builder/bob || exit 1
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_IMAGE}" validate --format documentation --color
-
-      - name: 🐋🍳 Docker Bake Kubler builder - bob - oras cp
-        if: ${{ steps.bob-pull.outcome == 'failure' }}
-        run: |
-          set -eux
-          oras cp -v "$TMP_BOB_IMAGE" "$BOB_IMAGE"
-
-      - name: 🐋 Docker Build kubler builder - bob-musl
-        if: ${{ false }}
-        run: |
-          set -eux
-          # Build kubler builder outside of kubler with native Docker tools
-          # So that we can use the buildkit docker-container driver that supports GHA caching
-          cd builder/bob-musl || exit 1
-          # This dockerfile does similar to what kubler does to build a builder
-          # Difference is kubler uses docker run and mounts volumes, and then commits the container as an image
-          # We are building direct, so can't use volumes.
-          # I am hoping caching makes up for that.
-          docker buildx build \
-            --push \
-            -f Dockerfile.berney \
-            --build-arg PARENT="${BOB_MUSL_CORE_IMAGE}" \
-            -t "${TMP_BOB_MUSL_IMAGE}" \
-            .
-
-      - name: 🐋🍳 Docker Bake Kubler builder - bob-musl
-        if: ${{ steps.bob-musl-pull.outcome == 'failure' }}
-        uses: docker/bake-action@v4
-        with:
-          workdir: builder/bob-musl
-          push: true
-          set: |
-            bob-musl.args.BASE_IMAGE=${{ env.BOB_MUSL_CORE_IMAGE }}
-            bob-musl.tags=${{ env.TMP_BOB_MUSL_IMAGE }}
-            bob-musl.cache-from=type=gha,scope=portage
-            bob-musl.cache-from=type=gha,scope=stage3-musl-hardened
-            bob-musl.cache-from=type=gha,scope=bob-musl-core
-            bob-musl.cache-from=type=gha,scope=bob-musl
-            bob-musl.cache-to=type=gha,scope=bob-musl
-
-
-      - name: 🐋 Docker Build kubler builder - bob-musl - test
-        run: |
-          set -eux
-          docker run --rm "${TMP_BOB_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${TMP_BOB_MUSL_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
-          docker run --rm "${TMP_BOB_MUSL_IMAGE}" eselect profile show
-          docker run --rm "${TMP_BOB_MUSL_IMAGE}" ls -l /var/cache
-          docker run --rm "${TMP_BOB_MUSL_IMAGE}" ls -l /var/cache/eix
-          docker run --rm "${TMP_BOB_MUSL_IMAGE}" eix --selected -c
-          cd builder/bob-musl || exit 1
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_BOB_MUSL_IMAGE}" validate --format documentation --color
-
-      - name: 🐋🍳 Docker Bake Kubler builder - bob-musl - oras cp
-        if: ${{ steps.bob-musl-pull.outcome == 'failure' }}
-        run: |
-          set -eux
-          oras cp -v "$TMP_BOB_MUSL_IMAGE" "$BOB_MUSL_IMAGE"
 
       - name: 🐋🍳 Docker Images
         run: |
