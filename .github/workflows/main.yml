@@ -189,6 +189,21 @@ jobs:
       KUBLER_IMAGE: ghcr.io/${{ github.repository }}
       PORTAGE_DATE: ${{ needs.setup.outputs.portage_date }}
       PORTAGE_IMAGE: ${{ needs.kubler-portage.outputs.portage_image }}
+    strategy:
+      matrix:
+        stage3:
+          - bob:
+              base: gentoo/stage3:hardened-nomultilib
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-hardened-nomultilib-openrc:${{ env.PORTAGE_DATE }}
+              image: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc/${{ env.PORTAGE_DATE }}
+              cache: stage3-amd64-hardened-nomultilib-openrc
+              goss: stage3/amd64-hardened-nomultilib-openrc
+          - bob-musl:
+              base: stage3-amd64-musl-hardened
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-musl-hardened:${{ env.PORTAGE_DATE }}
+              image: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ env.PORTAGE_DATE }}
+              cache: stage3-amd64-musl-hardened
+              goss: stage3/amd64-musl-hardened
     steps:
       - name: Set up QEMU
         id: qemu
@@ -219,32 +234,12 @@ jobs:
 
       - uses: oras-project/setup-oras@v1
 
-      - name: 🐋🍳 Docker Bake Kubler stage3 - set ENV vars
-        run: |
-          set -eux
-          # XXX Not the tags I'm setting here, and the BASE_TAG I use later probably have a disconnect
-          TMP_STAGE3_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/stage3-amd64-hardened-nomultilib-openrc:"${PORTAGE_DATE}"
-          echo "TMP_STAGE3_IMAGE=$TMP_STAGE3_IMAGE" >> $GITHUB_ENV
-          TMP_STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/tmp/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
-          echo "TMP_STAGE3_MUSL_IMAGE=$TMP_STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
-          STAGE3_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-hardened-nomultilib-openrc:"${PORTAGE_DATE}"
-          echo "STAGE3_IMAGE=$STAGE3_IMAGE" >> $GITHUB_ENV
-          STAGE3_MUSL_IMAGE=ghcr.io/"${GITHUB_REPOSITORY}"/stage3-amd64-musl-hardened:"${PORTAGE_DATE}"
-          echo "STAGE3_MUSL_IMAGE=$STAGE3_MUSL_IMAGE" >> $GITHUB_ENV
-
       - name: 🐋 Docker Pull stage3
         id: stage3-pull
         continue-on-error: true
         run: |
           set -eu
-          docker pull "$STAGE3_IMAGE"
-
-      - name: 🐋 Docker Pull stage3 musl
-        id: stage3-musl-pull
-        continue-on-error: true
-        run: |
-          set -eu
-          docker pull "$STAGE3_MUSL_IMAGE"
+          docker pull "${{ matrix.stage3.image }}"
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - list targets
         if: ${{ steps.stage3-pull.outcome == 'failure' }}
@@ -264,78 +259,38 @@ jobs:
           # For the gentoo-stage3 target there's no `BASE_TAG` arg, only `BASE_IMAGE` which defaults to `BASE_IMAGE` var
           # When using bake-action we need to set the `BASE_IMAGE` arg, setting `BASE_TAG` arg won't do what we want.
           set: |
-            gentoo-stage3.args.BASE_IMAGE=gentoo/stage3:hardened-nomultilib
+            gentoo-stage3.args.BASE_IMAGE=${{ matrix.stage3.base }}
             gentoo-stage3.args.PORTAGE=${{ env.PORTAGE_IMAGE }}
-            gentoo-stage3.tags=${{ env.TMP_STAGE3_IMAGE }}
+            gentoo-stage3.tags=${{ matrix.tmp_image }}
             gentoo-stage3.cache-from=type=gha,scope=portage
-            gentoo-stage3.cache-from=type=gha,scope=stage3-hardened-nomultilib
-            gentoo-stage3.cache-to=type=gha,scope=stage3-hardened-nomultilib
+            gentoo-stage3.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
+            gentoo-stage3.cache-to=type=gha,scope=${{ matrix.stage3.cache }}
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - test pulled
         if: ${{ steps.stage3-pull.outcome == 'success' }}
         run: |
           set -eux
-          docker run --rm "${STAGE3_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${STAGE3_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
-          docker run --rm "${STAGE3_IMAGE}" eselect profile show
+          docker run --rm "${{ matrix.stage3.image }}" cat /etc/gentoo-release
+          docker run --rm "${{ matrix.stage3.image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
+          docker run --rm "${{ matrix.stage3.image }}" eselect profile show
           cd stage3/amd64-hardened-nomultilib-openrc || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${_PORTAGE_IMAGE}" validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.stage3.image }}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - test baked
         if: ${{ steps.stage3-pull.outcome == 'failure' }}
         run: |
           set -eux
-          docker run --rm "${TMP_STAGE3_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${TMP_STAGE3_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
-          docker run --rm "${TMP_STAGE3_IMAGE}" eselect profile show
-          cd stage3/amd64-hardened-nomultilib-openrc || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --format documentation --color
+          docker run --rm "${{ matrix.stage3.tmp_image }}" cat /etc/gentoo-release
+          docker run --rm "${{ matrix.stage3.tmp_image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
+          docker run --rm "${{ matrix.stage3.tmp_image }}" eselect profile show
+          cd "${{ matrix.stage3.goss }}" || exit 1
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.stage3.tmp_image }}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - oras cp
         if: ${{ steps.stage3-pull.outcome == 'failure' }}
         run: |
           set -eux
-          oras cp -v "$TMP_STAGE3_IMAGE" "$STAGE3_IMAGE"
-
-      - name: 🐋🍳 Docker Bake Kubler stage3 - musl-hardened
-        if: ${{ steps.stage3-musl-pull.outcome == 'failure' }}
-        uses: docker/bake-action@v4
-        with:
-          workdir: bob-stage3
-          push: true
-          # In the `docker-bake.hcl`
-          # There is a variable `BASE_TAG` and `BASE_IMAGE`. `BASE_IMAGE` interpolates `BASE_TAG`i
-          # These can be set with env vars when using `docker buildx bake` command
-          # For the gentoo-stage3 target there's no `BASE_TAG` arg, only `BASE_IMAGE` which defaults to `BASE_IMAGE` var
-          # When using bake-action we need to set the `BASE_IMAGE` arg, setting `BASE_TAG` arg won't do what we want.
-          set: |
-            gentoo-stage3.args.BASE_IMAGE=gentoo/stage3:musl-hardened
-            gentoo-stage3.args.PORTAGE=${{ env.PORTAGE_IMAGE }}
-            gentoo-stage3.tags=${{ env.TMP_STAGE3_MUSL_IMAGE }}
-            gentoo-stage3.cache-from=type=gha,scope=portage
-            gentoo-stage3.cache-from=type=gha,scope=stage3-musl-hardened
-            gentoo-stage3.cache-to=type=gha,scope=stage3-musl-hardened
-
-      - name: 🐋🍳 Docker Bake Kubler stage3 musl - test
-        run: |
-          set -eux
-          docker run --rm "${TMP_STAGE3_MUSL_IMAGE}" cat /etc/gentoo-release
-          docker run --rm "${TMP_STAGE3_MUSL_IMAGE}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
-          docker run --rm "${TMP_STAGE3_MUSL_IMAGE}" eselect profile show
-          cd stage3/amd64-musl-hardened || exit 1
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_STAGE3_MUSL_IMAGE}" validate --format documentation --color
-
-      - name: 🐋🍳 Docker Bake Kubler stage3 musl - oras cp
-        if: ${{ steps.stage3-musl-pull.outcome == 'failure' }}
-        run: |
-          set -eux
-          oras cp -v "$TMP_STAGE3_MUSL_IMAGE" "$STAGE3_MUSL_IMAGE"
-
-      - name: Output STAGE3_IMAGE
-        id: stage3_image
-        run: |
-          set -eux
-          echo "stage3_image=${STAGE3_IMAGE}" >> $GITHUB_OUTPUT
+          oras cp -v "${{ matrix.stage3.tmp_image }}" "${{ matrix.stage3.image }}"
 
   kubler:
     runs-on: ubuntu-latest
