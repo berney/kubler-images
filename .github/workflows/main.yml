@@ -201,6 +201,7 @@ jobs:
               cache: stage3-amd64-hardened-nomultilib-openrc
               goss: stage3/amd64-hardened-nomultilib-openrc
             core:
+              def_chost: x86_64-pc-linux-gnu
               tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-core:${{ needs.setup.outputs.portage_date }}
               image: ghcr.io/${{ github.repository }}/bob-core:${{ needs.setup.outputs.portage_date }}
               cache: bob-core
@@ -218,6 +219,7 @@ jobs:
               cache: stage3-amd64-musl-hardened
               goss: stage3/amd64-musl-hardened
             core:
+              def_chost: x86_64-gentoo-linux-musl
               tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-musl-core:${{ needs.setup.outputs.portage_date }}
               image: ghcr.io/${{ github.repository }}/bob-musl-core:${{ needs.setup.outputs.portage_date }}
               cache: bob-musl-core
@@ -347,6 +349,7 @@ jobs:
           workdir: bob-core
           push: true
           set: |
+            core.args.DEF_CHOST=${{ matrix.core.def_chost }}
             core.args.BASE_IMAGE=${{ matrix.stage3.image }}
             core.tags=${{ matrix.core.tmp_image }}
             core.cache-from=type=gha,scope=portage
