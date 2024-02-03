@@ -353,13 +353,13 @@ jobs:
           docker run --rm "${{ matrix.core.tmp_image }}" eselect profile show
           docker run --rm "${{ matrix.core.tmp_image }}" ls -l /var/cache
           cd "${{ matrix.core.goss }}" || exit 1
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.tmp_image }}" validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.tmp_image }}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - oras cp
         if: ${{ steps.bob-core-pull.outcome == 'failure' || steps.bob-core-pull-test.outcome == 'failure' }}
         run: |
           set -eux
-          oras cp -v "$TMP_BOB_CORE_IMAGE" "$BOB_CORE_IMAGE"
+          oras cp -v "${{ matrix.core.tmp_image }}" "${{ matrix.core.image }}"
 
   kubler:
     runs-on: ubuntu-latest
