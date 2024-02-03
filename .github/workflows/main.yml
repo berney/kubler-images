@@ -118,7 +118,7 @@ jobs:
         if: ${{ steps.portage-pull.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
-          workdir: ../kubler/engine/docker/bob-portage
+          workdir: bob-portage
           push: true
           set: |
             kubler-portage.tags=${{ env.TMP_PORTAGE_IMAGE }}
