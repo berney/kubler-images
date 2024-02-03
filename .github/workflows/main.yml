@@ -194,14 +194,14 @@ jobs:
         stage3:
           - bob:
               base: gentoo/stage3:hardened-nomultilib
-              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-hardened-nomultilib-openrc:${{ env.PORTAGE_DATE }}
-              image: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc/${{ env.PORTAGE_DATE }}
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-hardened-nomultilib-openrc:${{ needs.setup.outputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc/${{ needs.setup.outputs.portage_date }}
               cache: stage3-amd64-hardened-nomultilib-openrc
               goss: stage3/amd64-hardened-nomultilib-openrc
           - bob-musl:
               base: stage3-amd64-musl-hardened
-              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-musl-hardened:${{ env.PORTAGE_DATE }}
-              image: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ env.PORTAGE_DATE }}
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-musl-hardened:${{ needs.setup.outputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ needs.setup.outputs.portage_date }}
               cache: stage3-amd64-musl-hardened
               goss: stage3/amd64-musl-hardened
     steps:
