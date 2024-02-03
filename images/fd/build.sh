@@ -78,6 +78,15 @@ finish_rootfs_build()
     # Copy c++ libs, may be needed if you see errors regarding missing libstdc++
     #copy_gcc_libs
 
+    # Install musl libc dynamic libraries
+    # - This is better than add sys-libs/musl to PACKAGES as that will install unneeded headers, and .o files etc
+    # - lib/ld-musl-x86_64.so.1 -> /usr/lib/libc.so
+    mkdir "${_EMERGE_ROOT}"/lib "${_EMERGE_ROOT}"/usr/lib
+    ln -s /usr/lib/libc.so "${_EMERGE_ROOT}"/lib/ld-musl-x86_64.so.1
+    cp -a /usr/lib/libc.so "${_EMERGE_ROOT}"/usr/lib/libc.so
+    # Install libgcc_s.so.1 based off edannenberg/kubler-images plantuml
+    find /usr/lib/gcc -name libgcc_s.so.1 -exec cp {} "${_EMERGE_ROOT}"/usr/"${_LIB}"/ \;
+
     # Example for a manual build if _packages method does not suffice, a typical use case is a Go project:
 
     #export GOPATH="/go"

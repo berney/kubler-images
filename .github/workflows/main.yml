@@ -1178,6 +1178,14 @@ jobs:
           export TERM
           kubler build -v fd
 
+      - name: Test Image - fd
+        id: test-fd
+        continue-on-error: true
+        run: |
+          cd images/fd || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/fd validate --format documentation --color
+
       - name: 🚧 Build Images - s6
         #if: ${{ false }}
         id: s6
