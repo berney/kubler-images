@@ -132,8 +132,8 @@ jobs:
         run: |
           set -eux
           docker run --rm "${TMP_PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
-          cd portage || exit 1
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --format documentation --color
+          cd bob-portage || exit 1
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler portage - oras cp
         if: ${{ steps.portage-pull.outcome == 'failure' }}
