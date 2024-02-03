@@ -318,7 +318,7 @@ jobs:
         run: |
           set -eux
           docker run --rm "${{ matrix.core.image }}" cat /etc/gentoo-release
-          docker run --rm "${{ matrix..core.image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
+          docker run --rm "${{ matrix.core.image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${{ matrix.core.image }}" eselect profile show
           docker run --rm "${{ matrix.core.image }}" ls -l /var/cache
           cd "${{ matrix.core.goss }}" || exit 1
