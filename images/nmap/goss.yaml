@@ -1088,7 +1088,7 @@ file:
         contents: []
 command:
     nmap -A --open scanme.nmap.org:
-        exec: [nmap, -A, --open, --top-ports, 100, scanme.nmap.org]
+        exec: [nmap, -A, --open, -p, "21-23,80,110,139,443,445,3389,9929,31337", scanme.nmap.org]
         exit-status: 0
         stdout:
             - Starting Nmap
