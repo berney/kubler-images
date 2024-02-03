@@ -138,6 +138,7 @@ jobs:
       - name: 🐋🍳 Docker Bake Kubler portage - test pulled
         id: portage-pull-test
         if: ${{ steps.portage-pull.outcome == 'success' }}
+        continue-on-error: true
         run: |
           set -eux
           docker run --rm "${PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
@@ -245,6 +246,7 @@ jobs:
       - name: 🐋🍳 Docker Bake Kubler stage3 - test pulled
         id: stage3-pull-test
         if: ${{ steps.stage3-pull.outcome == 'success' }}
+        continue-on-error: true
         run: |
           set -eux
           docker run --rm "${{ matrix.image }}" cat /etc/gentoo-release
