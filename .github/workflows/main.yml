@@ -1292,7 +1292,7 @@ jobs:
           cd images/nmap || false
           echo "kubler=test" >> $GITHUB_OUTPUT
           docker run --rm kubler-images/nmap -A --open scanme.nmap.org
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/nmap validate --format documentation --color
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/nmap -l debug validate --format documentation --color
 
       - name: 🚧 Build Images - nmap-musl-static
         #if: ${{ false }}
