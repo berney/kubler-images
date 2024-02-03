@@ -195,7 +195,7 @@ jobs:
           - name: bob
             base: gentoo/stage3:hardened-nomultilib
             tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-hardened-nomultilib-openrc:${{ needs.setup.outputs.portage_date }}
-            image: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc/${{ needs.setup.outputs.portage_date }}
+            image: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ needs.setup.outputs.portage_date }}
             cache: stage3-amd64-hardened-nomultilib-openrc
             goss: stage3/amd64-hardened-nomultilib-openrc
           - name: bob-musl
