@@ -1285,6 +1285,15 @@ jobs:
           " --cache-to=type=gha,scope=nmap" \
             kubler build -v nmap
 
+      - name: Test Image - nmap
+        id: test-nmap
+        continue-on-error: true
+        run: |
+          cd images/nmap || false
+          echo "kubler=test" >> $GITHUB_OUTPUT
+          docker run --rm kubler-images/nmap -A --open scanme.nmap.org
+          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/nmap validate --format documentation --color
+
       - name: 🚧 Build Images - nmap-musl-static
         #if: ${{ false }}
         id: nmap-musl-static
