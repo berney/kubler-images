@@ -62,6 +62,8 @@ jobs:
   kubler-portage:
     runs-on: ubuntu-latest
     needs: setup
+    outputs:
+      portage_image: ${{ steps.portage_image.outputs.portage_image }}
     env:
       KUBLER_IMAGE: ghcr.io/${{ github.repository }}
       PORTAGE_DATE: ${{ needs.setup.outputs.portage_date }}
@@ -128,7 +130,16 @@ jobs:
       # We always test, even if we pulled
       # A pushed image should have been tested before being pushed.
       # But re-testing for extra safety and in case tests have changed in between.
-      - name: 🐋🍳 Docker Bake Kubler portage - test
+      - name: 🐋🍳 Docker Bake Kubler portage - test pulled
+        if: ${{ steps.portage-pull.outcome == 'success' }}
+        run: |
+          set -eux
+          docker run --rm "${PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
+          cd bob-portage || exit 1
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${PORTAGE_IMAGE}" validate --format documentation --color
+
+      - name: 🐋🍳 Docker Bake Kubler portage - test baked
+        if: ${{ steps.portage-pull.outcome == 'failure' }}
         run: |
           set -eux
           docker run --rm "${TMP_PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
@@ -141,11 +152,20 @@ jobs:
           set -eux
           docker run --rm ghcr.io/oras-project/oras:v1.1.0 cp -v "$TMP_PORTAGE_IMAGE" "$PORTAGE_IMAGE"
 
+      - name: Output PORTAGE_IMAGE
+        id: portage_image
+        run: |
+          set -eux
+          echo "portage_image=${PORTAGE_IMAGE}" >> $GITHUB_OUTPUT
+
   kubler:
     runs-on: ubuntu-latest
     needs:
       - setup
       - kubler-portage
+    env:
+      KUBLER_IMAGE: ghcr.io/${{ github.repository }}
+      PORTAGE_IMAGE: ${{ needs.kubler-portage.outputs.portage_image }}
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
@@ -587,17 +607,6 @@ jobs:
           set -eu
           docker pull "$PORTAGE_IMAGE"
 
-      # We always test, even if we pulled
-      # A pushed image should have been tested before being pushed.
-      # But re-testing for extra safety and in case tests have changed in between.
-      - name: 🐋🍳 Docker Bake Kubler portage - test
-        run: |
-          set -eux
-          docker run --rm "${TMP_PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
-          cd portage || exit 1
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --format documentation --color
-
-
       - name: 🐋🍳 Docker Bake Kubler - images portage
         run: |
           docker images
@@ -628,31 +637,6 @@ jobs:
         run: |
           set -eu
           docker pull "$STAGE3_MUSL_IMAGE"
-
-      - name: 🐋🍳 Docker Bake Kubler stage3
-        if: ${{ false }}
-        run: |
-          set -eux
-          cd ../kubler/engine/docker/bob-stage3 || exit 1
-          # XXX There is a disconnect here between base image this would use and the tag we give it
-          # Base image would be gentoo/stage3:musl-hardened (e.g. latest musl hardened image)
-          # Could use `BASE_TAG=musl-hardened-20240102` (YYYYMMDD) to pin.
-          # The stage3 date we tag it with might not be correct
-          #
-          # XXX These will default to using PORTAGE=gentoo/portage
-          # But Kubler portage applies some patches
-          # This is working because `kubler build` is mounting portage into container.
-          # We could set `PORTAGE` to the kubler-portage image, so that the patches are embedded.
-          BASE_TAG=hardened-nomultilib \
-            PORTAGE=$PORTAGE_IMAGE \
-            docker buildx bake \
-              --push \
-              --set gentoo-stage3.tags="${TMP_STAGE3_IMAGE}"
-          BASE_TAG=musl-hardened \
-            PORTAGE=$PORTAGE_IMAGE \
-            docker buildx bake \
-              --push \
-              --set gentoo-stage3.tags="${TMP_STAGE3_MUSL_IMAGE}"
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - list targets
         if: ${{ steps.stage3-pull.outcome == 'failure' }}
