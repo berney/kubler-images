@@ -54,7 +54,9 @@ jobs:
       - name: Portage Date
         id: portage_date
         run: |
+          set -eux
           PORTAGE_DATE=$(docker run --rm -e TERM=dumb -w /root/.kubler "${KUBLER_IMAGE}" kubler portage)
+          echo "portage_date=$PORTAGE_DATE"
           echo "portage_date=$PORTAGE_DATE" >> $GITHUB_OUTPUT
 
   kubler-portage:
@@ -62,7 +64,7 @@ jobs:
     needs: setup
     env:
       KUBLER_IMAGE: ghcr.io/${{ github.repository }}
-      PORTAGE_DATE: ${{ needs.kubler.outputs.portage_date }}
+      PORTAGE_DATE: ${{ needs.setup.outputs.portage_date }}
     steps:
       - name: Set up QEMU
         id: qemu

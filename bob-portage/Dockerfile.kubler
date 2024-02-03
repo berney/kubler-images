@@ -1,0 +1,45 @@
+# syntax=docker/dockerfile:1
+# NOTE: syntax line needs to be first line, its a BuildKit only thing.
+
+# Build ARG for image parent (ex: `gentoo/portage` or `kubler-gentoo/portage`)
+# - Will either be upstream official `gentoo/portage` image
+#     - https://hub.docker.com/r/gentoo/portage
+#     - https://github.com/gentoo/gentoo-docker-images
+# - Or kubler `kubler-gentoo/portage` image created from downloaded (and cached) portage tarball
+#     - See `Dockerfile.download`
+ARG BASE_IMAGE
+FROM $BASE_IMAGE AS patcher
+
+COPY patches/ /patches
+
+# Better than `cd`
+WORKDIR /var/db/repos/gentoo
+# Here-Documents added in docker/dockerfile:1.4
+# Will implicictly use default shell, but can use a shebang to be explicit
+RUN <<-EOF
+    #!/bin/sh
+    set -x
+    patch -p1 -i /patches/0002*
+    patch -p1 -i /patches/0003*
+    patch -p1 -i /patches/0004*
+EOF
+
+FROM busybox:latest
+ARG portage=250:250
+COPY --from=patcher /var/db/repos/gentoo /var/db/repos/gentoo
+RUN <<-EOF
+  set -ux
+  mkdir -p /var/cache/eix
+  chown $portage /var/cache/eix
+EOF
+
+
+
+# Gentoo and Kubler both have `/var/db/repos` as a volume
+# - Kubler has `/var/cache/eix` as a volume as well
+# - They use `docker run --volumes-from $THIS_PORTAGE_IMAGE $MORE_ARGS $SOME_OTHER_IMAGE` to mount the volumes from this image into other images
+# - But the VOLUME makes docker engine copy (not COW, really copy) all the files, making it slow
+# - I want to avoid the copying of read-only data (immutable infra, no updating portage)
+# - I want to use a RO cache, or at least a COW cache, but I think there shouldn't be any writes
+#VOLUME /var/db/repos /var/cache/eix
+VOLUME /var/cache/eix
