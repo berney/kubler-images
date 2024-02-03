@@ -57,7 +57,7 @@ finish_rootfs_build()
     # install su-exec at ${_EMERGE_ROOT}
     #install_suexec
     # Copy c++ libs, may be needed if you see errors regarding missing libstdc++
-    #copy_gcc_libs
+    copy_gcc_libs
 
     # Example for a manual build if _packages method does not suffice, a typical use case is a Go project:
 
