@@ -206,6 +206,7 @@ jobs:
               cache: bob-core
               goss: core/bob-core
             bob:
+              target: bob
               tmp_image: ghcr.io/${{ github.repository }}/tmp/bob:${{ needs.setup.outputs.portage_date }}
               image: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
               cache: bob
@@ -224,6 +225,7 @@ jobs:
               cache: bob-musl-core
               goss: core/bob-musl-core
             bob:
+              target: bob-musl
               tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-musl:${{ needs.setup.outputs.portage_date }}
               image: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
               cache: bob-musl
@@ -407,13 +409,13 @@ jobs:
           workdir: ${{ matrix.bob.goss }}
           push: true
           set: |
-            bob.args.BASE_IMAGE=${{ matrix.core.image }}
-            bob.tags=${{ matrix.bob.tmp_image }}
-            bob.cache-from=type=gha,scope=portage
-            bob.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
-            bob.cache-from=type=gha,scope=${{ matrix.core.cache }}
-            bob.cache-from=type=gha,scope=${{ matrix.bob.cache }}
-            bob.cache-to=type=gha,scope=${{ matrix.bob.cache }}
+            ${{matrix.bob.target}}.args.BASE_IMAGE=${{ matrix.core.image }}
+            ${{matrix.bob.target}}.tags=${{ matrix.bob.tmp_image }}
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=portage
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.core.cache }}
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}
+            ${{matrix.bob.target}}.cache-to=type=gha,scope=${{ matrix.bob.cache }}
 
       - name: 🐋 Docker Build kubler builder - bob - test baked
         if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
