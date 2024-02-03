@@ -132,14 +132,26 @@ jobs:
           set -eu
           docker pull "$PORTAGE_IMAGE"
 
+      # We always test, even if we pulled
+      # A pushed image should have been tested before being pushed.
+      # But re-testing for extra safety and in case tests have changed in between.
+      - name: 🐋🍳 Docker Bake Kubler portage - test pulled
+        id: portage-pull-test
+        if: ${{ steps.portage-pull.outcome == 'success' }}
+        run: |
+          set -eux
+          docker run --rm "${PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
+          cd bob-portage || exit 1
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${PORTAGE_IMAGE}" validate --format documentation --color
+
       - name: 🐋🍳 Docker Bake Kubler portage - list targets
-        if: ${{ steps.portage-pull.outcome == 'failure' }}
+        if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
         uses: docker/bake-action/subaction/list-targets@v4
         with:
           workdir: bob-portage
 
       - name: 🐋🍳 Docker Bake Kubler portage
-        if: ${{ steps.portage-pull.outcome == 'failure' }}
+        if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: bob-portage
@@ -149,19 +161,8 @@ jobs:
             kubler-portage.cache-from=type=gha,scope=portage
             kubler-portage.cache-to=type=gha,scope=portage
 
-      # We always test, even if we pulled
-      # A pushed image should have been tested before being pushed.
-      # But re-testing for extra safety and in case tests have changed in between.
-      - name: 🐋🍳 Docker Bake Kubler portage - test pulled
-        if: ${{ steps.portage-pull.outcome == 'success' }}
-        run: |
-          set -eux
-          docker run --rm "${PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
-          cd bob-portage || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${PORTAGE_IMAGE}" validate --format documentation --color
-
       - name: 🐋🍳 Docker Bake Kubler portage - test baked
-        if: ${{ steps.portage-pull.outcome == 'failure' }}
+        if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
         run: |
           set -eux
           docker run --rm "${TMP_PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
@@ -169,7 +170,7 @@ jobs:
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler portage - oras cp
-        if: ${{ steps.portage-pull.outcome == 'failure' }}
+        if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
         run: |
           set -eux
           oras cp -v "$TMP_PORTAGE_IMAGE" "$PORTAGE_IMAGE"
@@ -241,14 +242,25 @@ jobs:
           set -eu
           docker pull "${{ matrix.image }}"
 
+      - name: 🐋🍳 Docker Bake Kubler stage3 - test pulled
+        id: stage3-pull-test
+        if: ${{ steps.stage3-pull.outcome == 'success' }}
+        run: |
+          set -eux
+          docker run --rm "${{ matrix.image }}" cat /etc/gentoo-release
+          docker run --rm "${{ matrix.image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
+          docker run --rm "${{ matrix.image }}" eselect profile show
+          cd stage3/amd64-hardened-nomultilib-openrc || exit 1
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.image }}" validate --format documentation --color
+
       - name: 🐋🍳 Docker Bake Kubler stage3 - list targets
-        if: ${{ steps.stage3-pull.outcome == 'failure' }}
+        if: ${{ steps.stage3-pull.outcome == 'failure' || steps.stage3-pull-test.outcome == 'failure' }}
         uses: docker/bake-action/subaction/list-targets@v4
         with:
           workdir: bob-stage3
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - hardened-nomultilib
-        if: ${{ steps.stage3-pull.outcome == 'failure' }}
+        if: ${{ steps.stage3-pull.outcome == 'failure' || steps.stage3-pull-test.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: bob-stage3
@@ -266,18 +278,8 @@ jobs:
             gentoo-stage3.cache-from=type=gha,scope=${{ matrix.cache }}
             gentoo-stage3.cache-to=type=gha,scope=${{ matrix.cache }}
 
-      - name: 🐋🍳 Docker Bake Kubler stage3 - test pulled
-        if: ${{ steps.stage3-pull.outcome == 'success' }}
-        run: |
-          set -eux
-          docker run --rm "${{ matrix.image }}" cat /etc/gentoo-release
-          docker run --rm "${{ matrix.image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
-          docker run --rm "${{ matrix.image }}" eselect profile show
-          cd stage3/amd64-hardened-nomultilib-openrc || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.image }}" validate --format documentation --color
-
       - name: 🐋🍳 Docker Bake Kubler stage3 - test baked
-        if: ${{ steps.stage3-pull.outcome == 'failure' }}
+        if: ${{ steps.stage3-pull.outcome == 'failure' || steps.stage3-pull-test.outcome == 'failure' }}
         run: |
           set -eux
           docker run --rm "${{ matrix.tmp_image }}" cat /etc/gentoo-release
@@ -287,7 +289,7 @@ jobs:
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.tmp_image }}" validate --format documentation --color
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - oras cp
-        if: ${{ steps.stage3-pull.outcome == 'failure' }}
+        if: ${{ steps.stage3-pull.outcome == 'failure' || steps.stage3-pull-test.outcome == 'failure' }}
         run: |
           set -eux
           oras cp -v "${{ matrix.tmp_image }}" "${{ matrix.image }}"
