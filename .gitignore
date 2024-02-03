@@ -1,6 +1,7 @@
 .project
 tmp/
-Dockerfile
+**/builder/**/Dockerfile
+**/images/**/Dockerfile
 rootfs.tar
 push.conf
 bob-core/PACKAGES.md
