@@ -1,0 +1,11 @@
+# syntax=docker/dockerfile:1
+
+# Global ARGS can be used in FROM lines, need to come before the first FROM.
+ARG PORTAGE
+ARG BASE_IMAGE
+
+FROM $PORTAGE AS portage
+
+FROM $BASE_IMAGE
+# This will create a layer
+COPY --from=portage --link /var/db/repos /var/db/repos

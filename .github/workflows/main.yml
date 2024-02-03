@@ -109,6 +109,11 @@ jobs:
           # this is the default, end of job will logout
           #logout: true
 
+      - uses: oras-project/setup-oras@v1
+
+      - run: |
+          oras version
+
       - name: Check out repository code
         uses: actions/checkout@v4
 
@@ -167,7 +172,7 @@ jobs:
         if: ${{ steps.portage-pull.outcome == 'failure' }}
         run: |
           set -eux
-          docker run --rm ghcr.io/oras-project/oras:v1.1.0 cp -v "$TMP_PORTAGE_IMAGE" "$PORTAGE_IMAGE"
+          oras cp -v "$TMP_PORTAGE_IMAGE" "$PORTAGE_IMAGE"
 
       - name: Output PORTAGE_IMAGE
         id: portage_image
@@ -185,6 +190,35 @@ jobs:
       PORTAGE_DATE: ${{ needs.setup.outputs.portage_date }}
       PORTAGE_IMAGE: ${{ needs.kubler-portage.outputs.portage_image }}
     steps:
+      - name: Set up QEMU
+        id: qemu
+        uses: docker/setup-qemu-action@v3
+        with:
+          image: tonistiigi/binfmt:latest
+          platforms: all
+
+      - name: 🐋 Set up Docker Buildx
+        id: buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          # This breaks kubler https://github.com/edannenberg/kubler/issues/215
+          # Sets up `docker build` command as an alias to `docker buildx` (default `false`)
+          install: true
+
+      - name: 🐋 Docker Login
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          # this is the default, end of job will logout
+          #logout: true
+
+      - name: Check out repository code
+        uses: actions/checkout@v4
+
+      - uses: oras-project/setup-oras@v1
+
       - name: 🐋🍳 Docker Bake Kubler stage3 - set ENV vars
         run: |
           set -eux
@@ -216,13 +250,13 @@ jobs:
         if: ${{ steps.stage3-pull.outcome == 'failure' }}
         uses: docker/bake-action/subaction/list-targets@v4
         with:
-          workdir: ../kubler/engine/docker/bob-stage3
+          workdir: bob-stage3
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - hardened-nomultilib
         if: ${{ steps.stage3-pull.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
-          workdir: ../kubler/engine/docker/bob-stage3
+          workdir: bob-stage3
           push: true
           # In the `docker-bake.hcl`
           # There is a variable `BASE_TAG` and `BASE_IMAGE`. `BASE_IMAGE` interpolates `BASE_TAG`i
@@ -267,7 +301,7 @@ jobs:
         if: ${{ steps.stage3-musl-pull.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
-          workdir: ../kubler/engine/docker/bob-stage3
+          workdir: bob-stage3
           push: true
           # In the `docker-bake.hcl`
           # There is a variable `BASE_TAG` and `BASE_IMAGE`. `BASE_IMAGE` interpolates `BASE_TAG`i
