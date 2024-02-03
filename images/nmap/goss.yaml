@@ -1087,25 +1087,6 @@ file:
         filetype: file
         contents: []
 command:
-    nmap --open scanme.nmap.org:
-        exec: [nmap, --open, scanme.nmap.org]
-        exit-status: 0
-        skip: true
-        stdout:
-            - Starting Nmap
-            - ( https://nmap.org ) at
-            - Nmap scan report for scanme.nmap.org (
-            - Host is up (
-            - 'Not shown: '
-            - filtered tcp ports (no-response)
-            - Some closed ports may be reported as filtered due to --defeat-rst-ratelimit
-            - PORT   STATE SERVICE
-            - 22/tcp open  ssh
-            - 53/tcp open  domain
-            - 80/tcp open  http
-            - 'Nmap done: 1 IP address (1 host up) scanned in '
-        stderr: ""
-        timeout: 120000
     nmap -A --open scanme.nmap.org:
         exec: [nmap, -A, --open, --top-ports, 100, scanme.nmap.org]
         exit-status: 0
@@ -1115,61 +1096,28 @@ command:
             - Nmap scan report for scanme.nmap.org (
             - Host is up (
             - 'Not shown:'
-            - filtered tcp ports (no-response)
-            - Some closed ports may be reported as filtered due to --defeat-rst-ratelimit
-            - PORT   STATE SERVICE    VERSION
-            - 22/tcp open  tcpwrapped
+            - PORT      STATE SERVICE    VERSION
+            - 22/tcp    open  ssh        OpenSSH
             - '| ssh-hostkey:'
             - '|   1024 ac:00:a0:1a:82:ff:cc:55:99:dc:67:2b:34:97:6b:75 (DSA)'
             - '|   2048 20:3d:2d:44:62:2a:b0:5a:9d:b5:b3:05:14:c2:a6:b2 (RSA)'
             - '|   256 96:02:bb:5e:57:54:1c:4e:45:2f:56:4c:4a:24:b2:57 (ECDSA)'
             - '|_  256 33:fa:91:0f:e0:e1:7b:1f:6d:05:a2:b0:f1:54:41:56 (ED25519)'
-            - 53/tcp open  tcpwrapped
-            - 80/tcp open  tcpwrapped
+            - 80/tcp    open  http       Apache httpd
             - '|_http-server-header: Apache/2'
             - '|_http-title: Go ahead and ScanMe!'
             - '|_http-favicon: Nmap Project'
+            - 9929/tcp  open  nping-echo Nping echo
+            - 31337/tcp open  tcpwrapped
             - 'Aggressive OS guesses: '
             - No exact OS matches for host (test conditions non-ideal).
             - 'Network Distance: '
-            - TRACEROUTE (using port 80/tcp)
-            - HOP RTT     ADDRESS
+            - TRACEROUTE (using port
+            - HOP
+            - RTT
+            - ADDRESS
             - OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
             - 'Nmap done: 1 IP address (1 host up) scanned in'
-        stderr: ""
-        timeout: 120000
-    nmap -v --open scanme.nmap.org:
-        exec: [nmap, -v, --open, scanme.nmap.org]
-        skip: true
-        exit-status: 0
-        stdout:
-            - Starting Nmap
-            - ( https://nmap.org ) at
-            - Initiating Ping Scan at
-            - Scanning scanme.nmap.org (
-            - ) [4 ports]
-            - Completed Ping Scan at
-            - elapsed (1 total hosts)
-            - Initiating Parallel DNS resolution of 1 host. at
-            - Completed Parallel DNS resolution of 1 host. at
-            - Initiating SYN Stealth Scan at
-            - Scanning scanme.nmap.org (
-            - ) [1000 ports]
-            - Discovered open port 53/tcp on
-            - Discovered open port 22/tcp on
-            - Discovered open port 80/tcp on
-            - Completed SYN Stealth Scan at
-            - elapsed (1000 total ports)
-            - Nmap scan report for scanme.nmap.org (
-            - Host is up (
-            - Some closed ports may be reported as filtered due to --defeat-rst-ratelimit
-            - PORT   STATE SERVICE
-            - 22/tcp open  ssh
-            - 53/tcp open  domain
-            - 80/tcp open  http
-            - 'Read data files from: /usr/bin/../share/nmap'
-            - 'Nmap done: 1 IP address (1 host up) scanned in'
-            - 'Raw packets sent: '
         stderr: ""
         timeout: 120000
     nmap --help:
