@@ -25,6 +25,8 @@ jobs:
           ls -la "${{ github.workspace }}"
           type systemctl
           which systemctl
+          file $(which systemctl)
+          ldd $(which systemctl)
           ls -la /var/run/dbus/system_bus_socket || true
           pidof systemd || true
           ps -ef
@@ -462,26 +464,16 @@ jobs:
       - kubler-portage
       - stage3
     runs-on: ubuntu-latest
-    container:
-      image: ghcr.io/${{ github.repository }}
-      env:
-        PORTAGE_DATE: ${{ needs.setup.outputs.portage_date }}
-        PORTAGE_IMAGE: ${{ needs.kubler-portage.outputs.portage_image }}
-        STAGE3_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ needs.setup.outputs.portage_date }}
-        STAGE3_MUSL_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ needs.setup.outputs.portage_date }}
-        BOB_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-core:${{ needs.setup.outputs.portage_date }}
-        BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ needs.setup.outputs.portage_date }}
-        BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
-        BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
-        # We are running as user `root`, but home is not `/root/`
-        # GitHub injects HOME: /github/home
-      volumes:
-        - ${{ github.workspace }}/.kubler/downloads:/github/home/.kubler/downloads
-        - ${{ github.workspace }}/.kubler/distfiles:/github/home/.kubler/distfiles
-        - ${{ github.workspace }}/.kubler/packages:/github/home/.kubler/packages
-        - ${{ github.workspace }}/.kubler/log:/github/home/.kubler/log
-        # default
-        #- /run/docker.sock:/run/docker.sock
+    env:
+      KUBLER_IMAGE: ghcr.io/${{ github.repository }}
+      PORTAGE_DATE: ${{ needs.setup.outputs.portage_date }}
+      PORTAGE_IMAGE: ${{ needs.kubler-portage.outputs.portage_image }}
+      STAGE3_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ needs.setup.outputs.portage_date }}
+      STAGE3_MUSL_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ needs.setup.outputs.portage_date }}
+      BOB_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-core:${{ needs.setup.outputs.portage_date }}
+      BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ needs.setup.outputs.portage_date }}
+      BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
+      BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
     strategy:
       fail-fast: false
       matrix:
@@ -626,17 +618,6 @@ jobs:
           cd
           pwd
           mount
-          ls -la ~/.kubler
-          ls -la ~/.kubler/downloads/
-          ls -la ~/.kubler/distfiles/
-          ls -la ~/.kubler/packages/
-          ls -la ~/.kubler/log/
-          type apk || exit 1
-          type goss || exit 1
-          type kubler || exit 1
-          type jq || exit 1
-          type gpg || exit 1
-          type docker || exit 1
 
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -681,7 +662,7 @@ jobs:
       - name: Cache Kubler Downloads
         uses: actions/cache@v4
         with:
-          path: ${{ github.workspace }}/.kubler/downloads/
+          path: ~/.kubler/downloads/
           key: kubler-${{ github.sha }}
           restore-keys: |
             kubler-
@@ -689,7 +670,7 @@ jobs:
       - name: Cache Kubler Gentoo Distfiles
         uses: actions/cache@v4
         with:
-          path: ${{ github.workspace }}/.kubler/distfiles/
+          path: ~/.kubler/distfiles/
           key: kubler-${{ github.sha }}
           restore-keys: |
             kubler-
@@ -697,7 +678,7 @@ jobs:
       - name: Cache Kubler Gentoo Packages
         uses: actions/cache@v4
         with:
-          path: ${{ github.workspace }}/.kubler/packages/
+          path: ~/.kubler/packages/
           key: kubler-${{ github.sha }}
           restore-keys: |
             kubler-
@@ -708,12 +689,11 @@ jobs:
           ls -la /
           id
           pwd
-          type apk
           ls -la ~/.kubler
-          ls -la ~/.kubler/downloads/
-          ls -la ~/.kubler/distfiles/
-          ls -la ~/.kubler/packages/
-          ls -la ~/.kubler/log/
+          ls -ltra ~/.kubler/downloads/
+          ls -ltra ~/.kubler/distfiles/
+          ls -ltra ~/.kubler/packages/
+          ls -ltra ~/.kubler/log/ || true
 
       - name: Set up QEMU
         id: qemu
@@ -969,6 +949,31 @@ jobs:
           docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache
           docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
 
+      - name: 🚧 Pull Kubler Image
+        run: |
+          docker pull "${KUBLER_IMAGE}"
+
+      - name: 🚧 Kubler Build Image - Inspect
+        #if: ${{ false }}
+        #id: ${{ matrix.name }}
+        id: kubler-build
+        continue-on-error: true
+        run: |
+          echo "kubler=build" >> $GITHUB_OUTPUT
+          export TERM
+          docker run \
+            --rm \
+            -v /run/docker.sock:/run/docker.sock \
+            -v ~/.kubler/downloads:/root/.kubler/downloads \
+            -v ~/.kubler/distfiles:/root/.kubler/distfiles \
+            -v ~/.kubler/packages:/root/.kubler/packages \
+            -v ~/.kubler/log:/root/.kubler/log \
+            -v "$(pwd):/kubler-images" \
+            -w /kubler-images \
+            -e TERM=dumb \
+            "${KUBLER_IMAGE}" \
+            sh -c "pwd; ls -la; mount"
+
       - name: 🚧 Kubler Build Image
         #if: ${{ false }}
         #id: ${{ matrix.name }}
@@ -976,8 +981,19 @@ jobs:
         continue-on-error: true
         run: |
           echo "kubler=build" >> $GITHUB_OUTPUT
-          #export TERM
-          kubler build -v "${{ matrix.name }}"
+          export TERM
+          docker run \
+            --rm \
+            -v /run/docker.sock:/run/docker.sock \
+            -v ~/.kubler/downloads:/root/.kubler/downloads \
+            -v ~/.kubler/distfiles:/root/.kubler/distfiles \
+            -v ~/.kubler/packages:/root/.kubler/packages \
+            -v ~/.kubler/log:/root/.kubler/log \
+            -v "$(pwd):/kubler-images" \
+            -w /kubler-images \
+            -e TERM=dumb \
+            "${KUBLER_IMAGE}" \
+            kubler build -v "${{ matrix.name }}"
 
       - name: Test Image
         #id: test-${{ matrix.name }}
