@@ -624,7 +624,7 @@ jobs:
           ls -la ~/.kubler/downloads/
           ls -la ~/.kubler/distfiles/
           ls -la ~/.kubler/packages/
-          ls -la ~/.kubler/logs/
+          ls -la ~/.kubler/log/
           type apk || exit 1
           type goss || exit 1
           type kubler || exit 1
@@ -707,7 +707,7 @@ jobs:
           ls -la ~/.kubler/downloads/
           ls -la ~/.kubler/distfiles/
           ls -la ~/.kubler/packages/
-          ls -la ~/.kubler/logs/
+          ls -la ~/.kubler/log/
 
       - name: Set up QEMU
         id: qemu
