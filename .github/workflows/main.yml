@@ -467,12 +467,13 @@ jobs:
         BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ needs.setup.outputs.portage_date }}
         BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
         BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
+        # We are running as user `root`, but home is not `/root/`
+        # GitHub injects HOME: /github/home
       volumes:
-        - ${{ github.workspace }}/.kubler/downloads:/root/.kubler/downloads
-        - ${{ github.workspace }}/.kubler/distfiles:/root/.kubler/distfiles
-        - ${{ github.workspace }}/.kubler/packages:/root/.kubler/packages
-        - ${{ github.workspace }}/.kubler/log:/root/.kubler/log
-        #- "$(pwd):/kubler-images"
+        - ${{ github.workspace }}/.kubler/downloads:/github/home/.kubler/downloads
+        - ${{ github.workspace }}/.kubler/distfiles:/github/home/.kubler/distfiles
+        - ${{ github.workspace }}/.kubler/packages:/github/home/.kubler/packages
+        - ${{ github.workspace }}/.kubler/log:/github/home/.kubler/log
         # default
         #- /run/docker.sock:/run/docker.sock
     strategy:
@@ -608,11 +609,16 @@ jobs:
     steps:
       - name: Inspect
         run: |
+          set -eux
           id
           uname
           pwd
+          echo "${{ github.workspace }}"
+          echo $HOME
           ls -la
           ls -la /
+          cd
+          pwd
           mount
           ls -la ~/.kubler
           ls -la ~/.kubler/downloads/
