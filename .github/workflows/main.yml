@@ -959,7 +959,6 @@ jobs:
         # This is docker inception
         # We run the kubler container to run kubler
         # Kubler runs docker itself, but it will be mounting volumes from the host's POV
-        continue-on-error: true
         run: |
           set -eux
           echo "kubler=build" >> $GITHUB_OUTPUT
@@ -985,7 +984,6 @@ jobs:
         #if: ${{ false }}
         #id: ${{ matrix.name }}
         id: kubler-build
-        continue-on-error: true
         run: |
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
@@ -1006,7 +1004,6 @@ jobs:
         #id: test-${{ matrix.name }}
         id: test
         if: ${{ matrix.goss }}
-        continue-on-error: true
         run: |
           cd "${{ matrix.goss.dir }}" || false
           echo "kubler=test" >> $GITHUB_OUTPUT
@@ -1025,7 +1022,6 @@ jobs:
         if: ${{ matrix.push }}
         #id: push-${{ matrix.name}}
         id: push
-        continue-on-error: true
         run: |
           # The buildx docker-container driver can't pull from the local registry
           # So we need to push the image
