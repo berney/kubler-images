@@ -923,7 +923,8 @@ jobs:
             kubler build -v "${{ matrix.name }}"
 
       - name: Test Image
-        id: test-${{ matrix.name }}
+        #id: test-${{ matrix.name }}
+        id: test
         if: ${{ matrix.goss }}
         continue-on-error: true
         run: |
@@ -934,7 +935,8 @@ jobs:
 
       - name: 🚧 Build Images - push
         if: ${{ matrix.push }}
-        id: push-${{ matrix.name}}
+        #id: push-${{ matrix.name}}
+        id: push
         continue-on-error: true
         run: |
           # The buildx docker-container driver can't pull from the local registry
