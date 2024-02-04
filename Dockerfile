@@ -15,6 +15,7 @@ RUN <<-EOF
         bash \
         curl \
         docker-cli \
+        docker-cli-buildx \
         git \
         gpg \
         jq \
