@@ -13,10 +13,13 @@ RUN <<-EOF
     pwd
     apk add --no-cache \
         bash \
-	docker-cli \
-	git \
-	jq \
-	ncurses
+        curl \
+        docker-cli \
+        git \
+        gpg \
+        jq \
+        ncurses \
+        wget
     type goss
     goss --version
     type dgoss
