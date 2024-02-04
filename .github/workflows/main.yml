@@ -466,10 +466,10 @@ jobs:
         BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
         BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
       volumes:
-        - $HOME/.kubler/downloads:/root/.kubler/downloads
-        - $HOME/.kubler/distfiles:/root/.kubler/distfiles
-        - $HOME/.kubler/packages:/root/.kubler/packages
-        - $HOME/.kubler/log:/root/.kubler/log
+        - ${{ env.HOME }}/.kubler/downloads:/root/.kubler/downloads
+        - ${{ env.HOME }}/.kubler/distfiles:/root/.kubler/distfiles
+        - ${{ env.HOME }}/.kubler/packages:/root/.kubler/packages
+        - ${{ env.HOME }}/.kubler/log:/root/.kubler/log
         #- "$(pwd):/kubler-images"
         # default
         #- /run/docker.sock:/run/docker.sock
