@@ -437,21 +437,29 @@ jobs:
           oras cp -v "${{ matrix.bob.tmp_image }}" "${{ matrix.bob.image }}"
 
   kubler:
-    runs-on: ubuntu-latest
     needs:
       - setup
       - kubler-portage
       - stage3
-    env:
-      KUBLER_IMAGE: ghcr.io/${{ github.repository }}
-      PORTAGE_DATE: ${{ needs.setup.outputs.portage_date }}
-      PORTAGE_IMAGE: ${{ needs.kubler-portage.outputs.portage_image }}
-      STAGE3_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ needs.setup.outputs.portage_date }}
-      STAGE3_MUSL_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ needs.setup.outputs.portage_date }}
-      BOB_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-core:${{ needs.setup.outputs.portage_date }}
-      BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ needs.setup.outputs.portage_date }}
-      BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
-      BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/${{ github.repository }}
+      env:
+        PORTAGE_DATE: ${{ needs.setup.outputs.portage_date }}
+        PORTAGE_IMAGE: ${{ needs.kubler-portage.outputs.portage_image }}
+        STAGE3_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ needs.setup.outputs.portage_date }}
+        STAGE3_MUSL_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ needs.setup.outputs.portage_date }}
+        BOB_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-core:${{ needs.setup.outputs.portage_date }}
+        BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ needs.setup.outputs.portage_date }}
+        BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
+        BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
+      volumes:
+        - /run/docker.sock:/run/docker.sock
+        - ~/.kubler/downloads:/root/.kubler/downloads
+        - ~/.kubler/distfiles:/root/.kubler/distfiles
+        - ~/.kubler/packages:/root/.kubler/packages
+        - ~/.kubler/log:/root/.kubler/log
+        #- "$(pwd):/kubler-images"
     strategy:
       fail-fast: false
       matrix:
@@ -583,6 +591,21 @@ jobs:
               goss_args: validate --format documentation --color
 
     steps:
+      - name: Inspect
+        run: |
+          id
+          uname
+          pwd
+          ls -la
+          ls -la /
+          mount
+          type apk || exit 1
+          type goss || exit 1
+          type kubler || exit 1
+          type jq || exit 1
+          type gpg || exit 1
+          type docker || exit 1
+
       - name: Check out repository code
         uses: actions/checkout@v4
 
@@ -908,20 +931,8 @@ jobs:
         continue-on-error: true
         run: |
           echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          # This is my copy with small changes
-          docker run \
-            --rm \
-            -v /run/docker.sock:/run/docker.sock \
-            -v ~/.kubler/downloads:/root/.kubler/downloads \
-            -v ~/.kubler/distfiles:/root/.kubler/distfiles \
-            -v ~/.kubler/packages:/root/.kubler/packages \
-            -v ~/.kubler/log:/root/.kubler/log \
-            -v "$(pwd):/kubler-images" \
-            -w /kubler-images \
-            -e TERM=dumb \
-            "${KUBLER_IMAGE}" \
-            kubler build -v "${{ matrix.name }}"
+          #export TERM
+          kubler build -v "${{ matrix.name }}"
 
       - name: Test Image
         #id: test-${{ matrix.name }}
@@ -931,7 +942,7 @@ jobs:
         run: |
           cd "${{ matrix.goss.dir }}" || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE="${{ matrix.goss.container_mode }}" "$KUBLER_IMAGE" dgoss run ${{ matrix.goss.docker_args }} "${{ matrix.image }}" ${{ matrix.goss.goss_args }}
+          CONTAINER_MODE="${{ matrix.goss.container_mode }}" dgoss run ${{ matrix.goss.docker_args }} "${{ matrix.image }}" ${{ matrix.goss.goss_args }}
 
       - name: 🚧 Build Images - push
         if: ${{ matrix.push }}
