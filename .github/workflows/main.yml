@@ -956,9 +956,17 @@ jobs:
       - name: 🚧 Kubler Build Image - Inspect
         #if: ${{ false }}
         #id: ${{ matrix.name }}
+        # This is docker inception
+        # We run the kubler container to run kubler
+        # Kubler runs docker itself, but it will be mounting volumes from the host's POV
         continue-on-error: true
         run: |
+          set -eux
           echo "kubler=build" >> $GITHUB_OUTPUT
+          realpath ~/.kubler
+          realpath ~/.kubler/downloads
+          realpath ~/.kubler/distfiles
+          realpath ~/.kubler/packages
           export TERM
           docker run \
             --rm \
@@ -967,11 +975,11 @@ jobs:
             -v ~/.kubler/distfiles:/root/.kubler/distfiles \
             -v ~/.kubler/packages:/root/.kubler/packages \
             -v ~/.kubler/log:/root/.kubler/log \
-            -v "$(pwd):/kubler-images" \
-            -w /kubler-images \
+            -v "$(pwd)":"$(pwd)" \
+            -w "$(pwd)" \
             -e TERM=dumb \
             "${KUBLER_IMAGE}" \
-            sh -c "pwd; ls -la; mount"
+            sh -c 'set -eux; id; pwd; echo $HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads; ls -la ~/.kubler/distifles; ls -la ~/.kubler/packages; ls -la ~/.kubler/log; mount'
 
       - name: 🚧 Kubler Build Image
         #if: ${{ false }}
@@ -988,7 +996,8 @@ jobs:
             -v ~/.kubler/distfiles:/root/.kubler/distfiles \
             -v ~/.kubler/packages:/root/.kubler/packages \
             -v ~/.kubler/log:/root/.kubler/log \
-            -v "$(pwd):/kubler-images" \
+            -v "$(pwd)":"$(pwd)" \
+            -w "$(pwd)" \
             -w /kubler-images \
             -e TERM=dumb \
             "${KUBLER_IMAGE}" \
