@@ -979,7 +979,7 @@ jobs:
             -w "$(pwd)" \
             -e TERM=dumb \
             "${KUBLER_IMAGE}" \
-            sh -c 'set -eux; id; pwd; echo $HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads; ls -la ~/.kubler/distifles; ls -la ~/.kubler/packages; ls -la ~/.kubler/log; mount'
+            sh -c 'set -eux; id; pwd; echo $HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads; ls -la ~/.kubler/distfiles; ls -la ~/.kubler/packages; ls -la ~/.kubler/log; mount'
 
       - name: 🚧 Kubler Build Image
         #if: ${{ false }}
