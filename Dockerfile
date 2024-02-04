@@ -11,7 +11,12 @@ COPY dgoss /usr/local/bin/
 RUN <<-EOF
     set -eux
     pwd
-    apk add --no-cache bash docker-cli git ncurses
+    apk add --no-cache \
+        bash \
+	docker-cli \
+	git \
+	jq \
+	ncurses
     type goss
     goss --version
     type dgoss

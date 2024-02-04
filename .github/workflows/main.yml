@@ -916,6 +916,7 @@ jobs:
             -v ~/.kubler/downloads:/root/.kubler/downloads \
             -v ~/.kubler/distfiles:/root/.kubler/distfiles \
             -v ~/.kubler/packages:/root/.kubler/packages \
+            -v ~/.kubler/log:/root/.kubler/log \
             -v "$(pwd):/kubler-images" \
             -w /kubler-images \
             -e TERM=dumb \
@@ -930,7 +931,6 @@ jobs:
         run: |
           cd "${{ matrix.goss.dir }}" || false
           echo "kubler=test" >> $GITHUB_OUTPUT
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/busybox validate --format documentation --color
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE="${{ matrix.goss.container_mode }}" "$KUBLER_IMAGE" dgoss run ${{ matrix.goss.docker_args }} "${{ matrix.image }}" ${{ matrix.goss.goss_args }}
 
       - name: 🚧 Build Images - push
