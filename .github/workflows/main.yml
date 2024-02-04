@@ -452,47 +452,139 @@ jobs:
       BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ needs.setup.outputs.portage_date }}
       BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
       BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
-    steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: busybox
+            image: kubler-images/busybox
+            goss:
+              dir: images/busybox
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --format documentation --color
+          - name: kubler/busybox
+            image: kubler/busybox
+            goss:
+              dir: images/busybox
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --format documentation --color
+          - name: kubler/glibc
+            image: kubler/glibc
+            goss:
+              dir: images/glibc
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --format documentation --color
+          - name: figlet
+            image: kubler-images/figlet
+            goss:
+              dir: images/figlet
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --format documentation --color
+          - name: figlet-user
+            image: kubler-images/figlet-user
+            goss:
+              dir: images/figlet-user
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --format documentation --color
+          - name: figlet-musl
+            image: kubler-images/figlet-musl
+            goss:
+              dir: images/figlet-musl
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --format documentation --color
+          - name: figlet-musl-static
+            image: kubler-images/figlet-musl-static
+            goss:
+              dir: images/figlet-musl-static
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --format documentation --color
+          - name: goss
+            image: kubler-images/goss
+            goss:
+              dir: images/goss
+              container_mode: entrypoint
+              # Because the image is already using `/goss` (and it's a file), we need `dgoss` to use a different directory
+              # I've added teh `CONTAINER_GOSS_PATH` env var to allow overriding the default
+              docker_args: -w /goss2 --entrypoint /goss2/goss
+              goss_args: validate --format documentation --color
+          - name: fd
+            image: kubler-images/fd
+            goss:
+              dir: images/fd
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --format documentation --color
+          - name: s6
+            image: kubler-images/s6
+            push: true
+            goss:
+              dir: images/s6
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --format documentation --color
+          - name: s6-busybox
+            image: kubler-images/s6-busybox
+            push: true
+            goss:
+              dir: images/s6-busybox
+              container_mode: inject
+              # ash needs a terminal to start
+              docker_args: -t
+              goss_args:
+          - name: coturn
+            image: kubler-images/coturn
+            #push: true
+            #goss:
+            #  dir: images/coturn
+            #  container_mode: inject
+            #  # ash needs a terminal to start
+            #  docker_args: -t
+            #  goss_args:
+          - name: s6-coturn-busybox
+            image: kubler-images/s6-coturn-busybox
+            #push: true
+            #goss:
+            #  dir: images/coturn
+            #  container_mode: inject
+            #  # ash needs a terminal to start
+            #  docker_args: -t
+            #  goss_args:
+          - name: nmap
+            image: kubler-images/nmap
+            #push: true
+            # extra test: docker run --rm kubler-images/nmap -A --open scanme.nmap.org
+            goss:
+              dir: images/nmap
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: -l debug validate --format documentation --color
+          - name: nmap-musl-static
+            image: kubler-images/nmap-musl-static
+            #push: true
+            # extra test: docker run --rm kubler-images/nmap-musl-static -A --open scanme.nmap.org
+            goss:
+              dir: images/nmap-musl-static
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: -l debug validate --format documentation --color
+          - name: tmux
+            image: kubler-images/tmux
+            goss:
+              dir: images/tmux
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --format documentation --color
 
+    steps:
       - name: Check out repository code
         uses: actions/checkout@v4
-
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-
-      - name: 🔎 Inspect Runner
-        run: |
-          df -h
-          free -m
-          bash --version
-          docker version
-          docker info
-          pwd
-          echo $PATH
-          type goss || true
-
-      - name: Install goss from berne/goss
-        #if: ${{ false }}
-        run: |
-          # This is a modified goss
-          docker pull berne/goss
-          docker create --name goss berne/goss
-          docker cp goss:/bin/goss /usr/local/bin/
-          docker rm goss
-          type goss
-          goss --version
-
-      - name: Install dgoss
-        #if: ${{ false }}
-        run: |
-          cp dgoss /usr/local/bin/
 
       - name: Update Docker Engine
         # Disable
@@ -524,54 +616,6 @@ jobs:
           docker version
           docker info
           docker run --rm hello-world
-
-      - name: 👷 Install Kubler
-        run: |
-          cd .. || exit 1
-
-          ## Install from tarball
-          #
-          #curl -L https://github.com/edannenberg/kubler/archive/master.tar.gz | tar xz
-          #ls -ld kubler-master
-          #mv kubler-master kubler
-          #ls -l kubler/bin
-          #echo "$(pwd)/kubler/bin" >> $GITHUB_PATH
-
-          ## Install from Git
-          #
-          git clone https://github.com/berney/kubler.git
-          cd kubler || exit 1
-          # Using my branch to pick-up fixes until PRs are merged
-          #git checkout f-berne
-          git checkout f-experiment-buildx-bake
-          git describe --all --long --dirty
-          #git checkout f-berne-bake
-          ls -l bin
-          echo "$(pwd)/bin" >> $GITHUB_PATH
-
-      - name: 👷 Kubler Version
-        run: |
-          export TERM
-          kubler --help
-
-      - name: 👷 Kubler Inspect Terminal
-        run: |
-          echo "TERM=$TERM"
-          echo $PATH
-          pwd
-          env
-          # test term colors
-          kubler dep-graph xxx || true
-          echo "export TERM"
-          export TERM
-          kubler dep-graph xxx || true
-          echo "export TERM=dumb"
-          export TERM
-          export TERM=dumb
-          kubler dep-graph xxx || true
-          echo "export TERM=xterm"
-          export TERM=xterm
-          kubler dep-graph xxx || true
 
       # Cache Versions are based off key and path, so differnt path's can use same key
       #
@@ -618,31 +662,12 @@ jobs:
           # Sets up `docker build` command as an alias to `docker buildx` (default `false`)
           install: true
 
-      - name: 🐋 Inspect builder
-        run: |
-          echo "Name:      ${{ steps.buildx.outputs.name }}"
-          echo "Endpoint:  ${{ steps.buildx.outputs.endpoint }}"
-          echo "Status:    ${{ steps.buildx.outputs.status }}"
-          echo "Flags:     ${{ steps.buildx.outputs.flags }}"
-          echo "Platforms: ${{ steps.buildx.outputs.platforms }}"
-
       - name: 🐋 Docker Login
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: 🐋 Docker Buildx Inspect
-        run: |
-          docker version
-          docker info
-          docker buildx version
-          docker buildx ls
-          # `default` is the name of the normie docker builder
-          docker buildx inspect default
-          # The buildx builder is the default builder due to the `install: true` above
-          docker buildx inspect "${{ steps.buildx.outputs.name }}"
 
       # When we use `docker buildx` and `docker bake` we want to be able to access images we built in prior steps
       # For this we need the containerd-snapshotter feature which is in beta
@@ -672,39 +697,6 @@ jobs:
           docker buildx inspect default
           # The buildx builder is the default builder due to the `install: true` above
           docker buildx inspect "${{ steps.buildx.outputs.name }}"
-
-      - name: 👷 Update Kubler (kubler-images, Gentoo Stage3)
-        run: |
-          export TERM
-          ls -la ~/.kubler || true
-          ls -la ~/.kubler/namespaces || true
-          ls -la ~/.kubler/namespaces/kubler || true
-          kubler update
-          ls -la ~/.kubler || true
-          ls -la ~/.kubler/namespaces || true
-          ls -la ~/.kubler/namespaces/kubler || true
-
-      - name: 👷 Inspect Kubler Images
-        run: |
-          cd ~/.kubler/namespaces/kubler/ || exit 1
-          git remote -v
-          git status
-          git ls-files -o
-          git diff
-
-      - name: 👷 Add Custom Kubler Command(s)
-        run: |
-          echo "Kubler Commands (OG)"
-          pwd
-          ls -l
-          tree -a -C ../kubler
-          ls -l ../kubler
-          ls -l ../kubler/cmd
-          echo "Custom Kubler Commands"
-          ls -l kubler/cmd
-          rsync -avi kubler/cmd/* ../kubler/cmd/
-          echo "Kubler Commands (now)"
-          ls -l ../kubler/cmd
 
       - name: 🔑 Get Gentoo Portage GPG Key
         run: |
@@ -909,300 +901,48 @@ jobs:
           docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache
           docker run --rm --volumes-from kubler-gentoo-portage "${BOB_MUSL_IMAGE}" ls -l /var/cache/eix
 
-      - name: 🚧 Build Images - berney/busybox
+      - name: 🚧 Kubler Build Image
         #if: ${{ false }}
-        id: busybox
+        id: ${{ matrix.name }}
         continue-on-error: true
         run: |
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
           # This is my copy with small changes
-          kubler build -v busybox
+          docker run \
+            --rm \
+            -v /run/docker.sock:/run/docker.sock \
+            -v ~/.kubler/downloads:/root/.kubler/downloads \
+            -v ~/.kubler/distfiles:/root/.kubler/distfiles \
+            -v ~/.kubler/packages:/root/.kubler/packages \
+            -v "$(pwd):/kubler-images" \
+            -w /kubler-images \
+            -e TERM=dumb \
+            "${KUBLER_IMAGE}" \
+            kubler build -v "${{ matrix.name }}"
 
-      - name: Test Image - berney/busybox
-        id: test-busybox
+      - name: Test Image
+        id: test-${{ matrix.name }}
+        if: ${{ matrix.goss }}
         continue-on-error: true
         run: |
-          cd images/busybox || false
+          cd "${{ matrix.goss.dir }}" || false
           echo "kubler=test" >> $GITHUB_OUTPUT
           CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/busybox validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE="${{ matrix.goss.container_mode }}" "$KUBLER_IMAGE" dgoss run ${{ matrix.goss.docker_args }} "${{ matrix.image }}" ${{ matrix.goss.goss_args }}
 
-      - name: 🚧 Build Images - kubler/busybox
-        #if: ${{ false }}
-        id: kubler-busybox
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v kubler/busybox
-
-      - name: Test Image - kubler/busybox
-        id: test-kubler-busybox
-        continue-on-error: true
-        run: |
-          cd images/busybox || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler/busybox validate --format documentation --color
-
-      #- name: 🛑 STOP HERE
-      #  run: |
-      #    false
-
-      - name: 🚧 Build Images - kubler/glibc
-        #if: ${{ false }}
-        id: glibc
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v kubler/glibc
-
-      - name: Test Image - kubler/glibc
-        id: test-kubler-glibc
-        continue-on-error: true
-        run: |
-          cd images/glibc || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler/glibc validate --format documentation --color
-
-      - name: 🚧 Build Images - figlet
-        #if: ${{ false }}
-        id: figlet
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v figlet
-
-      - name: Test Image - figlet
-        id: test-figlet
-        continue-on-error: true
-        run: |
-          cd images/figlet || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet validate --format documentation --color
-
-      - name: 🚧 Build Images - figlet-user
-        #if: ${{ false }}
-        id: figlet-user
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v figlet-user
-
-      - name: Test Image - figlet-user
-        id: test-figlet-user
-        continue-on-error: true
-        run: |
-          cd images/figlet-user || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-user validate --format documentation --color
-
-      - name: 🚧 Build Images - figlet-musl
-        #if: ${{ false }}
-        id: figlet-musl
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v figlet-musl
-
-      - name: Test Image - figlet-musl
-        id: test-figlet-musl
-        continue-on-error: true
-        run: |
-          cd images/figlet-musl || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl validate --format documentation --color
-
-      - name: 🚧 Build Images - figlet-musl-static
-        #if: ${{ false }}
-        id: figlet-musl-static
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v figlet-musl-static
-
-      - name: Test Image - figlet-musl-static
-        id: test-figlet-musl-static
-        continue-on-error: true
-        run: |
-          cd images/figlet-musl-static || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/figlet-musl-static validate --format documentation --color
-
-      - name: 🚧 Build Images - goss
-        #if: ${{ false }}
-        id: goss
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v goss
-
-      - name: Test Image - goss
-        id: test-goss
-        continue-on-error: true
-        run: |
-          cd images/goss || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          # Because the image is already using `/goss` (and it's a file), we need `dgoss` to use a different directory
-          # I've added teh `CONTAINER_GOSS_PATH` env var to allow overriding the default
-          CONTAINER_MODE=entrypoint CONTAINER_GOSS_PATH=/goss2 dgoss run -w /goss2 --entrypoint /goss2/goss kubler-images/goss validate --format documentation --color
-
-      - name: 🚧 Build Images - fd
-        #if: ${{ false }}
-        id: fd
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v fd
-
-      - name: Test Image - fd
-        id: test-fd
-        continue-on-error: true
-        run: |
-          cd images/fd || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/fd validate --format documentation --color
-
-      - name: 🚧 Build Images - s6
-        #if: ${{ false }}
-        id: s6
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build -v s6
-
-      - name: Test Image - s6
-        id: test-s6
-        continue-on-error: true
-        run: |
-          cd images/s6 || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/s6 validate --format documentation --color
-
-      - name: 🚧 Build Images - s6 - push
-        #if: ${{ false }}
-        id: s6-push
+      - name: 🚧 Build Images - push
+        if: ${{ matrix.push }}
+        id: push-${{ matrix.name}}
         continue-on-error: true
         run: |
           # The buildx docker-container driver can't pull from the local registry
           # So we need to push the image
-          docker tag kubler-images/s6 ghcr.io/berney/kubler-images/s6
-          docker push ghcr.io/berney/kubler-images/s6
-
-      - name: 🚧 Build Images - s6-busybox
-        #if: ${{ false }}
-        id: s6-busybox
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          DOCKER_BUILD_OPTS="--load"\
-          " --cache-from=type=gha,scope=s6-busybox"\
-          " --cache-to=type=gha,scope=s6-busybox" \
-          kubler build -v s6-busybox
-
-      - name: Test Image - s6-busybox
-        id: test-s6-busybox
-        continue-on-error: true
-        run: |
-          cd images/s6-busybox || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          # ash needs a terminal to start
-          dgoss run -t kubler-images/s6-busybox
-
-      - name: 🚧 Build Images - s6-busybox - push
-        #if: ${{ false }}
-        id: s6-busybox-push
-        continue-on-error: true
-        run: |
-          # The buildx docker-container driver can't pull from the local registry
-          # So we need to push the image
-          docker tag kubler-images/s6-busybox ghcr.io/berney/kubler-images/s6-busybox
-          docker push ghcr.io/berney/kubler-images/s6-busybox
-
-      # This is based off s6
-      - name: 🚧 Build Images - coturn
-        #if: ${{ false }}
-        id: coturn
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          # To continue the string, no spaces between end quote,slash, EOL, or start of line
-          # e.g. as a stream its `"alpha"\\\n" omega"\\\n"
-          DOCKER_BUILD_OPTS="--load"\
-          " --cache-from=type=gha,scope=coturn"\
-          " --cache-to=type=gha,scope=coturn" \
-            kubler build -v coturn
-
-      - name: 🚧 Build Images - s6-coturn-busybox
-        #if: ${{ false }}
-        id: s6-coturn-busybox
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          DOCKER_BUILD_OPTS="--load"\
-          " --cache-from=type=gha,scope=coturn"\
-          " --cache-from=type=gha,scope=s6-busybox"\
-          " --cache-from=type=gha,scope=s6-coturn-busybox"\
-          " --cache-to=type=gha,scope=s6-coturn-busybox" \
-            kubler build -v s6-coturn-busybox
-
-      - name: 🚧 Build Images - nmap
-        #if: ${{ false }}
-        id: nmap
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          DOCKER_BUILD_OPTS="--load"\
-          " --cache-from=type=gha,scope=nmap"\
-          " --cache-to=type=gha,scope=nmap" \
-            kubler build -v nmap
-
-      - name: Test Image - nmap
-        id: test-nmap
-        continue-on-error: true
-        run: |
-          cd images/nmap || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
-          docker run --rm kubler-images/nmap -A --open scanme.nmap.org
-          CONTAINER_MODE=entrypoint dgoss run -w /goss --entrypoint /goss/goss kubler-images/nmap -l debug validate --format documentation --color
-
-      - name: 🚧 Build Images - nmap-musl-static
-        #if: ${{ false }}
-        id: nmap-musl-static
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          DOCKER_BUILD_OPTS="--load"\
-          " --cache-from=type=gha,scope=nmap-musl-static"\
-          " --cache-to=type=gha,scope=nmap-musl-static" \
-            kubler build -v nmap-musl-static
-
-      - name: 🚧 Build Images - tmux
-        #if: ${{ false }}
-        id: tmux
-        continue-on-error: true
-        run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          DOCKER_BUILD_OPTS="--load"\
-          " --cache-from=type=gha,scope=tmux"\
-          " --cache-to=type=gha,scope=tmux" \
-            kubler build -v tmux
+          docker tag ${{ matrix.image }} ghcr.io/berney/kubler-images/${{ matrix.name }}
+          docker push ghcr.io/berney/kubler-images/${{ matrix.name }}
 
       - name: 🚧 Build Images - Everything excluding Problematic
-        #if: ${{ false }}
+        if: ${{ false }}
         id: everything-exc-problematic
         continue-on-error: true
         run: |
