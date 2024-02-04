@@ -21,6 +21,8 @@ jobs:
       - name: inspect
         run: |
           set -eux
+          echo "${{ github.workspace }}"
+          ls -la "${{ github.workspace }}"
           id
           uname -a
           pwd
@@ -466,10 +468,10 @@ jobs:
         BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
         BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
       volumes:
-        - ${{ env.HOME }}/.kubler/downloads:/root/.kubler/downloads
-        - ${{ env.HOME }}/.kubler/distfiles:/root/.kubler/distfiles
-        - ${{ env.HOME }}/.kubler/packages:/root/.kubler/packages
-        - ${{ env.HOME }}/.kubler/log:/root/.kubler/log
+        - ${{ github.workspace }}/.kubler/downloads:/root/.kubler/downloads
+        - ${{ github.workspace }}/.kubler/distfiles:/root/.kubler/distfiles
+        - ${{ github.workspace }}/.kubler/packages:/root/.kubler/packages
+        - ${{ github.workspace }}/.kubler/log:/root/.kubler/log
         #- "$(pwd):/kubler-images"
         # default
         #- /run/docker.sock:/run/docker.sock
@@ -612,6 +614,11 @@ jobs:
           ls -la
           ls -la /
           mount
+          ls -la ~/.kubler
+          ls -la ~/.kubler/downloads/
+          ls -la ~/.kubler/distfiles/
+          ls -la ~/.kubler/packages/
+          ls -la ~/.kubler/logs/
           type apk || exit 1
           type goss || exit 1
           type kubler || exit 1
@@ -662,7 +669,7 @@ jobs:
       - name: Cache Kubler Downloads
         uses: actions/cache@v4
         with:
-          path: ~/.kubler/downloads/
+          path: ${{ github.workspace }}/.kubler/downloads/
           key: kubler-${{ github.sha }}
           restore-keys: |
             kubler-
@@ -670,7 +677,7 @@ jobs:
       - name: Cache Kubler Gentoo Distfiles
         uses: actions/cache@v4
         with:
-          path: ~/.kubler/distfiles/
+          path: ${{ github.workspace }}/.kubler/distfiles/
           key: kubler-${{ github.sha }}
           restore-keys: |
             kubler-
@@ -678,10 +685,23 @@ jobs:
       - name: Cache Kubler Gentoo Packages
         uses: actions/cache@v4
         with:
-          path: ~/.kubler/packages/
+          path: ${{ github.workspace }}/.kubler/packages/
           key: kubler-${{ github.sha }}
           restore-keys: |
             kubler-
+
+      - name: Inspect Caches
+        run: |
+          set -eux
+          ls -la /
+          id
+          pwd
+          type apk
+          ls -la ~/.kubler
+          ls -la ~/.kubler/downloads/
+          ls -la ~/.kubler/distfiles/
+          ls -la ~/.kubler/packages/
+          ls -la ~/.kubler/logs/
 
       - name: Set up QEMU
         id: qemu
