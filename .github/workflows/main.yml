@@ -998,7 +998,6 @@ jobs:
             -v ~/.kubler/log:/root/.kubler/log \
             -v "$(pwd)":"$(pwd)" \
             -w "$(pwd)" \
-            -w /kubler-images \
             -e TERM=dumb \
             "${KUBLER_IMAGE}" \
             kubler build -v "${{ matrix.name }}"
