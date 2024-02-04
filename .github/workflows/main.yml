@@ -23,6 +23,12 @@ jobs:
           set -eux
           echo "${{ github.workspace }}"
           ls -la "${{ github.workspace }}"
+          type systemctl
+          which systemctl
+          ls -la /var/run/dbus/system_bus_socket || true
+          pidof systemd || true
+          ps -ef
+          ps -ef --forest || true
           id
           uname -a
           pwd
