@@ -4,6 +4,13 @@ on:
   #  branches:
   #    - main
   workflow_dispatch:
+    inputs:
+      portage_date:
+        description: The date (tag) of the latest portage image (e.g. `20241231`)
+        required: true
+        # Could be `latest` or a date like `20241231`
+        type: string
+        default: latest
   workflow_call:
     inputs:
       portage_date:

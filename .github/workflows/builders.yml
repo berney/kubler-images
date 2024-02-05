@@ -4,6 +4,18 @@ on:
   #  branches:
   #    - main
   workflow_dispatch:
+    inputs:
+      portage_date:
+        description: The date (tag) of the latest portage image (e.g. `20241231`)
+        required: true
+        # Could be `latest` or a date like `20241231`
+        type: string
+        default: latest
+      portage_image:
+        description: Portage Image (e.g. `ghcr.io/berney/kubler-images/portage:20241231`)
+        required: true
+        type: string
+        default: ghcr.io/${{github.repository}}/portage:latest
   workflow_call:
     inputs:
       portage_date:
