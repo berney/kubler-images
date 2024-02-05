@@ -978,7 +978,6 @@ jobs:
             -v "$(pwd)":"$(pwd)" \
             -w "$(pwd)" \
             -e TERM=dumb \
-            -e HOME=$HOME \
             "${KUBLER_IMAGE}" \
             sh -c 'set -eux; id; pwd; echo HOME=$HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads; ls -la ~/.kubler/distfiles; ls -la ~/.kubler/packages; ls -la ~/.kubler/log; mount'
 
@@ -999,7 +998,6 @@ jobs:
             -v "$(pwd)":"$(pwd)" \
             -w "$(pwd)" \
             -e TERM=dumb \
-            -e HOME=$HOME \
             "${KUBLER_IMAGE}" \
             kubler build -v "${{ matrix.name }}"
 
