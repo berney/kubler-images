@@ -5,19 +5,27 @@ on:
   #    - main
   workflow_dispatch:
   workflow_call:
+    inputs:
+      portage_date:
+        description: The date (tag) of the latest portage image (e.g. `20241231`)
+        required: true
+        # Could be `latest` or a date like `20241231`
+        type: string
+      portage_image:
+        description: Portage Image (e.g. `ghcr.io/berney/kubler-images/portage:20241231`)
+        required: true
+        type: string
+
 
 # Jobs run in parallel
 # Jobs are independent with separate file systems, IP addresses, etc.
 jobs:
-  stage3:
+  builders:
     runs-on: ubuntu-latest
-    needs:
-      - setup
-      - kubler-portage
     env:
       KUBLER_IMAGE: ghcr.io/${{ github.repository }}
-      PORTAGE_DATE: ${{ needs.setup.outputs.portage_date }}
-      PORTAGE_IMAGE: ${{ needs.kubler-portage.outputs.portage_image }}
+      PORTAGE_DATE: ${{ inputs.portage_date }}
+      PORTAGE_IMAGE: ${{ inputs.portage_image }}
     strategy:
       fail-fast: false
       matrix:
@@ -25,39 +33,39 @@ jobs:
           - name: bob
             stage3:
               base: gentoo/stage3:hardened-nomultilib
-              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-hardened-nomultilib-openrc:${{ needs.setup.outputs.portage_date }}
-              image: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ needs.setup.outputs.portage_date }}
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-hardened-nomultilib-openrc:${{ inputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ inputs.portage_date }}
               cache: stage3-amd64-hardened-nomultilib-openrc
               goss: stage3/amd64-hardened-nomultilib-openrc
             core:
               def_chost: x86_64-pc-linux-gnu
-              tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-core:${{ needs.setup.outputs.portage_date }}
-              image: ghcr.io/${{ github.repository }}/bob-core:${{ needs.setup.outputs.portage_date }}
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-core:${{ inputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/bob-core:${{ inputs.portage_date }}
               cache: bob-core
               goss: core/bob-core
             bob:
               target: bob
-              tmp_image: ghcr.io/${{ github.repository }}/tmp/bob:${{ needs.setup.outputs.portage_date }}
-              image: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/bob:${{ inputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/bob:${{ inputs.portage_date }}
               cache: bob
               goss: builder/bob
           - name: bob-musl
             stage3:
               base: gentoo/stage3:musl-hardened
-              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-musl-hardened:${{ needs.setup.outputs.portage_date }}
-              image: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ needs.setup.outputs.portage_date }}
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-musl-hardened:${{ inputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ inputs.portage_date }}
               cache: stage3-amd64-musl-hardened
               goss: stage3/amd64-musl-hardened
             core:
               def_chost: x86_64-gentoo-linux-musl
-              tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-musl-core:${{ needs.setup.outputs.portage_date }}
-              image: ghcr.io/${{ github.repository }}/bob-musl-core:${{ needs.setup.outputs.portage_date }}
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-musl-core:${{ inputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/bob-musl-core:${{ inputs.portage_date }}
               cache: bob-musl-core
               goss: core/bob-musl-core
             bob:
               target: bob-musl
-              tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-musl:${{ needs.setup.outputs.portage_date }}
-              image: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-musl:${{ inputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/bob-musl:${{ inputs.portage_date }}
               cache: bob-musl
               goss: builder/bob-musl
     steps:

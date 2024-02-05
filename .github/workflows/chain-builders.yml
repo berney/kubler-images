@@ -1,9 +1,18 @@
 name: Chain Builders-Kubler
 on:
   workflow_dispatch:
+    inputs:
+      portage_date:
+        description: The date (tag) of the latest portage image (e.g. `20241231`)
+        default: latest
+      portage_image:
+        description: Portage Image (e.g. `ghcr.io/berney/kubler-images/portage:20241231`)
+        required: true
+        type: string
 
 jobs:
   call-builders:
     uses: ./.github/builders.yml
   call-kubler-build:
     uses: ./.github/kubler-build.yml
+    needs: call-builders

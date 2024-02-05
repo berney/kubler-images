@@ -6,6 +6,16 @@ on:
   #    - main
   workflow_dispatch:
   workflow_call:
+    outputs:
+      portage_date:
+        description: The date (tag) of the latest portage image (e.g. `20241231`)
+        value: ${{ jobs.setup.outputs.portage_date }}
+      bob_stage3_date:
+        description: The date (tag) of the latest stage3 image for bob (glibc) (e.g. `20241231`)
+        value: ${{ jobs.setup.outputs.bob_stage3_date }}
+      bob_musl_stage3_date:
+        description:  The data (tag) of the latest stage3 image for bob-musl (e.g. `20241231`)
+        value: ${{ jobs.setup.outputs.bob_musl_stage3_date }}
 
 # Jobs run in parallel
 # Jobs are independent with separate file systems, IP addresses, etc.

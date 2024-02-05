@@ -1,11 +1,28 @@
 name: Chain Portage-Builders-Kubler
 on:
   workflow_dispatch:
+    inputs:
+      portage_date:
+        description: The date (tag) of the latest portage image (e.g. `20241231`)
+        default: latest
 
 jobs:
   call-portage:
     uses: ./.github/portage.yml
+    with:
+      portage_date: ${{ inputs.portage_date }}
   call-builders:
     uses: ./.github/builders.yml
+    needs:
+      - call-portage
+    with:
+      portage_date: ${{ inputs.portage_date }}
+      portage_image: ${{ needs.call-portage.outputs.portage_image }}
   call-kubler-build:
     uses: ./.github/kubler-build.yml
+    needs:
+      - call-portage
+      - call-builders
+    with:
+      portage_date: ${{ inputs.portage_date }}
+      portage_image: ${{ needs.call-portage.outputs.portage_image }}

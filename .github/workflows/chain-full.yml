@@ -7,7 +7,24 @@ jobs:
     uses: ./.github/setup.yml
   call-portage:
     uses: ./.github/portage.yml
+    needs:
+      - call-setup
+    with:
+      portage_date: ${{ needs.call-setup.outputs.portage_date }}
   call-builders:
     uses: ./.github/builders.yml
+    needs:
+      - call-setup
+      - call-portage
+    with:
+      portage_date: ${{ needs.call-setup.outputs.portage_date }}
+      portage_image: ${{ needs.call-portage.outputs.portage_image }}
   call-kubler-build:
     uses: ./.github/kubler-build.yml
+    needs:
+      - call-setup
+      - call-portage
+      - call-builders
+    with:
+      portage_date: ${{ needs.call-setup.outputs.portage_date }}
+      portage_image: ${{ needs.call-portage.outputs.portage_image }}

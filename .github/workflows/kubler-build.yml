@@ -5,26 +5,32 @@ on:
       - main
   workflow_dispatch:
   workflow_call:
+    inputs:
+      portage_date:
+        description: The date (tag) of the latest portage image (e.g. `20241231`)
+        required: true
+        # Could be `latest` or a date like `20241231`
+        type: string
+      portage_image:
+        description: Portage Image (e.g. `ghcr.io/berney/kubler-images/portage:20241231`)
+        required: true
+        type: string
 
 # Jobs run in parallel
 # Jobs are independent with separate file systems, IP addresses, etc.
 jobs:
   kubler:
-    needs:
-      - setup
-      - kubler-portage
-      - stage3
     runs-on: ubuntu-latest
     env:
       KUBLER_IMAGE: ghcr.io/${{ github.repository }}
-      PORTAGE_DATE: ${{ needs.setup.outputs.portage_date }}
-      PORTAGE_IMAGE: ${{ needs.kubler-portage.outputs.portage_image }}
-      STAGE3_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ needs.setup.outputs.portage_date }}
-      STAGE3_MUSL_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ needs.setup.outputs.portage_date }}
-      BOB_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-core:${{ needs.setup.outputs.portage_date }}
-      BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ needs.setup.outputs.portage_date }}
-      BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ needs.setup.outputs.portage_date }}
-      BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ needs.setup.outputs.portage_date }}
+      PORTAGE_DATE: ${{ inputs.portage_date }}
+      PORTAGE_IMAGE: ${{ inputs.portage_image }}
+      STAGE3_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ inputs.portage_date }}
+      STAGE3_MUSL_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ inputs.portage_date }}
+      BOB_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-core:${{ inputs.portage_date }}
+      BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ inputs.portage_date }}
+      BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ inputs.portage_date }}
+      BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ inputs.portage_date }}
     strategy:
       fail-fast: false
       matrix:
