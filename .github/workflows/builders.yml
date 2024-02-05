@@ -152,9 +152,16 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - oras cp
         if: ${{ steps.stage3-pull.outcome == 'failure' || steps.stage3-pull-test.outcome == 'failure' }}
+        env:
+          TMP_IMAGE: ${{ matrix.stage3.tmp_image }}
+          IMAGE: ${{ matrix.stage3.image }}
         run: |
           set -eux
-          oras cp -v "${{ matrix.stage3.tmp_image }}" "${{ matrix.stage3.image }}"
+          # Strip tag from end of string
+          LATEST=${IMAGE%:*}"
+          oras cp -v "$TMP_IMAGE" "$IMAGE"
+          oras cp -v "$TMP_IMAGE" "$LATEST"
+
 
       - name: 🐋 Docker Pull bob-core
         id: bob-core-pull
@@ -209,9 +216,15 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - oras cp
         if: ${{ steps.bob-core-pull.outcome == 'failure' || steps.bob-core-pull-test.outcome == 'failure' }}
+        env:
+          TMP_IMAGE: ${{ matrix.core.tmp_image }}
+          IMAGE: ${{ matrix.core.image }}
         run: |
           set -eux
-          oras cp -v "${{ matrix.core.tmp_image }}" "${{ matrix.core.image }}"
+          # Strip tag from end of string
+          LATEST=${IMAGE%:*}"
+          oras cp -v "$TMP_IMAGE" "$IMAGE"
+          oras cp -v "$TMP_IMAGE" "$LATEST"
 
       - name: 🐋 Docker Pull bob
         id: bob-pull
@@ -270,6 +283,12 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler builder - bob - oras cp
         if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        env:
+          TMP_IMAGE: ${{ matrix.bob.tmp_image }}
+          IMAGE: ${{ matrix.bob.image }}
         run: |
           set -eux
-          oras cp -v "${{ matrix.bob.tmp_image }}" "${{ matrix.bob.image }}"
+          # Strip tag from end of string
+          LATEST=${IMAGE%:*}"
+          oras cp -v "$TMP_IMAGE" "$IMAGE"
+          oras cp -v "$TMP_IMAGE" "$LATEST"

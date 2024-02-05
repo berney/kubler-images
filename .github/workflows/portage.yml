@@ -112,9 +112,15 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler portage - oras cp
         if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
+        env:
+          TMP_IMAGE: ${{ env.TMP_PORTAGE_IMAGE }}
+          IMAGE: ${{ env.PORTAGE_IMAGE }}
         run: |
           set -eux
-          oras cp -v "$TMP_PORTAGE_IMAGE" "$PORTAGE_IMAGE"
+          # Strip tag from end of string
+          LATEST=${IMAGE%:*}"
+          oras cp -v "$TMP_IMAGE" "$IMAGE"
+          oras cp -v "$TMP_IMAGE" "$LATEST"
 
       - name: Output PORTAGE_IMAGE
         id: portage_image
