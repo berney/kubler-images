@@ -1010,7 +1010,9 @@ jobs:
         env:
           CONTAINER_MODE: ${{ matrix.goss.container_mode }}
           CONTAINER_GOSS_PATH: ${{ matrix.goss.container_goss_path }}
+          GOSS_FILES_STRATEGY: ${{ matrix.goss.goss_files_strategy }}
         # We use the env vars with defaults in case they were empty
+        # Since we are doing docker inception it is easier to always use `cp` strategy than to try to get mounts in the container matching the host - since `dgoss` uses tmp files we'd have to use `DGOSS_TEMP_DIR` etc.
         run: |
           cd "${{ matrix.goss.dir }}" || false
           echo "kubler=test" >> $GITHUB_OUTPUT
@@ -1021,6 +1023,7 @@ jobs:
             -w /src \
             -e CONTAINER_MODE="${CONTAINER_MODE:-inject}" \
             -e CONTAINER_GOSS_PATH="${CONTAINER_GOSS_PATH:-/goss}" \
+            -e GOSS_FILES_STRATEGY="${GOSS_FILES_STRATEGY:-cp}" \
             "$KUBLER_IMAGE" \
               dgoss run \
                 ${{ matrix.goss.docker_args }} \
