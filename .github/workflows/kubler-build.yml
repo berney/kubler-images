@@ -475,14 +475,14 @@ jobs:
         run: |
           # We need a local copy to tag
           # We build tmp image and use oras to copy it, so we don't have it locally
-          docker pull "${PORTAGE_IMAGE}"
-          docker pull "${BOB_CORE_IMAGE}"
-          docker pull "${BOB_MUSL_CORE_IMAGE}"
-          docker pull "${BOB_IMAGE}"
-          docker pull "${BOB_MUSL_IMAGE}"
+          #docker pull "${PORTAGE_IMAGE}"
+          #docker pull "${BOB_CORE_IMAGE}"
+          #docker pull "${BOB_MUSL_CORE_IMAGE}"
+          #docker pull "${BOB_IMAGE}"
+          #docker pull "${BOB_MUSL_IMAGE}"
           docker tag "${PORTAGE_IMAGE}" kubler-gentoo/portage:latest
-          docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
-          docker tag "${BOB_MUSL_CORE_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
+          #docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
+          #docker tag "${BOB_MUSL_CORE_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
           docker tag "${BOB_IMAGE}" kubler/bob:"${PORTAGE_DATE}"
           docker tag "${BOB_MUSL_IMAGE}" kubler/bob-musl:"${PORTAGE_DATE}"
           docker images
