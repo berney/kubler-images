@@ -967,6 +967,8 @@ jobs:
           realpath ~/.kubler/downloads
           realpath ~/.kubler/distfiles
           realpath ~/.kubler/packages
+          ls -la ~/.kubler
+          touch ~/.kubler/kubler.conf
           export TERM
           docker run \
             --rm \
