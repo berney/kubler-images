@@ -533,7 +533,8 @@ jobs:
               dir: images/goss
               container_mode: entrypoint
               # Because the image is already using `/goss` (and it's a file), we need `dgoss` to use a different directory
-              # I've added teh `CONTAINER_GOSS_PATH` env var to allow overriding the default
+              # I've added the `CONTAINER_GOSS_PATH` env var to allow overriding the default
+              container_goss_path: /goss2
               docker_args: -w /goss2 --entrypoint /goss2/goss
               goss_args: validate --color
           - name: fd
@@ -1005,6 +1006,11 @@ jobs:
         #id: test-${{ matrix.name }}
         id: test
         if: ${{ matrix.goss }}
+        # The matrix might not define these
+        env:
+          CONTAINER_MODE: ${{ matrix.goss.container_mode }}
+          CONTAINER_GOSS_PATH: ${{ matrix.goss.container_goss_path }}
+        # We use the env vars with defaults in case they were empty
         run: |
           cd "${{ matrix.goss.dir }}" || false
           echo "kubler=test" >> $GITHUB_OUTPUT
@@ -1013,7 +1019,8 @@ jobs:
             -v /run/docker.sock:/run/docker.sock \
             -v "$(pwd):/src:ro" \
             -w /src \
-            -e CONTAINER_MODE="${{ matrix.goss.container_mode }}" \
+            -e CONTAINER_MODE="${CONTAINER_MODE:-inject}" \
+            -e CONTAINER_GOSS_PATH="${CONTAINER_GOSS_PATH:-/goss}" \
             "$KUBLER_IMAGE" \
               dgoss run \
                 ${{ matrix.goss.docker_args }} \
