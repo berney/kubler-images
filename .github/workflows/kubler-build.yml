@@ -23,14 +23,14 @@ jobs:
     runs-on: ubuntu-latest
     env:
       KUBLER_IMAGE: ghcr.io/${{ github.repository }}
-      PORTAGE_DATE: ${{ inputs.portage_date }}
-      PORTAGE_IMAGE: ${{ inputs.portage_image }}
-      STAGE3_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ inputs.portage_date }}
-      STAGE3_MUSL_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ inputs.portage_date }}
-      BOB_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-core:${{ inputs.portage_date }}
-      BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ inputs.portage_date }}
-      BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ inputs.portage_date }}
-      BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ inputs.portage_date }}
+      PORTAGE_DATE: ${{ inputs.portage_date || 'latest' }}
+      PORTAGE_IMAGE: ${{ inputs.portage_image || 'ghcr.io/' + github.repository + '/portage:' + (inputs.portage_date || 'latest') }}
+      STAGE3_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ inputs.portage_date || 'latest' }}
+      STAGE3_MUSL_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ inputs.portage_date || 'latest' }}
+      BOB_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-core:${{ inputs.portage_date || 'latest' }}
+      BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ inputs.portage_date || 'latest' }}
+      BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ inputs.portage_date || 'latest' }}
+      BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ inputs.portage_date || 'latest' }}
     strategy:
       fail-fast: false
       matrix:
