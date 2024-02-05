@@ -15,7 +15,7 @@ on:
         description: Portage Image (e.g. `ghcr.io/berney/kubler-images/portage:20241231`)
         required: true
         type: string
-        default: ghcr.io/${{github.repository}}/portage:latest
+        default: ghcr.io/berney/kubler-images/portage:latest
   workflow_call:
     inputs:
       portage_date:

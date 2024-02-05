@@ -9,6 +9,7 @@ on:
         description: Portage Image (e.g. `ghcr.io/berney/kubler-images/portage:20241231`)
         required: true
         type: string
+        default: ghcr.io/berney/kubler-images/portage:latest
 
 jobs:
   call-builders:
