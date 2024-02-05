@@ -158,7 +158,7 @@ jobs:
         run: |
           set -eux
           # Strip tag from end of string
-          LATEST=${IMAGE%:*}"
+          LATEST="${IMAGE%:*}"
           oras cp -v "$TMP_IMAGE" "$IMAGE"
           oras cp -v "$TMP_IMAGE" "$LATEST"
 
@@ -222,7 +222,7 @@ jobs:
         run: |
           set -eux
           # Strip tag from end of string
-          LATEST=${IMAGE%:*}"
+          LATEST="${IMAGE%:*}"
           oras cp -v "$TMP_IMAGE" "$IMAGE"
           oras cp -v "$TMP_IMAGE" "$LATEST"
 
@@ -289,6 +289,6 @@ jobs:
         run: |
           set -eux
           # Strip tag from end of string
-          LATEST=${IMAGE%:*}"
+          LATEST="${IMAGE%:*}"
           oras cp -v "$TMP_IMAGE" "$IMAGE"
           oras cp -v "$TMP_IMAGE" "$LATEST"
