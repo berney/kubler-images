@@ -479,8 +479,8 @@ jobs:
           #docker pull "${BOB_IMAGE}"
           #docker pull "${BOB_MUSL_IMAGE}"
           docker tag "${PORTAGE_IMAGE}" kubler-gentoo/portage:latest
-          #docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
-          #docker tag "${BOB_MUSL_CORE_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
+          docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
+          docker tag "${BOB_MUSL_CORE_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
           docker tag "${BOB_IMAGE}" kubler/bob:"${PORTAGE_DATE}"
           docker tag "${BOB_MUSL_IMAGE}" kubler/bob-musl:"${PORTAGE_DATE}"
           docker images
