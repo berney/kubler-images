@@ -13,6 +13,12 @@ on:
 jobs:
   call-builders:
     uses: ./.github/workflows/builders.yml
+    with:
+      portage_date: ${{ inputs.portage_date }}
+      portage_image: ${{ inputs.portage_image }}
   call-kubler-build:
     uses: ./.github/workflows/kubler-build.yml
     needs: call-builders
+    with:
+      portage_date: ${{ inputs.portage_date }}
+      portage_image: ${{ inputs.portage_image }}
