@@ -49,6 +49,7 @@ jobs:
         include:
           - name: busybox
             image: kubler-images/busybox
+            bob-musl: true
             goss:
               dir: images/busybox
               container_mode: entrypoint
@@ -56,6 +57,7 @@ jobs:
               goss_args: validate --color
           - name: kubler/busybox
             image: kubler/busybox
+            bob-musl: true
             goss:
               dir: images/busybox
               container_mode: entrypoint
@@ -63,6 +65,7 @@ jobs:
               goss_args: validate --color
           - name: kubler/glibc
             image: kubler/glibc
+            bob: true
             goss:
               dir: images/glibc
               container_mode: entrypoint
@@ -70,6 +73,7 @@ jobs:
               goss_args: validate --color
           - name: figlet
             image: kubler-images/figlet
+            bob: true
             goss:
               dir: images/figlet
               container_mode: entrypoint
@@ -77,6 +81,7 @@ jobs:
               goss_args: validate --color
           - name: figlet-user
             image: kubler-images/figlet-user
+            bob: true
             goss:
               dir: images/figlet-user
               container_mode: entrypoint
@@ -84,6 +89,7 @@ jobs:
               goss_args: validate --color
           - name: figlet-musl
             image: kubler-images/figlet-musl
+            bob-musl: true
             goss:
               dir: images/figlet-musl
               container_mode: entrypoint
@@ -91,6 +97,7 @@ jobs:
               goss_args: validate --color
           - name: figlet-musl-static
             image: kubler-images/figlet-musl-static
+            bob-musl: true
             goss:
               dir: images/figlet-musl-static
               container_mode: entrypoint
@@ -98,6 +105,7 @@ jobs:
               goss_args: validate --color
           - name: goss
             image: kubler-images/goss
+            bob-musl: true
             goss:
               dir: images/goss
               container_mode: entrypoint
@@ -108,6 +116,7 @@ jobs:
               goss_args: validate --color
           - name: fd
             image: kubler-images/fd
+            bob-musl: true
             goss:
               dir: images/fd
               container_mode: entrypoint
@@ -115,6 +124,7 @@ jobs:
               goss_args: validate --color
           - name: s6
             image: kubler-images/s6
+            bob-musl: true
             push: true
             goss:
               dir: images/s6
@@ -123,6 +133,7 @@ jobs:
               goss_args: validate --color
           - name: s6-busybox
             image: kubler-images/s6-busybox
+            bob-musl: true
             push: true
             goss:
               dir: images/s6-busybox
@@ -132,6 +143,7 @@ jobs:
               goss_args:
           - name: coturn
             image: kubler-images/coturn
+            bob-musl: true
             #push: true
             #goss:
             #  dir: images/coturn
@@ -141,6 +153,7 @@ jobs:
             #  goss_args:
           - name: s6-coturn-busybox
             image: kubler-images/s6-coturn-busybox
+            bob-musl: true
             #push: true
             #goss:
             #  dir: images/coturn
@@ -150,6 +163,7 @@ jobs:
             #  goss_args:
           - name: nmap
             image: kubler-images/nmap
+            bob: true
             #push: true
             # extra test: docker run --rm kubler-images/nmap -A --open scanme.nmap.org
             goss:
@@ -159,6 +173,7 @@ jobs:
               goss_args: -l debug validate --color
           - name: nmap-musl-static
             image: kubler-images/nmap-musl-static
+            bob-musl: true
             #push: true
             # extra test: docker run --rm kubler-images/nmap-musl-static -A --open scanme.nmap.org
             goss:
@@ -168,6 +183,7 @@ jobs:
               goss_args: -l debug validate --color
           - name: tmux
             image: kubler-images/tmux
+            bob-musl: true
             #goss:
             #  dir: images/tmux
             #  container_mode: entrypoint
@@ -420,6 +436,7 @@ jobs:
         run: |
           set -eu
           docker pull "$PORTAGE_IMAGE"
+          docker tag "${PORTAGE_IMAGE}" kubler-gentoo/portage:latest
 
       - name: 🐋 Docker Pull stage3
         id: stage3-pull
@@ -439,37 +456,47 @@ jobs:
 
       - name: 🐋 Docker Pull bob-core
         id: bob-core-pull
+        if: ${{ matrix.bob }}
         continue-on-error: true
         run: |
           set -eu
           docker pull "$BOB_CORE_IMAGE"
+          docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
 
       - name: 🐋 Docker Pull bob-musl-core
         id: bob-musl-core-pull
+        if: ${{ matrix.bob-musl }}
         continue-on-error: true
         run: |
           set -eu
           docker pull "$BOB_MUSL_CORE_IMAGE"
+          docker tag "${BOB_MUSL_CORE_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
 
       - name: 🐋 Docker Pull bob
         id: bob-pull
+        if: ${{ matrix.bob }}
         continue-on-error: true
         run: |
           set -eu
           docker pull "$BOB_IMAGE"
+          docker tag "${BOB_IMAGE}" kubler/bob:"${PORTAGE_DATE}"
 
       - name: 🐋 Docker Pull bob-musl
         id: bob-musl-pull
+        if: ${{ matrix.bob-musl }}
         continue-on-error: true
         run: |
           set -eu
           docker pull "$BOB_MUSL_IMAGE"
+          docker tag "${BOB_MUSL_IMAGE}" kubler/bob-musl:"${PORTAGE_DATE}"
 
       - name: 🐋🍳 Docker Images
+        if: ${{ false }}
         run: |
           docker images
 
       - name: 🐋🍳 Docker Tag Images for Kubler Compatability
+        if: ${{ false }}
         run: |
           # We need a local copy to tag
           # We build tmp image and use oras to copy it, so we don't have it locally
@@ -478,11 +505,6 @@ jobs:
           #docker pull "${BOB_MUSL_CORE_IMAGE}"
           #docker pull "${BOB_IMAGE}"
           #docker pull "${BOB_MUSL_IMAGE}"
-          docker tag "${PORTAGE_IMAGE}" kubler-gentoo/portage:latest
-          docker tag "${BOB_CORE_IMAGE}" kubler/bob-core:"${PORTAGE_DATE}"
-          docker tag "${BOB_MUSL_CORE_IMAGE}" kubler/bob-musl-core:"${PORTAGE_DATE}"
-          docker tag "${BOB_IMAGE}" kubler/bob:"${PORTAGE_DATE}"
-          docker tag "${BOB_MUSL_IMAGE}" kubler/bob-musl:"${PORTAGE_DATE}"
           docker images
 
       - name: 🐋🍳 Docker Images
@@ -501,6 +523,29 @@ jobs:
           echo "DEFAULT_MUSL_BUILDER=kubler/bob-musl" >> kubler.conf
 
       - name: 👷 Portage Container - eix-update - Populate /var/cache/eix
+        if: ${{ matrix.bob }}
+        run: |
+          set -u
+          # Kubler building builders would use volume from portage container
+          # and run `eix-update` which would populate /var/cache/eix.
+          # But I'm building the builders directly with docker
+          # Docker build doesn't support mounting volumes during builds
+          # When using `kubler build` to build images with our builder,
+          # the builds fail with this error:
+          #
+          #   cannot open database file /var/cache/eix/portage.eix for reading
+          #
+          # So this step will fix this to make kubler build for images happy.
+          # kubler does `docker run`, but I think `docker create` is more idiomatic
+          docker create --name kubler-gentoo-portage "${PORTAGE_IMAGE}" true
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" ls -l /var/cache
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" ls -l /var/cache/eix
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" eix-update
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" ls -l /var/cache
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" ls -l /var/cache/eix
+
+      - name: 👷 Portage Container - eix-update - Populate /var/cache/eix - musl
+        if: ${{ matrix.bob-musl }}
         run: |
           set -u
           # Kubler building builders would use volume from portage container
