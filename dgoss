@@ -2,6 +2,7 @@
 
 set -e
 
+# shellcheck disable=SC2016
 USAGE=$(printf "%s\n" \
     "USAGE: $(basename "$0") [run|edit] <docker_run_params>" \
     '' \
@@ -53,6 +54,7 @@ case "$CONTAINER_MODE" in
         GOSS_FILES_STRATEGY=cp
         ;;
     *)
+        # shellcheck disable=SC2016
         error 'Wrong dgoss container mode, only `inject` or `entrypoint`'
         ;;
 esac
@@ -179,6 +181,7 @@ dgoss_run() {
             entrypoint_mode
             ;;
         *)
+            # shellcheck disable=SC2016
             error 'Wrong dgoss container mode, only `inject` or `entrypoint`'
             ;;
     esac
@@ -187,6 +190,7 @@ dgoss_run() {
 dgoss_edit() {
     run "$@"
     info "Run goss add/autoadd to add resources"
+    # shellcheck disable=SC2016
     $CONTAINER_RUNTIME exec -it "$id" sh -c 'cd /goss; PATH="/goss:$PATH" exec sh'
     get_docker_file "$id" "/goss/goss.yaml" "${GOSS_FILES_PATH}/${GOSS_FILE:-goss.yaml}"
     get_docker_file "$id" "/goss/goss_wait.yaml" "${GOSS_FILES_PATH}/goss_wait.yaml"
