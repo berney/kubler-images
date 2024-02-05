@@ -423,6 +423,7 @@ jobs:
 
       - name: 🐋 Docker Pull stage3
         id: stage3-pull
+        if: ${{ false }}
         continue-on-error: true
         run: |
           set -eu
@@ -430,6 +431,7 @@ jobs:
 
       - name: 🐋 Docker Pull stage3 musl
         id: stage3-musl-pull
+        if: ${{ false }}
         continue-on-error: true
         run: |
           set -eu
