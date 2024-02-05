@@ -79,7 +79,7 @@ jobs:
         id: portage_date
         run: |
           set -eux
-          PORTAGE_DATE=$(docker run --rm -e TERM=dumb -w /root/.kubler "${KUBLER_IMAGE}" kubler portage)
+          PORTAGE_DATE=$(docker run --rm -e TERM=dumb -w $HOME/.kubler "${KUBLER_IMAGE}" kubler portage)
           echo "portage_date=$PORTAGE_DATE"
           echo "portage_date=$PORTAGE_DATE" >> $GITHUB_OUTPUT
 
@@ -87,10 +87,10 @@ jobs:
         id: stage3_date
         run: |
           set -eux
-          docker run --rm -w /root/.kubler/namespaces/kubler "${KUBLER_IMAGE}" grep '^STAGE3_DATE=' builder/bob/build.conf
-          docker run --rm -w /root/.kubler/namespaces/kubler "${KUBLER_IMAGE}" grep '^STAGE3_DATE=' builder/bob-musl/build.conf
-          bob=$(docker run --rm -w /root/.kubler/namespaces/kubler "${KUBLER_IMAGE}" sed -n "s/^STAGE3_DATE='\(202[34][01][0-9]\{3\}T[0-9]\{6\}Z\)'$/\\1/p" builder/bob/build.conf)
-          bob_musl=$(docker run --rm -w /root/.kubler/namespaces/kubler "${KUBLER_IMAGE}" sed -n "s/^STAGE3_DATE='\(202[34][01][0-9]\{3\}T[0-9]\{6\}Z\)'$/\\1/p" builder/bob-musl/build.conf)
+          docker run --rm -w $HOME/.kubler/namespaces/kubler "${KUBLER_IMAGE}" grep '^STAGE3_DATE=' builder/bob/build.conf
+          docker run --rm -w $HOME/.kubler/namespaces/kubler "${KUBLER_IMAGE}" grep '^STAGE3_DATE=' builder/bob-musl/build.conf
+          bob=$(docker run --rm -w $HOME/.kubler/namespaces/kubler "${KUBLER_IMAGE}" sed -n "s/^STAGE3_DATE='\(202[34][01][0-9]\{3\}T[0-9]\{6\}Z\)'$/\\1/p" builder/bob/build.conf)
+          bob_musl=$(docker run --rm -w $HOME/.kubler/namespaces/kubler "${KUBLER_IMAGE}" sed -n "s/^STAGE3_DATE='\(202[34][01][0-9]\{3\}T[0-9]\{6\}Z\)'$/\\1/p" builder/bob-musl/build.conf)
           if [[ ("$bob" != "$bob_musl") ]]; then
             echo "WARNING: bob and bob-musl have different STAGE3_DATE"
           fi
