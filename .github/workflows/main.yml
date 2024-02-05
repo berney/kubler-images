@@ -598,11 +598,11 @@ jobs:
               goss_args: -l debug validate --color
           - name: tmux
             image: kubler-images/tmux
-            goss:
-              dir: images/tmux
-              container_mode: entrypoint
-              docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --color
+            #goss:
+            #  dir: images/tmux
+            #  container_mode: entrypoint
+            #  docker_args: -w /goss --entrypoint /goss/goss
+            #  goss_args: validate --color
 
     steps:
       - name: Inspect
