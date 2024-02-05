@@ -962,6 +962,7 @@ jobs:
         run: |
           set -eux
           echo "kubler=build" >> $GITHUB_OUTPUT
+          echo "HOME=$HOME"
           realpath ~/.kubler
           realpath ~/.kubler/downloads
           realpath ~/.kubler/distfiles
@@ -970,15 +971,16 @@ jobs:
           docker run \
             --rm \
             -v /run/docker.sock:/run/docker.sock \
-            -v ~/.kubler/downloads:/root/.kubler/downloads \
-            -v ~/.kubler/distfiles:/root/.kubler/distfiles \
-            -v ~/.kubler/packages:/root/.kubler/packages \
-            -v ~/.kubler/log:/root/.kubler/log \
+            -v ~/.kubler/downloads:/$HOME/.kubler/downloads \
+            -v ~/.kubler/distfiles:/$HOME/.kubler/distfiles \
+            -v ~/.kubler/packages:/$HOME/.kubler/packages \
+            -v ~/.kubler/log:/$HOME/.kubler/log \
             -v "$(pwd)":"$(pwd)" \
             -w "$(pwd)" \
             -e TERM=dumb \
+            -e HOME=$HOME \
             "${KUBLER_IMAGE}" \
-            sh -c 'set -eux; id; pwd; echo $HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads; ls -la ~/.kubler/distfiles; ls -la ~/.kubler/packages; ls -la ~/.kubler/log; mount'
+            sh -c 'set -eux; id; pwd; echo HOME=$HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads; ls -la ~/.kubler/distfiles; ls -la ~/.kubler/packages; ls -la ~/.kubler/log; mount'
 
       - name: 🚧 Kubler Build Image
         #if: ${{ false }}
@@ -990,13 +992,14 @@ jobs:
           docker run \
             --rm \
             -v /run/docker.sock:/run/docker.sock \
-            -v ~/.kubler/downloads:/root/.kubler/downloads \
-            -v ~/.kubler/distfiles:/root/.kubler/distfiles \
-            -v ~/.kubler/packages:/root/.kubler/packages \
-            -v ~/.kubler/log:/root/.kubler/log \
+            -v ~/.kubler/downloads:/$HOME/.kubler/downloads \
+            -v ~/.kubler/distfiles:/$HOME/.kubler/distfiles \
+            -v ~/.kubler/packages:/$HOME/.kubler/packages \
+            -v ~/.kubler/log:/$HOME/.kubler/log \
             -v "$(pwd)":"$(pwd)" \
             -w "$(pwd)" \
             -e TERM=dumb \
+            -e HOME=$HOME \
             "${KUBLER_IMAGE}" \
             kubler build -v "${{ matrix.name }}"
 
