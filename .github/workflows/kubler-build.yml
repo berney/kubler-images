@@ -439,6 +439,7 @@ jobs:
 
       - name: 🐋 Docker Pull bob-core
         id: bob-core-pull
+        if: ${{ false }}
         continue-on-error: true
         run: |
           set -eu
@@ -446,6 +447,7 @@ jobs:
 
       - name: 🐋 Docker Pull bob-musl-core
         id: bob-musl-core-pull
+        if: ${{ false }}
         continue-on-error: true
         run: |
           set -eu
