@@ -162,7 +162,7 @@ jobs:
           set -eux
           docker run --rm "${PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
           cd bob-portage || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${PORTAGE_IMAGE}" validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${PORTAGE_IMAGE}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler portage - list targets
         if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
@@ -187,7 +187,7 @@ jobs:
           set -eux
           docker run --rm "${TMP_PORTAGE_IMAGE}" grep TIMESTAMP /var/db/repos/gentoo/Manifest
           cd bob-portage || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${TMP_PORTAGE_IMAGE}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler portage - oras cp
         if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
@@ -297,7 +297,7 @@ jobs:
           docker run --rm "${{ matrix.stage3.image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${{ matrix.stage3.image }}" eselect profile show
           cd "${{ matrix.stage3.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.stage3.image }}" validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.stage3.image }}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - list targets
         if: ${{ steps.stage3-pull.outcome == 'failure' || steps.stage3-pull-test.outcome == 'failure' }}
@@ -332,7 +332,7 @@ jobs:
           docker run --rm "${{ matrix.stage3.tmp_image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${{ matrix.stage3.tmp_image }}" eselect profile show
           cd "${{ matrix.stage3.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.stage3.tmp_image }}" validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.stage3.tmp_image }}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - oras cp
         if: ${{ steps.stage3-pull.outcome == 'failure' || steps.stage3-pull-test.outcome == 'failure' }}
@@ -357,7 +357,7 @@ jobs:
           docker run --rm "${{ matrix.core.image }}" eselect profile show
           docker run --rm "${{ matrix.core.image }}" ls -l /var/cache
           cd "${{ matrix.core.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.image }}" validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.image }}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - list targets
         if: ${{ steps.bob-core-pull.outcome == 'failure' || steps.bob-core-pull-test.outcome == 'failure' }}
@@ -389,7 +389,7 @@ jobs:
           docker run --rm "${{ matrix.core.tmp_image }}" eselect profile show
           docker run --rm "${{ matrix.core.tmp_image }}" ls -l /var/cache
           cd "${{ matrix.core.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.tmp_image }}" validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.tmp_image }}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - oras cp
         if: ${{ steps.bob-core-pull.outcome == 'failure' || steps.bob-core-pull-test.outcome == 'failure' }}
@@ -416,7 +416,7 @@ jobs:
           docker run --rm "${{ matrix.bob.image }}" ls -l /var/cache/eix
           docker run --rm "${{ matrix.bob.image }}" eix --selected -c
           cd "${{ matrix.bob.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.image }}" validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.image }}" validate --color
 
       - name: 🐋 Docker Build kubler builder - bob - list targets
         if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
@@ -450,7 +450,7 @@ jobs:
           docker run --rm "${{ matrix.bob.tmp_image }}" ls -l /var/cache/eix
           docker run --rm "${{ matrix.bob.tmp_image }}" eix --selected -c
           cd "${{ matrix.bob.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.tmp_image }}" validate --format documentation --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.tmp_image }}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler builder - bob - oras cp
         if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
@@ -484,49 +484,49 @@ jobs:
               dir: images/busybox
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
           - name: kubler/busybox
             image: kubler/busybox
             goss:
               dir: images/busybox
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
           - name: kubler/glibc
             image: kubler/glibc
             goss:
               dir: images/glibc
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
           - name: figlet
             image: kubler-images/figlet
             goss:
               dir: images/figlet
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
           - name: figlet-user
             image: kubler-images/figlet-user
             goss:
               dir: images/figlet-user
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
           - name: figlet-musl
             image: kubler-images/figlet-musl
             goss:
               dir: images/figlet-musl
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
           - name: figlet-musl-static
             image: kubler-images/figlet-musl-static
             goss:
               dir: images/figlet-musl-static
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
           - name: goss
             image: kubler-images/goss
             goss:
@@ -535,14 +535,14 @@ jobs:
               # Because the image is already using `/goss` (and it's a file), we need `dgoss` to use a different directory
               # I've added teh `CONTAINER_GOSS_PATH` env var to allow overriding the default
               docker_args: -w /goss2 --entrypoint /goss2/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
           - name: fd
             image: kubler-images/fd
             goss:
               dir: images/fd
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
           - name: s6
             image: kubler-images/s6
             push: true
@@ -550,7 +550,7 @@ jobs:
               dir: images/s6
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
           - name: s6-busybox
             image: kubler-images/s6-busybox
             push: true
@@ -586,7 +586,7 @@ jobs:
               dir: images/nmap
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: -l debug validate --format documentation --color
+              goss_args: -l debug validate --color
           - name: nmap-musl-static
             image: kubler-images/nmap-musl-static
             #push: true
@@ -595,14 +595,14 @@ jobs:
               dir: images/nmap-musl-static
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: -l debug validate --format documentation --color
+              goss_args: -l debug validate --color
           - name: tmux
             image: kubler-images/tmux
             goss:
               dir: images/tmux
               container_mode: entrypoint
               docker_args: -w /goss --entrypoint /goss/goss
-              goss_args: validate --format documentation --color
+              goss_args: validate --color
 
     steps:
       - name: Inspect
@@ -1053,6 +1053,7 @@ jobs:
           # https://stackoverflow.com/a/72955840
           STEPS: ${{ toJSON(steps) }}
         run: |
+          set -eux
           docker images
           docker ps -a
           df -h
@@ -1060,8 +1061,8 @@ jobs:
           git ls-files -o
           ls -ld ~/.kubler
           ls -la ~/.kubler
-          ls -ld ~/.kubler/log
-          ls -la ~/.kubler/log
+          ls -ld ~/.kubler/log || true
+          ls -la ~/.kubler/log || true
           ls -l ~/.kubler/log/build.log || true
           cat ~/.kubler/log/build.log || true
           echo "== Steps"
