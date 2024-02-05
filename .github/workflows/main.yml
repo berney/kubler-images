@@ -971,30 +971,28 @@ jobs:
           docker run \
             --rm \
             -v /run/docker.sock:/run/docker.sock \
-            -v ~/.kubler/downloads:/$HOME/.kubler/downloads \
-            -v ~/.kubler/distfiles:/$HOME/.kubler/distfiles \
-            -v ~/.kubler/packages:/$HOME/.kubler/packages \
-            -v ~/.kubler/log:/$HOME/.kubler/log \
+            -v ~/.kubler:/$HOME/.kubler \
             -v "$(pwd)":"$(pwd)" \
             -w "$(pwd)" \
             -e TERM=dumb \
             "${KUBLER_IMAGE}" \
-            sh -c 'set -eux; id; pwd; echo HOME=$HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads; ls -la ~/.kubler/distfiles; ls -la ~/.kubler/packages; ls -la ~/.kubler/log; mount'
+            sh -c 'set -eux; id; pwd; echo HOME=$HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads; ls -la ~/.kubler/distfiles; ls -la ~/.kubler/packages; ls -la ~/.kubler/log || true; ls -la ~/.kubler/namespaces || true; ls -la ~/.kubler/namespaces/kubler || true; mount'
 
       - name: 🚧 Kubler Build Image
         #if: ${{ false }}
         #id: ${{ matrix.name }}
         id: kubler-build
+        # We need `~/.kubler/namespaces/kubler` in the container to exist on the host,
+        # so that the `kubler build` docker volume mounts are correct from host's POV.
+        # Mounting `~/.kubler` from host should shadow that in the container.
+        # `~/.kubler/namespaces` won't exist yet, so `kubler` should re-create it, and it will be on the host this time.
         run: |
           echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
           docker run \
             --rm \
             -v /run/docker.sock:/run/docker.sock \
-            -v ~/.kubler/downloads:/$HOME/.kubler/downloads \
-            -v ~/.kubler/distfiles:/$HOME/.kubler/distfiles \
-            -v ~/.kubler/packages:/$HOME/.kubler/packages \
-            -v ~/.kubler/log:/$HOME/.kubler/log \
+            -v ~/.kubler:/$HOME/.kubler \
             -v "$(pwd)":"$(pwd)" \
             -w "$(pwd)" \
             -e TERM=dumb \
