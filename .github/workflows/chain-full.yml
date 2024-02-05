@@ -1,0 +1,13 @@
+name: Full Chain
+on:
+  workflow_dispatch:
+
+jobs:
+  call-setup:
+    uses: ./.github/setup.yml
+  call-portage:
+    uses: ./.github/portage.yml
+  call-builders:
+    uses: ./.github/builders.yml
+  call-kubler-build:
+    uses: ./.github/kubler-build.yml

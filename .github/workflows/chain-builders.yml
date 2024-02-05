@@ -1,0 +1,9 @@
+name: Chain Builders-Kubler
+on:
+  workflow_dispatch:
+
+jobs:
+  call-builders:
+    uses: ./.github/builders.yml
+  call-kubler-build:
+    uses: ./.github/kubler-build.yml

@@ -1,0 +1,11 @@
+name: Chain Portage-Builders-Kubler
+on:
+  workflow_dispatch:
+
+jobs:
+  call-portage:
+    uses: ./.github/portage.yml
+  call-builders:
+    uses: ./.github/builders.yml
+  call-kubler-build:
+    uses: ./.github/kubler-build.yml
