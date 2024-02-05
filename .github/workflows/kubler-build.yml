@@ -66,6 +66,7 @@ jobs:
           - name: kubler/glibc
             image: kubler/glibc
             bob: true
+            bob-musl: true
             goss:
               dir: images/glibc
               container_mode: entrypoint
@@ -74,6 +75,7 @@ jobs:
           - name: figlet
             image: kubler-images/figlet
             bob: true
+            bob-musl: true
             goss:
               dir: images/figlet
               container_mode: entrypoint
@@ -82,6 +84,7 @@ jobs:
           - name: figlet-user
             image: kubler-images/figlet-user
             bob: true
+            bob-musl: true
             goss:
               dir: images/figlet-user
               container_mode: entrypoint
@@ -164,6 +167,7 @@ jobs:
           - name: nmap
             image: kubler-images/nmap
             bob: true
+            bob-musl: true
             #push: true
             # extra test: docker run --rm kubler-images/nmap -A --open scanme.nmap.org
             goss:
