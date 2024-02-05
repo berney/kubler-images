@@ -12,7 +12,7 @@ on:
 
 jobs:
   call-builders:
-    uses: ./.github/builders.yml
+    uses: ./.github/workflows/builders.yml
   call-kubler-build:
-    uses: ./.github/kubler-build.yml
+    uses: ./.github/workflows/kubler-build.yml
     needs: call-builders

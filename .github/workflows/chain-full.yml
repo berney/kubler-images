@@ -4,15 +4,15 @@ on:
 
 jobs:
   call-setup:
-    uses: ./.github/setup.yml
+    uses: ./.github/workflows/setup.yml
   call-portage:
-    uses: ./.github/portage.yml
+    uses: ./.github/workflows/portage.yml
     needs:
       - call-setup
     with:
       portage_date: ${{ needs.call-setup.outputs.portage_date }}
   call-builders:
-    uses: ./.github/builders.yml
+    uses: ./.github/workflows/builders.yml
     needs:
       - call-setup
       - call-portage
@@ -20,7 +20,7 @@ jobs:
       portage_date: ${{ needs.call-setup.outputs.portage_date }}
       portage_image: ${{ needs.call-portage.outputs.portage_image }}
   call-kubler-build:
-    uses: ./.github/kubler-build.yml
+    uses: ./.github/workflows/kubler-build.yml
     needs:
       - call-setup
       - call-portage

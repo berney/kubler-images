@@ -8,18 +8,18 @@ on:
 
 jobs:
   call-portage:
-    uses: ./.github/portage.yml
+    uses: ./.github/workflows/portage.yml
     with:
       portage_date: ${{ inputs.portage_date }}
   call-builders:
-    uses: ./.github/builders.yml
+    uses: ./.github/workflows/builders.yml
     needs:
       - call-portage
     with:
       portage_date: ${{ inputs.portage_date }}
       portage_image: ${{ needs.call-portage.outputs.portage_image }}
   call-kubler-build:
-    uses: ./.github/kubler-build.yml
+    uses: ./.github/workflows/kubler-build.yml
     needs:
       - call-portage
       - call-builders
