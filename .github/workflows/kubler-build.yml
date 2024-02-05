@@ -527,7 +527,7 @@ jobs:
           echo "DEFAULT_MUSL_BUILDER=kubler/bob-musl" >> kubler.conf
 
       - name: 👷 Portage Container - eix-update - Populate /var/cache/eix
-        if: ${{ matrix.bob }}
+        if: ${{ !matrix.bob-musl && matrix.bob }}
         run: |
           set -u
           # Kubler building builders would use volume from portage container
