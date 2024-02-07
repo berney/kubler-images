@@ -178,7 +178,7 @@ jobs:
           - name: nmap-musl-static
             image: kubler-images/nmap-musl-static
             bob-musl: true
-            #push: true
+            push: true
             # extra test: docker run --rm kubler-images/nmap-musl-static -A --open scanme.nmap.org
             goss:
               dir: images/nmap-musl-static
