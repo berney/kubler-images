@@ -1,12 +1,12 @@
-### kubler-images/nmap-musl-static:20200707
+### berney/nmap-musl-static:20240201
 
-Built: Sat Jul 11 21:07:11 AEST 2020
-Image Size: 32MB
+Built: Thu Feb  8 05:07:18 AEDT 2024
+Image Size: 55.1MB
 
 #### Installed
 Package | USE Flags
 --------|----------
-net-analyzer/nmap-9999 | `ipv6 libressl libssh2 ncat nping nse ssl static -nmap-update (-system-lua)`
+net-analyzer/nmap-9999 | `ipv6 libssh2 ncat ndiff nls nping nse ssl static symlink -zenmap`
 #### Inherited
 Package | USE Flags
 --------|----------
