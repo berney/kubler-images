@@ -273,16 +273,18 @@ jobs:
           restore-keys: |
             kubler-
 
+      # If too long between last run then caches might not exists anymore
+      # So directories might not exist
       - name: Inspect Caches
         run: |
           set -eux
           ls -la /
           id
           pwd
-          ls -la ~/.kubler
-          ls -ltra ~/.kubler/downloads/
-          ls -ltra ~/.kubler/distfiles/
-          ls -ltra ~/.kubler/packages/
+          ls -la ~/.kubler || true
+          ls -ltra ~/.kubler/downloads/ || true
+          ls -ltra ~/.kubler/distfiles/ || true
+          ls -ltra ~/.kubler/packages/ || true
           ls -ltra ~/.kubler/log/ || true
 
       - name: Set up QEMU
