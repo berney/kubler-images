@@ -582,7 +582,6 @@ jobs:
         # Kubler runs docker itself, but it will be mounting volumes from the host's POV
         run: |
           set -eux
-          echo "kubler=build" >> $GITHUB_OUTPUT
           echo "HOME=$HOME"
           realpath ~/.kubler
           realpath ~/.kubler/downloads
@@ -610,7 +609,6 @@ jobs:
         # Mounting `~/.kubler` from host should shadow that in the container.
         # `~/.kubler/namespaces` won't exist yet, so `kubler` should re-create it, and it will be on the host this time.
         run: |
-          echo "kubler=build" >> $GITHUB_OUTPUT
           export TERM
           docker run \
             --rm \
@@ -635,7 +633,6 @@ jobs:
         # Since we are doing docker inception it is easier to always use `cp` strategy than to try to get mounts in the container matching the host - since `dgoss` uses tmp files we'd have to use `DGOSS_TEMP_DIR` etc.
         run: |
           cd "${{ matrix.goss.dir }}" || false
-          echo "kubler=test" >> $GITHUB_OUTPUT
           docker run \
             --rm \
             -v /run/docker.sock:/run/docker.sock \
@@ -659,29 +656,7 @@ jobs:
           docker tag ${{ matrix.image }} ghcr.io/berney/kubler-images/${{ matrix.name }}
           docker push ghcr.io/berney/kubler-images/${{ matrix.name }}
 
-      - name: 🚧 Build Images - Everything excluding Problematic
-        if: ${{ false }}
-        id: everything-exc-problematic
-        continue-on-error: true
-        run: |
-          #echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build kubler-images -e kubler-images/nmap-musl-static
-
-      - name: 🚧 Build Images - EVERYTHING
-        if: ${{ false }}
-        id: everything
-        continue-on-error: true
-        run: |
-          #echo "kubler=build" >> $GITHUB_OUTPUT
-          export TERM
-          kubler build kubler-images
-
       - name: 🔎 Post Build Inspect
-        env:
-          # This will contain double-quotes, which `echo` would eat, breaking `jq`
-          # https://stackoverflow.com/a/72955840
-          STEPS: ${{ toJSON(steps) }}
         run: |
           set -eux
           docker images
@@ -695,43 +670,3 @@ jobs:
           ls -la ~/.kubler/log || true
           ls -l ~/.kubler/log/build.log || true
           cat ~/.kubler/log/build.log || true
-          echo "== Steps"
-          printf '%s\n' "$STEPS"
-          echo "== Steps | jq"
-          printf '%s\n' "$STEPS" | jq .
-          echo "== Steps | jq expr"
-          printf '%s\n' "$STEPS" | jq 'to_entries | map(select(.value.outputs.kubler == "build").key)'
-
-      - name: 🔎 Sumarise Build Status
-        env:
-          # This will contain double-quotes, which `echo` would eat, breaking `jq`
-          # https://stackoverflow.com/a/72955840
-          STEPS: ${{ toJSON(steps) }}
-        run: |
-          echo "# Successful Build Steps"
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key | sub("^"; "* ")) | join("\n")'
-          echo "# Failed Build Steps"
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key | sub("^"; "* ")) | join("\n")'
-
-          echo "# Successful Build Steps" >> $GITHUB_STEP_SUMMARY
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome == "success").key | sub("^"; "* ")) | join("\n")' >> $GITHUB_STEP_SUMMARY
-          echo "# Failed Build Steps" >> $GITHUB_STEP_SUMMARY
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "build" and .outcome != "success").key | sub("^"; "* ")) | join("\n")' >> $GITHUB_STEP_SUMMARY
-
-      - name: 🔎 Sumarise Test Status
-        env:
-          # This will contain double-quotes, which `echo` would eat, breaking `jq`
-          # https://stackoverflow.com/a/72955840
-          STEPS: ${{ toJSON(steps) }}
-        run: |
-          echo "# Successful Test Steps"
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "test" and .outcome == "success").key | sub("^"; "* ")) | join("\n")'
-          echo "# Failed Test Steps"
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "test" and .outcome != "success").key | sub("^"; "* ")) | join("\n")'
-
-          echo "# Successful Test Steps" >> $GITHUB_STEP_SUMMARY
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "test" and .outcome == "success").key | sub("^"; "* ")) | join("\n")' >> $GITHUB_STEP_SUMMARY
-          echo "# Failed Test Steps" >> $GITHUB_STEP_SUMMARY
-          printf '%s\n' "$STEPS" | jq -r 'to_entries | map(select(.value | .outputs.kubler == "test" and .outcome != "success").key | sub("^"; "* ")) | join("\n")' >> $GITHUB_STEP_SUMMARY
-
-      - run: echo "🍏 This job's status is ${{ job.status }}."
