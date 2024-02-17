@@ -359,7 +359,7 @@ jobs:
           #       uid                 [ unknown] Gentoo Portage Snapshot Signing Key (Automated Signing Key)
           #       sub   rsa4096/EC590EEAC9189250 2011-11-25 [S] [expires: 2023-07-01]
           #             E1D6ABB63BFCFB4BA02FDF1CEC590EEAC9189250
-          gpg --keyserver keys.gentoo.org --recv-keys DCD05B71EAB94199527F44ACDB6B8C1F96D8BF6D
+          gpg --keyserver hkps://keys.gentoo.org --recv-keys DCD05B71EAB94199527F44ACDB6B8C1F96D8BF6D
 
           # For Stage3 signatures
           #
@@ -379,7 +379,7 @@ jobs:
           #       sub   rsa2048/2C44695DB9F6043D 2019-02-23 [S] [expires: 2023-07-01]
           #             534E4209AB49EEE1C19D96162C44695DB9F6043D
           #
-          gpg --keyserver keys.gentoo.org --recv-keys 13EBBDBEDE7A12775DFDB1BABB572E0E2D182910
+          gpg --keyserver hkps://keys.gentoo.org --recv-keys 13EBBDBEDE7A12775DFDB1BABB572E0E2D182910
 
           gpg --list-public-keys
           gpg --list-public-keys --with-subkey-fingerprint
