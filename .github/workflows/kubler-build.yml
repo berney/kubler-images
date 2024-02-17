@@ -576,6 +576,11 @@ jobs:
         run: |
           docker pull "${KUBLER_IMAGE}"
 
+      - name: Ensure ~/.kubler Directory Exists
+        run: |
+          mkdir -p ~/.kubler
+          touch ~/.kubler/kubler.conf
+
       - name: 🚧 Kubler Build Image - Inspect
         #if: ${{ false }}
         #id: ${{ matrix.name }}
@@ -585,12 +590,11 @@ jobs:
         run: |
           set -eux
           echo "HOME=$HOME"
-          realpath ~/.kubler
-          realpath ~/.kubler/downloads
-          realpath ~/.kubler/distfiles
-          realpath ~/.kubler/packages
-          ls -la ~/.kubler
-          touch ~/.kubler/kubler.conf
+          realpath ~/.kubler || true
+          realpath ~/.kubler/downloads || true
+          realpath ~/.kubler/distfiles || true
+          realpath ~/.kubler/packages || true
+          ls -la ~/.kubler || true
           export TERM
           docker run \
             --rm \
