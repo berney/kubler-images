@@ -451,16 +451,18 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-    bat --version:
+    bat --version | sed -e 's/bat //':
         exit-status: 0
         stdout:
-            - bat 0.23.0
+            contain-element:
+                semver-constraint: ">=0.23.0"
         stderr: ""
         timeout: 10000
     eix --version:
         exit-status: 0
         stdout:
-            - 0.36.7
+            contain-element:
+                semver-constraint: ">=0.36.7"
         stderr: ""
         timeout: 10000
     eix -c --selected:
@@ -622,16 +624,18 @@ command:
             - default/linux/amd64/17.1/no-multilib/hardened
         stderr: ""
         timeout: 10000
-    fd --version:
+    fd --version | sed -e 's/^fd //':
         exit-status: 0
         stdout:
-            - fd 8.7.0
+            contain-element:
+                semver-constraint: ">=8.7.0"
         stderr: ""
         timeout: 10000
-    flaggie --version:
+    flaggie --version | sed -e 's/^flaggie //':
         exit-status: 0
         stdout:
-            - flaggie 0.99.8
+            contain-element:
+                semver-constraint: ">=0.99.8"
         stderr: ""
         timeout: 10000
     gcc --version:
