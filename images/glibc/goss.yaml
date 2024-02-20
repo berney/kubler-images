@@ -568,12 +568,12 @@ file:
         linked-to: ../../lib64/libcrypt.so.2.0.0
         filetype: symlink
         contents: []
-    /usr/lib64/libidn2.so.0.3.8:
+    /usr/lib64/libidn2.so:
         exists: true
-        mode: "0755"
+        mode: "0777"
         owner: root
         group: root
-        filetype: file
+        filetype: symlink
         contents: []
     /usr/lib64/libm.so:
         exists: true
