@@ -10,6 +10,9 @@ configure_builder() {
     fix_portage_profile_symlink
     # install basics used by helper functions
     eselect news read new 1> /dev/null
+    emerge --info | grep EMERGE_DEFAULT_OPTS
+    export EMERGE_DEFAULT_OPTS="-b -k --quiet-build --tree"
+    emerge --info | grep EMERGE_DEFAULT_OPTS
     emerge app-portage/flaggie app-portage/eix app-portage/gentoolkit
     configure_eix
     mkdir -p /etc/portage/package.{accept_keywords,unmask,mask,use}
