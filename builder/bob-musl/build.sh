@@ -28,15 +28,18 @@ configure_builder() {
     update_use 'dev-libs/libpcre2' '+jit'
     update_keywords 'dev-python/ssl-fetch' '+~amd64'
     update_keywords 'app-admin/su-exec' '+~amd64'
+    emerge --info | grep EMERGE_DEFAULT_OPTS
     emerge dev-vcs/git app-eselect/eselect-repository app-misc/jq app-shells/bash-completion
     #install_git_postsync_hooks
     [[ "${BOB_UPDATE_WORLD}" == true ]] && emerge -uND world
     add_overlay musl
     add_overlay kubler https://github.com/edannenberg/kubler-overlay.git
+    emerge --info | grep EMERGE_DEFAULT_OPTS
     emerge dev-lang/go
     # bdawg favs - I want these when doing `kubler build -i something`
     # Workaround vim nls issues on musl
     update_use app-editors/vim-core -nls
     update_use app-editors/vim -nls
+    emerge --info | grep EMERGE_DEFAULT_OPTS
     emerge app-editors/vim sys-apps/bat sys-apps/fd sys-apps/ripgrep
 }
