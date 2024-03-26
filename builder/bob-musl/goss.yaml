@@ -673,10 +673,24 @@ command:
         timeout: 10000
     rg --version:
         exit-status: 0
+        stderr: ""
+        timeout: 10000
+    #    # old
+    #    stdout:
+    #        - ripgrep
+    #        - -SIMD -AVX (compiled)
+    #        - +SIMD +AVX (runtime)
+    #    # new
+    #    #stdout:
+    #    #  - features:-simd-accel,+pcre2
+    #    #  - simd(compile):+SSE2,-SSSE3,-AVX2
+    #    #  - simd(runtime):+SSE2,+SSSE3,+AVX2
+    #    #  - PCRE2 10.42 is available (JIT is available)
+    rg --version | sed -e 's/^ripgrep //':
+        exit-status: 0
         stdout:
-            - ripgrep
-            - -SIMD -AVX (compiled)
-            - +SIMD +AVX (runtime)
+            contain-element:
+                semver-constraint: ">=14.1.0"
         stderr: ""
         timeout: 10000
     type bat:
