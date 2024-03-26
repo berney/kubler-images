@@ -475,8 +475,8 @@ command:
             - '[I] dev-vcs/git'
             - '[I] sys-apps/bat'
             - '[I] sys-apps/fd'
-            - '[I] sys-apps/ripgrep'
-            - Found 12 matches
+            #- '[I] sys-apps/ripgrep'
+            - /Found 1[12] matches/
         stderr: ""
         timeout: 10000
     equery --version:
@@ -604,13 +604,6 @@ command:
         exit-status: 0
         stdout:
             - -debug
-        stderr: ""
-        timeout: 10000
-    equery u sys-apps/ripgrep:
-        exit-status: 0
-        stdout:
-            - -debug
-            - +pcre
         stderr: ""
         timeout: 10000
     eselect profile show:

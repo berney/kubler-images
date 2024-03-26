@@ -1,4 +1,17 @@
 command:
+    eix -c --selected:
+        exit-status: 0
+        stdout:
+            - '[I] sys-apps/ripgrep'
+        stderr: ""
+        timeout: 10000
+    equery u sys-apps/ripgrep:
+        exit-status: 0
+        stdout:
+            - -debug
+            - +pcre
+        stderr: ""
+        timeout: 10000
     rg --version:
         exit-status: 0
         stderr: ""
