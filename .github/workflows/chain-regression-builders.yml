@@ -48,7 +48,6 @@ jobs:
           - 20240325
     uses: ./.github/workflows/builders.yml
     needs:
-      - call-setup
       - call-portage
     with:
       portage_date: ${{ matrix.portage_date }}
