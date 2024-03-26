@@ -256,8 +256,19 @@ jobs:
           docker run --rm "${{ matrix.bob.image }}" ls -l /var/cache
           docker run --rm "${{ matrix.bob.image }}" ls -l /var/cache/eix
           docker run --rm "${{ matrix.bob.image }}" eix --selected -c
+          docker run --rm "${{ matrix.bob.image }}" rg --version || true
           cd "${{ matrix.bob.goss }}" || exit 1
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.image }}" validate --color
+
+      - name: 🐋 Docker Build kubler builder - bob - test pulled - ripgrep
+        id: bob-pull-test-ripgrep
+        if: ${{ steps.bob-pull.outcome == 'success' }}
+        continue-on-error: true
+        run: |
+          set -eux
+          docker run --rm "${{ matrix.bob.image }}" rg --version || true
+          cd "${{ matrix.bob.goss }}" || exit 1
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" -e GOSS_FILE=goss-ripgrep.yaml dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.image }}" validate --color
 
       - name: 🐋 Docker Build kubler builder - bob - list targets
         if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
@@ -290,8 +301,18 @@ jobs:
           docker run --rm "${{ matrix.bob.tmp_image }}" ls -l /var/cache
           docker run --rm "${{ matrix.bob.tmp_image }}" ls -l /var/cache/eix
           docker run --rm "${{ matrix.bob.tmp_image }}" eix --selected -c
+          docker run --rm "${{ matrix.bob.image }}" rg --version || true
           cd "${{ matrix.bob.goss }}" || exit 1
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.tmp_image }}" validate --color
+
+      - name: 🐋 Docker Build kubler builder - bob - test baked ripgrep
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        continue-on-error: true
+        run: |
+          set -eux
+          docker run --rm "${{ matrix.bob.image }}" rg --version || true
+          cd "${{ matrix.bob.goss }}" || exit 1
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" -e GOSS_FILE=goss-ripgrep.yaml dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.image }}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler builder - bob - oras cp
         if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}

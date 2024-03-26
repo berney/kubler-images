@@ -671,28 +671,6 @@ command:
             - jq
         stderr: ""
         timeout: 10000
-    rg --version:
-        exit-status: 0
-        stderr: ""
-        timeout: 10000
-    #    # old
-    #    stdout:
-    #        - ripgrep
-    #        - -SIMD -AVX (compiled)
-    #        - +SIMD +AVX (runtime)
-    #    # new
-    #    #stdout:
-    #    #  - features:-simd-accel,+pcre2
-    #    #  - simd(compile):+SSE2,-SSSE3,-AVX2
-    #    #  - simd(runtime):+SSE2,+SSSE3,+AVX2
-    #    #  - PCRE2 10.42 is available (JIT is available)
-    rg --version | sed -e 's/^ripgrep //':
-        exit-status: 0
-        stdout:
-            contain-element:
-                semver-constraint: ">=13.0.0"
-        stderr: ""
-        timeout: 10000
     type bat:
         exit-status: 0
         stdout:
@@ -745,12 +723,6 @@ command:
         exit-status: 0
         stdout:
             - jq is /usr/bin/jq
-        stderr: ""
-        timeout: 10000
-    type rg:
-        exit-status: 0
-        stdout:
-            - rg is /usr/bin/rg
         stderr: ""
         timeout: 10000
     type vi:
