@@ -1,0 +1,28 @@
+name: Portage Regression Chain
+on:
+  workflow_dispatch:
+
+jobs:
+  call-portage:
+    strategy:
+      fail-fast: false
+      matrix:
+        portage_date:
+          - 20240101
+          - 20240108
+          - 20240115
+          - 20240122
+          - 20240129
+          - 20240205
+          - 20240208
+          - 20240218
+          - 20240219
+          - 20240226
+          - 20240303
+          - 20240304
+          - 20240311
+          - 20240318
+          - 20240325
+    uses: ./.github/workflows/portage.yml
+    with:
+      portage_date: ${{ matrix.portage_date }}
