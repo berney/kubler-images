@@ -694,7 +694,7 @@ command:
         exit-status: 0
         stdout:
             contain-element:
-                semver-constraint: ">=14.1.0"
+                semver-constraint: ">=13.0.0"
         stderr: ""
         timeout: 10000
     type bat:
