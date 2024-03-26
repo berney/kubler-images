@@ -34,4 +34,4 @@ jobs:
       - call-portage
     with:
       portage_date: ${{ matrix.portage_date }}
-      portage_image: ${{ needs.call-portage.outputs.portage_image }}:
+      portage_image: ${{ needs.call-portage.outputs.portage_image }}
