@@ -1,4 +1,4 @@
-name: Full Chain
+name: Builder Regression Chain
 on:
   workflow_dispatch:
 
