@@ -471,6 +471,6 @@ command:
     type gcc:
         exit-status: 0
         stdout:
-            - gcc is /usr/bin/gcc
+            - gcc is /usr/sbin/gcc
         stderr: ""
         timeout: 10000
