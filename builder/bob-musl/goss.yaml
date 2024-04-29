@@ -610,7 +610,7 @@ command:
         exit-status: 0
         stdout:
             - 'Current /etc/portage/make.profile symlink:'
-            - default/linux/amd64/17.0/musl/hardened
+            - default/linux/amd64/23.0/musl/hardened
         stderr: ""
         timeout: 10000
     fd --version | sed -e 's/^fd //':
