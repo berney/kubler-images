@@ -675,31 +675,31 @@ command:
     type bat:
         exit-status: 0
         stdout:
-            - bat is /usr/bin/bat
+            - bat is /usr/sbin/bat
         stderr: ""
         timeout: 10000
     type eix:
         exit-status: 0
         stdout:
-            - eix is /usr/bin/eix
+            - eix is /usr/sbin/eix
         stderr: ""
         timeout: 10000
     type equery:
         exit-status: 0
         stdout:
-            - equery is /usr/bin/equery
+            - equery is /usr/sbin/equery
         stderr: ""
         timeout: 10000
     type fd:
         exit-status: 0
         stdout:
-            - fd is /usr/bin/fd
+            - fd is /usr/sbin/fd
         stderr: ""
         timeout: 10000
     type flaggie:
         exit-status: 0
         stdout:
-            - flaggie is /usr/bin/flaggie
+            - flaggie is /usr/sbin/flaggie
         stderr: ""
         timeout: 10000
     type gcc:
@@ -711,31 +711,31 @@ command:
     type git:
         exit-status: 0
         stdout:
-            - git is /usr/bin/git
+            - git is /usr/sbin/git
         stderr: ""
         timeout: 10000
     type go:
         exit-status: 0
         stdout:
-            - go is /usr/bin/go
+            - go is /usr/sbin/go
         stderr: ""
         timeout: 10000
     type jq:
         exit-status: 0
         stdout:
-            - jq is /usr/bin/jq
+            - jq is /usr/sbin/jq
         stderr: ""
         timeout: 10000
     type vi:
         exit-status: 0
         stdout:
-            - vi is /usr/bin/vi
+            - vi is /usr/sbin/vi
         stderr: ""
         timeout: 10000
     type vim:
         exit-status: 0
         stdout:
-            - vim is /usr/bin/vim
+            - vim is /usr/sbin/vim
         stderr: ""
         timeout: 10000
     vi --version:
@@ -785,7 +785,7 @@ command:
             - 'user exrc file: "$HOME/.exrc"'
             - 'defaults file: "$VIMRUNTIME/defaults.vim"'
             - 'fall-back for $VIM: "/usr/share/vim"'
-            - 'Compilation: x86_64-gentoo-linux-musl-gcc -c -I. -Iproto -DHAVE_CONFIG_H -mtune=generic -O2 -pipe -D_REENTRANT -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1'
-            - 'Linking: x86_64-gentoo-linux-musl-gcc -Wl,-O1 -Wl,--as-needed -L/usr/local/lib -o vim -lm -ltinfo -lsodium -lacl -lattr'
+            - 'Compilation: gcc -c -I. -Iproto -DHAVE_CONFIG_H -mtune=generic -O2 -pipe -D_REENTRANT -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1'
+            - 'Linking: gcc -Wl,-O1 -Wl,--as-needed -Wl,-z,pack-relative-relocs -L/usr/local/lib -o vim -lm -ltinfo -lsodium -lacl -lattr'
         stderr: ""
         timeout: 10000
