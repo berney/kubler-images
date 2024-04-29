@@ -124,7 +124,7 @@ jobs:
           docker run --rm "${{ matrix.stage3.image }}" cat /etc/gentoo-release
           docker run --rm "${{ matrix.stage3.image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${{ matrix.stage3.image }}" eselect profile show
-          docker run --rm "${{ matrix.stage3.image }}" type gcc
+          docker run --rm "${{ matrix.stage3.image }}" sh -c "type gcc"
           cd "${{ matrix.stage3.goss }}" || exit 1
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.stage3.image }}" validate --color
 
@@ -161,7 +161,7 @@ jobs:
           docker run --rm "${{ matrix.stage3.tmp_image }}" cat /etc/gentoo-release
           docker run --rm "${{ matrix.stage3.tmp_image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${{ matrix.stage3.tmp_image }}" eselect profile show
-          docker run --rm "${{ matrix.stage3.tmp_image }}" type gcc
+          docker run --rm "${{ matrix.stage3.tmp_image }}" sh -c "type gcc"
           cd "${{ matrix.stage3.goss }}" || exit 1
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.stage3.tmp_image }}" validate --color
 
