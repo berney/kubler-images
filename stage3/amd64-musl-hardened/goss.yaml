@@ -24,9 +24,17 @@ file:
         mode: "0777"
         owner: root
         group: root
-        #linked-to: /usr/x86_64-gentoo-linux-musl/gcc-bin/13/gcc
-        #filetype: symlink
-        #contents: []
+        linked-to: /usr/x86_64-pc-linux-musl/gcc-bin/13/gcc
+        filetype: symlink
+        contents: null
+    /usr/sbin/gcc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: /usr/x86_64-pc-linux-musl/gcc-bin/13/gcc
+        filetype: symlink
+        contents: null
     # I bake in portage, so check it
     /var/db/repos/gentoo:
         exists: true

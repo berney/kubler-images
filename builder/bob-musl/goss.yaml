@@ -207,7 +207,7 @@ file:
         mode: "0777"
         owner: root
         group: root
-        linked-to: /usr/x86_64-gentoo-linux-musl/gcc-bin/13/gcc
+        linked-to: /usr/x86_64-pc-linux-musl/gcc-bin/13/gcc
         filetype: symlink
         contents: null
     /usr/local/bin/kubler-build-root:
@@ -244,6 +244,14 @@ file:
             - '# Replace all matches for given sed regex with given replace_value.'
             - '# Replace all matches for given sed regex with given replace_value. Script is aborted on no match or missing file.'
             - 'usage: sed-or-die <regex> <replace_value> <target_file> [sed_separator, optional, default: %]'
+    /usr/sbin/gcc:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: /usr/x86_64-pc-linux-musl/gcc-bin/13/gcc
+        filetype: symlink
+        contents: null
     /var:
         exists: true
         mode: "0755"
