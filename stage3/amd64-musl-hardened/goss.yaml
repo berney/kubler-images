@@ -43,11 +43,11 @@ file:
         group: root
         filetype: directory
         contents: []
-    /var/db/repos/gentoo/.editorconfig:
-        exists: true
-        mode: "0644"
-        filetype: file
-        contents: []
+    #/var/db/repos/gentoo/.editorconfig:
+    #    exists: true
+    #    mode: "0644"
+    #    filetype: file
+    #    contents: []
     /var/db/repos/gentoo/Manifest:
         exists: true
         mode: "0644"
