@@ -46,7 +46,7 @@ file:
         filetype: file
         contents:
             - Gentoo Base System release
-            - Gentoo Base System release 2.14
+            - Gentoo Base System release 2.15
     /etc/portage:
         exists: true
         mode: "0755"
