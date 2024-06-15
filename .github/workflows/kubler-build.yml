@@ -297,6 +297,7 @@ jobs:
           set -eux
           ls -ltra ~/.kubler/packages/
           ls -ltra ~/.kubler/packages/*
+          tree -aC --filelimit 100 ~/.kubler/packages
 
       - name: Set up QEMU
         id: qemu
