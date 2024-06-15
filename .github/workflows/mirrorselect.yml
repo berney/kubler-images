@@ -1,0 +1,69 @@
+name: mirrorselect
+on:
+  workflow_dispatch:
+    inputs:
+      args:
+        description: Arguments for mirrorselect
+        required: false
+        type: string
+        default: --servers 3 --blocksize 10 --deep
+      portage_date:
+        description: The date (tag) of the latest portage image (e.g. `20241231`)
+        required: true
+        # Could be `latest` or a date like `20241231`
+        type: string
+        default: latest
+      portage_image:
+        description: Portage Image (e.g. `ghcr.io/berney/kubler-images/portage:20241231`)
+        required: true
+        type: string
+        default: ghcr.io/berney/kubler-images/portage:latest
+
+jobs:
+  mirrorselect:
+    runs-on: ubuntu-latest
+
+    env:
+      KUBLER_IMAGE: ghcr.io/${{ github.repository }}
+      PORTAGE_DATE: ${{ inputs.portage_date }}
+      PORTAGE_IMAGE: ${{ inputs.portage_image }}
+      BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ inputs.portage_date || 'latest' }}
+
+    steps:
+      - name: 🐋 Docker Pull bob
+        id: bob-pull
+        #if: ${{ matrix.bob }}
+        #continue-on-error: true
+        run: |
+          set -eu
+          docker pull "$BOB_IMAGE"
+          docker tag "${BOB_IMAGE}" kubler/bob:"${PORTAGE_DATE}"
+
+      - name: 👷 Portage Container - eix-update - Populate /var/cache/eix
+        #if: ${{ !matrix.bob-musl && matrix.bob }}
+        run: |
+          set -u
+          # Kubler building builders would use volume from portage container
+          # and run `eix-update` which would populate /var/cache/eix.
+          # But I'm building the builders directly with docker
+          # Docker build doesn't support mounting volumes during builds
+          # When using `kubler build` to build images with our builder,
+          # the builds fail with this error:
+          #
+          #   cannot open database file /var/cache/eix/portage.eix for reading
+          #
+          # So this step will fix this to make kubler build for images happy.
+          # kubler does `docker run`, but I think `docker create` is more idiomatic
+          docker create --name kubler-gentoo-portage "${PORTAGE_IMAGE}" true
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" ls -l /var/cache
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" ls -l /var/cache/eix
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" eix-update
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" ls -l /var/cache
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" ls -l /var/cache/eix
+
+      - name: 🪞 mirrorselect
+        run: |
+          set -u
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" eix -c --selected
+          docker run --rm --volumes-from kubler-gentoo-portage "${BOB_IMAGE}" "emerge -vt mirrorselect && mirrorselect -s3 -b10 -D"
+          
