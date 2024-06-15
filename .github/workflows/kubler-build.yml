@@ -630,6 +630,8 @@ jobs:
         #id: test-${{ matrix.name }}
         id: test
         if: ${{ matrix.goss }}
+        # If the image fails, we want to push it under /bad/ so we can inspect it
+        continue-on-error: true
         # The matrix might not define these
         env:
           CONTAINER_MODE: ${{ matrix.goss.container_mode }}
@@ -659,8 +661,21 @@ jobs:
         run: |
           # The buildx docker-container driver can't pull from the local registry
           # So we need to push the image
-          docker tag ${{ matrix.image }} ghcr.io/berney/kubler-images/${{ matrix.name }}
-          docker push ghcr.io/berney/kubler-images/${{ matrix.name }}
+          IMAGE="ghcr.io/berney/kubler-images/${{ matrix.name }}"
+          docker tag ${{ matrix.image }} "$IMAGE"
+          docker push "$IMAGE"
+
+      - name: 🚧 Build Images - push bad image
+        #if: ${{ matrix.push }}
+        if: ${{ steps.test.outcome == 'failure' }}
+        #id: push-${{ matrix.name}}
+        id: push-bad
+        run: |
+          # The buildx docker-container driver can't pull from the local registry
+          # So we need to push the image
+          IMAGE="ghcr.io/berney/kubler-images/bad/${{ matrix.name }}"
+          docker tag ${{ matrix.image }} "$IMAGE"
+          docker push "$IMAGE"
 
       - name: 🔎 Post Build Inspect
         run: |
