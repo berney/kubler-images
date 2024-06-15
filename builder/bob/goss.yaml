@@ -509,7 +509,8 @@ command:
             - -perl
             - -python
             - -python_single_target_python3_10
-            - +python_single_target_python3_11
+            - -python_single_target_python3_11
+            - +python_single_target_python3_12
             - -racket
             - -ruby
             - -sound
@@ -522,7 +523,8 @@ command:
         exit-status: 0
         stdout:
             - -python_single_target_python3_10
-            - +python_single_target_python3_11
+            - -python_single_target_python3_11
+            - +python_single_target_python3_12
             - -test
         stderr: ""
         timeout: 10000
@@ -547,7 +549,8 @@ command:
         exit-status: 0
         stdout:
             - -python_targets_python3_10
-            - +python_targets_python3_11
+            - -python_targets_python3_11
+            - +python_targets_python3_12
             - -test
         stderr: ""
         timeout: 10000
@@ -555,7 +558,8 @@ command:
         exit-status: 0
         stdout:
             - -python_targets_python3_10
-            - +python_targets_python3_11
+            - -python_targets_python3_11
+            - +python_targets_python3_12
         stderr: ""
         timeout: 10000
     equery u app-shells/bash-completion:
@@ -589,7 +593,8 @@ command:
             - -perforce
             - -perl
             - -python_single_target_python3_10
-            - +python_single_target_python3_11
+            - -python_single_target_python3_11
+            - +python_single_target_python3_12
             - +safe-directory
             - -subversion
             - -test
@@ -738,8 +743,10 @@ command:
         exit-status: 0
         stdout:
             - VIM - Vi IMproved
-            - 'Included patches: 1-2167'
-            - Modified by Gentoo-9.0.2167 (RIP Bram)
+            - |-
+              /Included patches: 1-\d+/
+            - |-
+              /Modified by Gentoo-9\.\d+\.\d+ \(RIP Bram\)/
             - Compiled by portage@buildkitsandbox
             - 'Huge version without GUI.  Features included (+) or not (-):'
             - +acl               +file_in_path      +mouse_urxvt       -tag_any_white
