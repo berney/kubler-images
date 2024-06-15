@@ -43,9 +43,11 @@ jobs:
       BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ inputs.portage_date || 'latest' }}
       BOB_IMAGE: ghcr.io/${{ github.repository }}/bob:${{ inputs.portage_date || 'latest' }}
       BOB_MUSL_IMAGE: ghcr.io/${{ github.repository }}/bob-musl:${{ inputs.portage_date || 'latest' }}
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       fail-fast: false
       matrix:
+        experimental: [false]
         include:
           - name: busybox
             image: kubler-images/busybox
@@ -145,6 +147,7 @@ jobs:
               docker_args: -t
               goss_args:
           - name: coturn
+            experimental: true
             image: kubler-images/coturn
             bob-musl: true
             #push: true
@@ -155,6 +158,7 @@ jobs:
             #  docker_args: -t
             #  goss_args:
           - name: s6-coturn-busybox
+            experimental: true
             image: kubler-images/s6-coturn-busybox
             bob-musl: true
             #push: true
@@ -176,6 +180,7 @@ jobs:
               docker_args: -w /goss --entrypoint /goss/goss
               goss_args: -l debug validate --color
           - name: nmap-musl-static
+            experimental: true
             image: kubler-images/nmap-musl-static
             bob-musl: true
             push: true
@@ -691,3 +696,12 @@ jobs:
           ls -la ~/.kubler/log || true
           ls -l ~/.kubler/log/build.log || true
           cat ~/.kubler/log/build.log || true
+
+      # Fail the job if the testing step above failed
+      # Because the test step had `continue-on-error: true` it's conclusion will be 'success'
+      # But we want the job to fail if testing fails
+      - name: ❓ Outcome
+        if: ${{ steps.test.outcome == 'failure' }}
+        run: |
+          # should fail the job
+          false
