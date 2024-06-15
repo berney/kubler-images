@@ -47,7 +47,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        experimental: [false]
+        experimental: false
         include:
           - name: busybox
             image: kubler-images/busybox
