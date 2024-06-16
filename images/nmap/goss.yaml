@@ -1,4 +1,4 @@
-file:
+ile:
     /etc:
         exists: true
         mode: "0755"
@@ -133,7 +133,7 @@ file:
         group: root
         filetype: file
         contents: []
-    /lib64/libcrypt.so.1:
+    /usr/lib64/libcrypt.so.1:
         exists: true
         mode: "0777"
         owner: root
@@ -141,14 +141,14 @@ file:
         linked-to: libcrypt.so.1.1.0
         filetype: symlink
         contents: []
-    /lib64/libcrypt.so.1.1.0:
+    /usr/lib64/libcrypt.so.1.1.0:
         exists: true
         mode: "0755"
         owner: root
         group: root
         filetype: file
         contents: []
-    /lib64/libcrypt.so.2:
+    /usr/lib64/libcrypt.so.2:
         exists: true
         mode: "0777"
         owner: root
@@ -156,7 +156,7 @@ file:
         linked-to: libcrypt.so.2.0.0
         filetype: symlink
         contents: []
-    /lib64/libcrypt.so.2.0.0:
+    /usr/lib64/libcrypt.so.2.0.0:
         exists: true
         mode: "0755"
         owner: root
@@ -233,7 +233,15 @@ file:
         group: root
         filetype: file
         contents: []
-    /lib64/libowcrypt.so.1:
+    /usr/lib64/libowcrypt.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: libcrypt.so
+        filetype: symlink
+        contents: []
+    /usr/lib64/libowcrypt.so.1:
         exists: true
         mode: "0777"
         owner: root
@@ -522,7 +530,7 @@ file:
         group: root
         filetype: file
         contents: []
-    /usr/lib64/glibc-2.38:
+    /usr/lib64/glibc-2.39:
         exists: true
         mode: "0755"
         owner: root
@@ -572,7 +580,7 @@ file:
         mode: "0777"
         owner: root
         group: root
-        linked-to: ../../lib64/libcrypt.so.2.0.0
+        linked-to: libcrypt.so.2.0.0
         filetype: symlink
         contents: []
     /usr/lib64/libidn2.so:
@@ -621,14 +629,6 @@ file:
         linked-to: ../../lib64/libnss_hesiod.so.2
         filetype: symlink
         contents: []
-    /usr/lib64/libowcrypt.so:
-        exists: true
-        mode: "0777"
-        owner: root
-        group: root
-        linked-to: ../../lib64/libcrypt.so.2.0.0
-        filetype: symlink
-        contents: []
     /usr/lib64/libresolv.so:
         exists: true
         mode: "0777"
@@ -645,7 +645,23 @@ file:
         linked-to: ../../lib64/libthread_db.so.1
         filetype: symlink
         contents: []
-    /usr/lib64/libunistring.so.5.0.0:
+    /usr/lib64/libunistring.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: libunistring.so.5.1.0
+        filetype: symlink
+        contents: []
+    /usr/lib64/libunistring.so.5:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: libunistring.so.5.1.0
+        filetype: symlink
+        contents: []
+    /usr/lib64/libunistring.so.5.1.0:
         exists: true
         mode: "0755"
         owner: root
@@ -1151,7 +1167,7 @@ command:
             - '-sL: List Scan - simply list targets to scan'
             - '-sn: Ping Scan - disable port scan'
             - '-Pn: Treat all hosts as online -- skip host discovery'
-            - '-PS/PA/PU/PY[portlist]: TCP SYN/ACK, UDP or SCTP discovery to given ports'
+            - '-PS/PA/PU/PY[portlist]: TCP SYN, TCP ACK, UDP or SCTP discovery to given ports'
             - '-PE/PP/PM: ICMP echo, timestamp, and netmask request discovery probes'
             - '-PO[protocol list]: IP Protocol Ping'
             - '-n/-R: Never do DNS resolution/Always resolve [default: sometimes]'
