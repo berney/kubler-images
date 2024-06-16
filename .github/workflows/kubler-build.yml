@@ -257,24 +257,27 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.kubler/downloads/
-          key: kubler-${{ github.sha }}
+          key: kubler-${{ matrix.name }}-${{ github.sha }}
           restore-keys: |
+            kubler-${{ matrix.name }}-
             kubler-
 
       - name: Cache Kubler Gentoo Distfiles
         uses: actions/cache@v4
         with:
           path: ~/.kubler/distfiles/
-          key: kubler-${{ github.sha }}
+          key: kubler-${{ matrix.name }}-${{ github.sha }}
           restore-keys: |
+            kubler-${{ matrix.name }}-
             kubler-
 
       - name: Cache Kubler Gentoo Packages
         uses: actions/cache@v4
         with:
           path: ~/.kubler/packages/
-          key: kubler-${{ github.sha }}
+          key: kubler-${{ matrix.name }}-${{ github.sha }}
           restore-keys: |
+            kubler-${{ matrix.name }}-
             kubler-
 
       # If too long between last run then caches might not exists anymore
