@@ -133,7 +133,7 @@ file:
         group: root
         filetype: file
         contents: []
-    /lib64/libcrypt.so.1:
+    /usr/lib64/libcrypt.so.1:
         exists: true
         mode: "0777"
         owner: root
@@ -141,14 +141,14 @@ file:
         linked-to: libcrypt.so.1.1.0
         filetype: symlink
         contents: []
-    /lib64/libcrypt.so.1.1.0:
+    /usr/lib64/libcrypt.so.1.1.0:
         exists: true
         mode: "0755"
         owner: root
         group: root
         filetype: file
         contents: []
-    /lib64/libcrypt.so.2:
+    /usr/lib64/libcrypt.so.2:
         exists: true
         mode: "0777"
         owner: root
@@ -156,7 +156,7 @@ file:
         linked-to: libcrypt.so.2.0.0
         filetype: symlink
         contents: []
-    /lib64/libcrypt.so.2.0.0:
+    /usr/lib64/libcrypt.so.2.0.0:
         exists: true
         mode: "0755"
         owner: root
@@ -233,7 +233,7 @@ file:
         group: root
         filetype: file
         contents: []
-    /lib64/libowcrypt.so.1:
+    /usr/lib64/libowcrypt.so.1:
         exists: true
         mode: "0777"
         owner: root
@@ -515,7 +515,7 @@ file:
         group: root
         filetype: file
         contents: []
-    /usr/lib64/glibc-2.38:
+    /usr/lib64/glibc-2.39:
         exists: true
         mode: "0755"
         owner: root
@@ -565,7 +565,7 @@ file:
         mode: "0777"
         owner: root
         group: root
-        linked-to: ../../lib64/libcrypt.so.2.0.0
+        linked-to: libcrypt.so.2.0.0
         filetype: symlink
         contents: []
     /usr/lib64/libidn2.so:
@@ -619,7 +619,7 @@ file:
         mode: "0777"
         owner: root
         group: root
-        linked-to: ../../lib64/libcrypt.so.2.0.0
+        linked-to: libcrypt.so
         filetype: symlink
         contents: []
     /usr/lib64/libresolv.so:
@@ -638,7 +638,23 @@ file:
         linked-to: ../../lib64/libthread_db.so.1
         filetype: symlink
         contents: []
-    /usr/lib64/libunistring.so.5.0.0:
+    /usr/lib64/libunistring.so:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: libunistring.so.5.1.0
+        filetype: symlink
+        contents: []
+    /usr/lib64/libunistring.so.5:
+        exists: true
+        mode: "0777"
+        owner: root
+        group: root
+        linked-to: libunistring.so.5.1.0
+        filetype: symlink
+        contents: []
+    /usr/lib64/libunistring.so.5.1.0:
         exists: true
         mode: "0755"
         owner: root
