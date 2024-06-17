@@ -792,7 +792,9 @@ command:
             - 'user exrc file: "$HOME/.exrc"'
             - 'defaults file: "$VIMRUNTIME/defaults.vim"'
             - 'fall-back for $VIM: "/usr/share/vim"'
-            - 'Compilation: gcc -c -I. -Iproto -DHAVE_CONFIG_H -mtune=generic -O2 -pipe -D_REENTRANT -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1'
-            - 'Linking: gcc -Wl,-O1 -Wl,--as-needed -Wl,-z,pack-relative-relocs -L/usr/local/lib -o vim -lm -ltinfo -lsodium -lacl -lattr'
+            - |-
+              /Compilation: (x86_64-pc-linux-musl-)?gcc -c -I. -Iproto -DHAVE_CONFIG_H -mtune=generic -O2 -pipe -D_REENTRANT -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=1/
+            - |-
+              /Linking: (x86_64-pc-linux-musl-)?gcc -Wl,-O1 -Wl,--as-needed -Wl,-z,pack-relative-relocs -L/usr/local/lib -o vim -lm -ltinfo -lsodium -lacl -lattr/
         stderr: ""
         timeout: 10000
