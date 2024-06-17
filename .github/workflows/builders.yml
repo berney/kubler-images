@@ -160,9 +160,9 @@ jobs:
             gentoo-stage3.args.BASE_IMAGE=${{ matrix.stage3.base }}
             gentoo-stage3.args.PORTAGE=${{ env.PORTAGE_IMAGE }}
             gentoo-stage3.tags=${{ matrix.stage3.tmp_image }}
-          #  gentoo-stage3.cache-from=type=gha,scope=portage
-          #  gentoo-stage3.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
-          #  gentoo-stage3.cache-to=type=gha,scope=${{ matrix.stage3.cache }}
+            gentoo-stage3.cache-from=type=gha,scope=portage
+            gentoo-stage3.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
+            gentoo-stage3.cache-to=type=gha,scope=${{ matrix.stage3.cache }}
 
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - test baked
@@ -244,10 +244,10 @@ jobs:
             core.args.DEF_CHOST=${{ matrix.core.def_chost }}
             core.args.BASE_IMAGE=${{ matrix.stage3.image }}
             core.tags=${{ matrix.core.tmp_image }}
-          #  core.cache-from=type=gha,scope=portage
-          #  core.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
-          #  core.cache-from=type=gha,scope=${{ matrix.core.cache }}
-          #  core.cache-to=type=gha,scope=${{ matrix.core.cache }}
+            core.cache-from=type=gha,scope=portage
+            core.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
+            core.cache-from=type=gha,scope=${{ matrix.core.cache }}
+            core.cache-to=type=gha,scope=${{ matrix.core.cache }}
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - test baked
         id: bob-core-bake-test
@@ -348,11 +348,11 @@ jobs:
           set: |
             ${{matrix.bob.target}}.args.BASE_IMAGE=${{ matrix.core.image }}
             ${{matrix.bob.target}}.tags=${{ matrix.bob.tmp_image }}
-          #  ${{matrix.bob.target}}.cache-from=type=gha,scope=portage
-          #  ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
-          #  ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.core.cache }}
-          #  ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}
-          #  ${{matrix.bob.target}}.cache-to=type=gha,scope=${{ matrix.bob.cache }}
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=portage
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.core.cache }}
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}
+            ${{matrix.bob.target}}.cache-to=type=gha,scope=${{ matrix.bob.cache }}
 
       - name: 🐋 Docker Build kubler builder - bob - test baked
         id: bob-bake-test

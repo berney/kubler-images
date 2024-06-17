@@ -106,8 +106,8 @@ jobs:
           push: true
           set: |
             kubler-portage.tags=${{ env.TMP_PORTAGE_IMAGE }}
-          #  kubler-portage.cache-from=type=gha,scope=portage
-          #  kubler-portage.cache-to=type=gha,scope=portage
+            kubler-portage.cache-from=type=gha,scope=portage
+            kubler-portage.cache-to=type=gha,scope=portage
 
       - name: 🐋🍳 Docker Bake Kubler portage - test baked
         if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
