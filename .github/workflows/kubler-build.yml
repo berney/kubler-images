@@ -146,7 +146,6 @@ jobs:
               docker_args: -t
               goss_args:
           - name: coturn
-            experimental: true
             image: kubler-images/coturn
             bob-musl: true
             #push: true
@@ -157,7 +156,6 @@ jobs:
             #  docker_args: -t
             #  goss_args:
           - name: s6-coturn-busybox
-            experimental: true
             image: kubler-images/s6-coturn-busybox
             bob-musl: true
             #push: true
