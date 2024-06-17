@@ -354,6 +354,9 @@ jobs:
           docker buildx inspect "${{ steps.buildx.outputs.name }}"
 
       - name: 🔑 Get Gentoo Portage GPG Key
+        id: gpg-recv-key
+        # keys.gentoo.org seems flakey lately - alternative methods in steps below
+        continue-on-error: true
         run: |
           # For Portage signatures
           #
@@ -396,6 +399,21 @@ jobs:
           #
           gpg --keyserver hkps://keys.gentoo.org --recv-keys 13EBBDBEDE7A12775DFDB1BABB572E0E2D182910
 
+      - name: 🔑 Get Gentoo Portage GPG Key - Web Key Directory (WKD) Method
+        id: gpg-wkd
+        if: ${{ steps.gpg-recv-key.outcome == 'failure' }}
+        continue-on-error: true
+        run: |
+          gpg --auto-key-locate=clear,nodefault,wkd --locate-key releng@gentoo.org
+
+      - name: 🔑 Get Gentoo Portage GPG Key - curl qa-reports Method
+        if: ${{ steps.gpg-recv-key.outcome == 'failure' && steps.gpg-wkd.outcome == 'failure' }}
+        run: |
+          # keys.gentoo.org seems flakey lately
+          curl -L https://qa-reports.gentoo.org/output/service-keys.gpg | gpg --import
+
+      - name: 🔑 List Gentoo Portage GPG Keys
+        run: |
           gpg --list-public-keys
           gpg --list-public-keys --with-subkey-fingerprint
           gpg --list-public-keys --with-subkey-fingerprint --fingerprint
