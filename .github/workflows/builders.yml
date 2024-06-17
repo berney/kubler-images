@@ -250,7 +250,7 @@ jobs:
           #  core.cache-to=type=gha,scope=${{ matrix.core.cache }}
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - test baked
-        id: bob-core-pull-test
+        id: bob-core-bake-test
         if: ${{ steps.bob-core-pull.outcome == 'failure' || steps.bob-core-pull-test.outcome == 'failure' }}
         # If this fails we will test again with `-l debug`, and then fail
         continue-on-error: true
@@ -264,7 +264,7 @@ jobs:
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.tmp_image }}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - test baked - debug
-        if: ${{ steps.bob-core-pull-test.outcome == 'failure' }}
+        if: ${{ steps.bob-core-bake-test.outcome == 'failure' }}
         run: |
           set -eux
           cd "${{ matrix.core.goss }}" || exit 1
