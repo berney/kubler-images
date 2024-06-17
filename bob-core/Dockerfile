@@ -8,7 +8,7 @@ ARG BASE_IMAGE=gentoo/stage3:musl-hardened
 
 FROM $BASE_IMAGE
 
-# musl use `x86_64-gentoo-linux-musl`
+# musl use `x86_64-pc-linux-musl`
 ARG DEF_CHOST="x86_64-pc-linux-gnu"
 ARG DEF_CFLAGS="-mtune=generic -O2 -pipe"
 ARG DEF_CXXFLAGS="${DEF_CFLAGS}"

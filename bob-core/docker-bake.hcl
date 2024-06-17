@@ -19,7 +19,7 @@ variable "DEF_CHOST" {
   # glibc
   #default = "x86_64-pc-linux-gnu"
   # musl
-  #default = "x86_64-gentoo-linux-musl"
+  #default = "x86_64-pc-linux-musl"
 }
 
 variable "DEF_CFLAGS" {

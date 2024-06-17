@@ -69,7 +69,7 @@ jobs:
               cache: stage3-amd64-musl-hardened
               goss: stage3/amd64-musl-hardened
             core:
-              def_chost: x86_64-gentoo-linux-musl
+              def_chost: x86_64-pc-linux-musl
               tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-musl-core:${{ inputs.portage_date }}
               image: ghcr.io/${{ github.repository }}/bob-musl-core:${{ inputs.portage_date }}
               cache: bob-musl-core
