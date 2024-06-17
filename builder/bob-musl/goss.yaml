@@ -388,7 +388,7 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-    '[ "${DEF_BUILDER_CHOST}" = "x86_64-gentoo-linux-musl" ]':
+    '[ "${DEF_BUILDER_CHOST}" = "x86_64-pc-linux-musl" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
@@ -403,7 +403,7 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-    '[ "${DEF_CHOST}" = "x86_64-gentoo-linux-musl" ]':
+    '[ "${DEF_CHOST}" = "x86_64-pc-linux-musl" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
@@ -413,7 +413,7 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-    '[ "${PKGDIR}" = "/packages/x86_64-gentoo-linux-musl" ]':
+    '[ "${PKGDIR}" = "/packages/x86_64-pc-linux-musl" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
