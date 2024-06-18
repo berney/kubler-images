@@ -108,6 +108,39 @@ jobs:
 
       - uses: oras-project/setup-oras@v1
 
+      # Cache Versions are based off key and path, so differnt path's can use same key
+      #
+      # Caches are immutable, so need unique key to create a new cache
+      # `restore-keys` provides a list to restore a cache when key doesn't match
+      # If there's no exact match, the most recent cache that partially matches will be used
+      #
+      - name: Cache Kubler Downloads
+        uses: actions/cache@v4
+        with:
+          path: ~/.kubler/downloads/
+          key: kubler-${{ matrix.name }}-${{ github.sha }}
+          restore-keys: |
+            kubler-${{ matrix.name }}-
+            kubler-
+
+      - name: Cache Kubler Gentoo Distfiles
+        uses: actions/cache@v4
+        with:
+          path: ~/.kubler/distfiles/
+          key: kubler-${{ matrix.name }}-${{ github.sha }}
+          restore-keys: |
+            kubler-${{ matrix.name }}-
+            kubler-
+
+      - name: Cache Kubler Gentoo Packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.kubler/packages/
+          key: kubler-${{ matrix.name }}-${{ github.sha }}
+          restore-keys: |
+            kubler-${{ matrix.name }}-
+            kubler-
+
       - name: 🐋 Docker Pull stage3
         id: stage3-pull
         continue-on-error: true
@@ -346,13 +379,86 @@ jobs:
           workdir: ${{ matrix.bob.goss }}
           push: true
           set: |
+            # Builder target
+            ${{matrix.bob.target}}-builder.args.BASE_IMAGE=${{ matrix.core.image }}
+            ${{matrix.bob.target}}-builder.tags=${{ matrix.bob.target }}-builder:${{ inputs.portage_date }}
+            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=portage
+            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
+            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.core.cache }}
+            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.bob.cache }}
+            ${{matrix.bob.target}}-builder.cache-to=type=gha,scope=${{ matrix.bob.cache }}-builder
+            # Final Clean target
             ${{matrix.bob.target}}.args.BASE_IMAGE=${{ matrix.core.image }}
             ${{matrix.bob.target}}.tags=${{ matrix.bob.tmp_image }}
             ${{matrix.bob.target}}.cache-from=type=gha,scope=portage
             ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
             ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.core.cache }}
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}-builder
             ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}
             ${{matrix.bob.target}}.cache-to=type=gha,scope=${{ matrix.bob.cache }}
+
+      - name: Inspect Downloads Cache - Before
+        continue-on-error: true
+        run: |
+          set -eux
+          ls -ltra ~/.kubler/downloads/
+          ls -ltra ~/.kubler/downloads/*
+          tree -aC --filelimit 100 ~/.kubler/downloads
+
+      - name: Inspect Distfiles Cache - Before
+        continue-on-error: true
+        run: |
+          set -eux
+          ls -ltra ~/.kubler/distfiles/
+          ls -ltra ~/.kubler/distfiles/*
+          tree -aC --filelimit 100 ~/.kubler/distfiles
+
+      - name: Inspect Packages Cache - Before
+        continue-on-error: true
+        run: |
+          set -eux
+          ls -ltra ~/.kubler/packages/
+          ls -ltra ~/.kubler/packages/*
+          tree -aC --filelimit 100 ~/.kubler/packages
+
+      - name: 🐋 Docker Build kubler builder - bob - test baked - builder
+        continue-on-error: true
+        run: |
+          set -eux
+          docker images
+          docker run --rm ${{ matrix.bob.target }}-builder:${{ inputs.portage_date }} ls -la /distfiles || true
+          docker run --rm ${{ matrix.bob.target }}-builder:${{ inputs.portage_date }} ls -la /packages || true
+          # Extract files to host, for caching
+          docker create --name ${{ matrix.bob.target }}-builder ${{ matrix.bob.target }}-builder
+          docker cp ${{ matrix.bob.target }}-builder /downloads ~/.kubler/
+          docker cp ${{ matrix.bob.target }}-builder /distfiles ~/.kubler/
+          docker cp ${{ matrix.bob.target }}-builder /packages ~/.kubler/
+          docker rm ${{ matrix.bob.target }}-builder ${{ matrix.bob.target }}-builder
+
+      - name: Inspect Downloads Cache - After
+        continue-on-error: true
+        run: |
+          set -eux
+          ls -ltra ~/.kubler/downloads/
+          ls -ltra ~/.kubler/downloads/*
+          tree -aC --filelimit 100 ~/.kubler/downloads
+
+      - name: Inspect Distfiles Cache - After
+        continue-on-error: true
+        run: |
+          set -eux
+          ls -ltra ~/.kubler/distfiles/
+          ls -ltra ~/.kubler/distfiles/*
+          tree -aC --filelimit 100 ~/.kubler/distfiles
+
+      - name: Inspect Packages Cache - After
+        continue-on-error: true
+        run: |
+          set -eux
+          ls -ltra ~/.kubler/packages/
+          ls -ltra ~/.kubler/packages/*
+          tree -aC --filelimit 100 ~/.kubler/packages
+
 
       - name: 🐋 Docker Build kubler builder - bob - test baked
         id: bob-bake-test
@@ -361,6 +467,9 @@ jobs:
         continue-on-error: true
         run: |
           set -eux
+          docker run --rm "${{ matrix.bob.tmp_image }}" ls -la /distfiles || true
+          docker run --rm "${{ matrix.bob.tmp_image }}" ls -la /downloads || true
+          docker run --rm "${{ matrix.bob.tmp_image }}" ls -la /packages || true
           docker run --rm "${{ matrix.bob.tmp_image }}" cat /etc/gentoo-release
           docker run --rm "${{ matrix.bob.tmp_image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
           docker run --rm "${{ matrix.bob.tmp_image }}" eselect profile show
