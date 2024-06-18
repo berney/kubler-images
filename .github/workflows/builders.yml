@@ -381,7 +381,7 @@ jobs:
           set: |
             # Builder target
             ${{matrix.bob.target}}-builder.args.BASE_IMAGE=${{ matrix.core.image }}
-            ${{matrix.bob.target}}-builder.tags=${{ matrix.bob.target }}-builder:${{ inputs.portage_date }}
+            ${{matrix.bob.target}}-builder.tags=${{ matrix.bob.tmp_image }}-builder
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=portage
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.core.cache }}
@@ -401,63 +401,60 @@ jobs:
         continue-on-error: true
         run: |
           set -eux
-          ls -ltra ~/.kubler/downloads/
-          ls -ltra ~/.kubler/downloads/*
-          tree -aC --filelimit 100 ~/.kubler/downloads
+          ls -ltra ~/.kubler/downloads/ || true
+          ls -ltra ~/.kubler/downloads/* || true
+          tree -aC --filelimit 100 ~/.kubler/downloads || true
 
       - name: Inspect Distfiles Cache - Before
         continue-on-error: true
         run: |
           set -eux
-          ls -ltra ~/.kubler/distfiles/
-          ls -ltra ~/.kubler/distfiles/*
-          tree -aC --filelimit 100 ~/.kubler/distfiles
+          ls -ltra ~/.kubler/distfiles/ | head -n 100 || true
 
       - name: Inspect Packages Cache - Before
         continue-on-error: true
         run: |
           set -eux
-          ls -ltra ~/.kubler/packages/
-          ls -ltra ~/.kubler/packages/*
-          tree -aC --filelimit 100 ~/.kubler/packages
+          ls -ltra ~/.kubler/packages/ || true
+          ls -ltra ~/.kubler/packages/* || true
+          tree -aC --filelimit 100 ~/.kubler/packages || true
 
       - name: 🐋 Docker Build kubler builder - bob - test baked - builder
         continue-on-error: true
         run: |
           set -eux
           docker images
-          docker run --rm ${{ matrix.bob.target }}-builder:${{ inputs.portage_date }} ls -la /distfiles || true
-          docker run --rm ${{ matrix.bob.target }}-builder:${{ inputs.portage_date }} ls -la /packages || true
+          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /distfiles || true
+          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /downloads || true
+          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /packages || true
           # Extract files to host, for caching
-          docker create --name ${{ matrix.bob.target }}-builder ${{ matrix.bob.target }}-builder
-          docker cp ${{ matrix.bob.target }}-builder /downloads ~/.kubler/
-          docker cp ${{ matrix.bob.target }}-builder /distfiles ~/.kubler/
-          docker cp ${{ matrix.bob.target }}-builder /packages ~/.kubler/
-          docker rm ${{ matrix.bob.target }}-builder ${{ matrix.bob.target }}-builder
+          docker create --name "${{ matrix.name }}-builder" "${{ matrix.bob.tmp_image }}-builder"
+          docker cp "${{ matrix.name }}-builder" /downloads ~/.kubler/ || true
+          docker cp "${{ matrix.name }}-builder" /distfiles ~/.kubler/ || true
+          docker cp "${{ matrix.name }}-builder" /packages ~/.kubler/ || true
+          docker rm "${{ matrix.name }}-builder"
 
       - name: Inspect Downloads Cache - After
         continue-on-error: true
         run: |
           set -eux
-          ls -ltra ~/.kubler/downloads/
-          ls -ltra ~/.kubler/downloads/*
-          tree -aC --filelimit 100 ~/.kubler/downloads
+          ls -ltra ~/.kubler/downloads/ || true
+          ls -ltra ~/.kubler/downloads/* || true
+          tree -aC --filelimit 100 ~/.kubler/downloads || true
 
       - name: Inspect Distfiles Cache - After
         continue-on-error: true
         run: |
           set -eux
-          ls -ltra ~/.kubler/distfiles/
-          ls -ltra ~/.kubler/distfiles/*
-          tree -aC --filelimit 100 ~/.kubler/distfiles
+          ls -ltra ~/.kubler/distfiles/ | head -n 100 || true
 
       - name: Inspect Packages Cache - After
         continue-on-error: true
         run: |
           set -eux
-          ls -ltra ~/.kubler/packages/
-          ls -ltra ~/.kubler/packages/*
-          tree -aC --filelimit 100 ~/.kubler/packages
+          ls -ltra ~/.kubler/packages/ || true
+          ls -ltra ~/.kubler/packages/* || true
+          tree -aC --filelimit 100 ~/.kubler/packages || true
 
 
       - name: 🐋 Docker Build kubler builder - bob - test baked
