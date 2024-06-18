@@ -317,6 +317,8 @@ jobs:
 
       - name: 🐋 Docker Pull bob
         id: bob-pull
+        # Temporary whilst testing changes to get binpkgs working
+        if: ${{ false }}
         continue-on-error: true
         run: |
           set -eu
