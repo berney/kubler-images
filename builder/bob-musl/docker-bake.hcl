@@ -33,9 +33,25 @@ variable "BASE_IMAGE" {
 
 # This is what is built by default when no arguments are supplied
 group "default" {
-  targets = [ "bob-musl" ]
+  targets = [
+    "bob-musl-builder",
+    "bob-musl"
+  ]
 }
 
+# This one has solid `/distfiles/` and `/packages/` directories
+# They aren't using `RUN --mount` to make them bind/cache
+# This is necessary so we can extract files back to host for caching
+target "bob-musl-builder" {
+  dockerfile = "Dockerfile.builder"
+  args = {
+    BASE_IMAGE = "${BASE_IMAGE}"
+  }
+}
+
+# This one has `RUN --mount` to cache mount `/distfiles/` and `/packages/` directories
+# They are ephemeral, writes are discarded
+# The BuildKit Cache means this target will build quickly since its effectively the same as the other target
 target "bob-musl" {
   dockerfile = "Dockerfile.berney"
   args = {

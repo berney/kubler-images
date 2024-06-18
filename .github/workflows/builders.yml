@@ -372,29 +372,6 @@ jobs:
         with:
           workdir: ${{ matrix.bob.goss }}
 
-      - name: 🐋🍳 Docker Bake Kubler builder - bob
-        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
-        uses: docker/bake-action@v4
-        with:
-          workdir: ${{ matrix.bob.goss }}
-          push: true
-          set: |
-            ${{matrix.bob.target}}-builder.args.BASE_IMAGE=${{ matrix.core.image }}
-            ${{matrix.bob.target}}-builder.tags=${{ matrix.bob.tmp_image }}-builder
-            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=portage
-            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
-            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.core.cache }}
-            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.bob.cache }}
-            ${{matrix.bob.target}}-builder.cache-to=type=gha,scope=${{ matrix.bob.cache }}-builder
-            ${{matrix.bob.target}}.args.BASE_IMAGE=${{ matrix.core.image }}
-            ${{matrix.bob.target}}.tags=${{ matrix.bob.tmp_image }}
-            ${{matrix.bob.target}}.cache-from=type=gha,scope=portage
-            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
-            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.core.cache }}
-            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}-builder
-            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}
-            ${{matrix.bob.target}}.cache-to=type=gha,scope=${{ matrix.bob.cache }}
-
       - name: Inspect Downloads Cache - Before
         continue-on-error: true
         run: |
@@ -417,20 +394,21 @@ jobs:
           ls -ltra ~/.kubler/packages/* || true
           tree -aC --filelimit 100 ~/.kubler/packages || true
 
-      - name: 🐋 Docker Build kubler builder - bob - test baked - builder
-        continue-on-error: true
-        run: |
-          set -eux
-          docker images
-          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /distfiles || true
-          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /downloads || true
-          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /packages || true
-          # Extract files to host, for caching
-          docker create --name "${{ matrix.name }}-builder" "${{ matrix.bob.tmp_image }}-builder"
-          docker cp "${{ matrix.name }}-builder" /downloads ~/.kubler/ || true
-          docker cp "${{ matrix.name }}-builder" /distfiles ~/.kubler/ || true
-          docker cp "${{ matrix.name }}-builder" /packages ~/.kubler/ || true
-          docker rm "${{ matrix.name }}-builder"
+      - name: 🐋🍳 Docker Bake Kubler builder - bob-builder
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        uses: docker/bake-action@v4
+        with:
+          workdir: ${{ matrix.bob.goss }}
+          push: true
+          targets: ${{ matrix.bob.target }}-builder
+          set: |
+            ${{matrix.bob.target}}-builder.args.BASE_IMAGE=${{ matrix.core.image }}
+            ${{matrix.bob.target}}-builder.tags=${{ matrix.bob.tmp_image }}-builder
+            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=portage
+            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
+            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.core.cache }}
+            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.bob.cache }}
+            ${{matrix.bob.target}}-builder.cache-to=type=gha,scope=${{ matrix.bob.cache }}-builder
 
       - name: Inspect Downloads Cache - After
         continue-on-error: true
@@ -454,6 +432,37 @@ jobs:
           ls -ltra ~/.kubler/packages/* || true
           tree -aC --filelimit 100 ~/.kubler/packages || true
 
+      - name: 🐋🍳 Docker Bake Kubler builder - bob
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        uses: docker/bake-action@v4
+        with:
+          workdir: ${{ matrix.bob.goss }}
+          push: true
+          targets: ${{ matrix.bob.target }}
+          set: |
+            ${{matrix.bob.target}}.args.BASE_IMAGE=${{ matrix.core.image }}
+            ${{matrix.bob.target}}.tags=${{ matrix.bob.tmp_image }}
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=portage
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.core.cache }}
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}-builder
+            ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}
+            ${{matrix.bob.target}}.cache-to=type=gha,scope=${{ matrix.bob.cache }}
+
+      - name: 🐋 Docker Build kubler builder - bob - test baked - builder
+        continue-on-error: true
+        run: |
+          set -eux
+          docker images
+          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /distfiles || true
+          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /downloads || true
+          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /packages || true
+          # Extract files to host, for caching
+          docker create --name "${{ matrix.name }}-builder" "${{ matrix.bob.tmp_image }}-builder"
+          docker cp "${{ matrix.name }}-builder" /downloads ~/.kubler/ || true
+          docker cp "${{ matrix.name }}-builder" /distfiles ~/.kubler/ || true
+          docker cp "${{ matrix.name }}-builder" /packages ~/.kubler/ || true
+          docker rm "${{ matrix.name }}-builder"
 
       - name: 🐋 Docker Build kubler builder - bob - test baked
         id: bob-bake-test

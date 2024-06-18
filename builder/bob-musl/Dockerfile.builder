@@ -6,9 +6,8 @@ COPY build.sh /config/
 #RUN <<-EOF
 #RUN --mount=type=bind,target=/distfiles,from=distfiles,rw --mount=type=bind,target=/packages,from=packages,rw <<-EOF
 #RUN --mount=type=cache,target=/distfiles,from=distfiles --mount=type=cache,target=/packages,from=packages <<-EOF
-RUN --mount=type=cache,target=/distfiles \
-    --mount=type=cache,target=/downloads \
-    --mount=type=cache,target=/packages <<-EOF
+#RUN --mount=type=cache,target=/distfiles --mount=type=cache,target=/packages <<-EOF
+RUN <<-EOF
   env | grep -E '^((BOB|DEF)_|PKGDIR)'
   ls -l /config
   ls -ltra /distfiles | tail || true
