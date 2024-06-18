@@ -114,15 +114,6 @@ jobs:
       # `restore-keys` provides a list to restore a cache when key doesn't match
       # If there's no exact match, the most recent cache that partially matches will be used
       #
-      - name: Cache Kubler Downloads
-        uses: actions/cache@v4
-        with:
-          path: ~/.kubler/downloads/
-          key: kubler-${{ matrix.name }}-${{ github.sha }}
-          restore-keys: |
-            kubler-${{ matrix.name }}-
-            kubler-
-
       - name: Cache Kubler Gentoo Distfiles
         uses: actions/cache@v4
         with:
@@ -374,14 +365,6 @@ jobs:
         with:
           workdir: ${{ matrix.bob.goss }}
 
-      - name: Inspect Downloads Cache - Before
-        continue-on-error: true
-        run: |
-          set -eux
-          ls -ltra ~/.kubler/downloads/ || true
-          ls -ltra ~/.kubler/downloads/* || true
-          tree -aC --filelimit 100 ~/.kubler/downloads || true
-
       - name: Inspect Distfiles Cache - Before
         continue-on-error: true
         run: |
@@ -412,14 +395,6 @@ jobs:
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.bob.cache }}
             ${{matrix.bob.target}}-builder.cache-to=type=gha,scope=${{ matrix.bob.cache }}-builder
 
-      - name: Inspect Downloads Cache - After
-        continue-on-error: true
-        run: |
-          set -eux
-          ls -ltra ~/.kubler/downloads/ || true
-          ls -ltra ~/.kubler/downloads/* || true
-          tree -aC --filelimit 100 ~/.kubler/downloads || true
-
       - name: Inspect Distfiles Cache - After
         continue-on-error: true
         run: |
@@ -435,6 +410,7 @@ jobs:
           tree -aC --filelimit 100 ~/.kubler/packages || true
 
       - name: 🐋🍳 Docker Bake Kubler builder - bob
+        id: bob-bake
         #if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
@@ -457,24 +433,21 @@ jobs:
           set -eux
           docker images
           docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /distfiles || true
-          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /downloads || true
           docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /packages || true
           # Extract files to host, for caching
-          docker create --name "${{ matrix.name }}-builder" "${{ matrix.bob.tmp_image }}-builder"
-          docker cp "${{ matrix.name }}-builder" /downloads ~/.kubler/ || true
-          docker cp "${{ matrix.name }}-builder" /distfiles ~/.kubler/ || true
-          docker cp "${{ matrix.name }}-builder" /packages ~/.kubler/ || true
-          docker rm "${{ matrix.name }}-builder"
+          docker create --name "${{ matrix.name }}"-builder "${{ matrix.bob.tmp_image }}"-builder
+          docker cp "${{ matrix.name }}"-builder:/distfiles ~/.kubler/ || true
+          docker cp "${{ matrix.name }}"-builder:/packages ~/.kubler/ || true
+          docker rm "${{ matrix.name }}"-builder
 
       - name: 🐋 Docker Build kubler builder - bob - test baked
         id: bob-bake-test
-        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        if: ${{ steps.bob-bake.outcome == 'success' }}
         # if this fails we will test again with `-l debug` and then fail
         continue-on-error: true
         run: |
           set -eux
           docker run --rm "${{ matrix.bob.tmp_image }}" ls -la /distfiles || true
-          docker run --rm "${{ matrix.bob.tmp_image }}" ls -la /downloads || true
           docker run --rm "${{ matrix.bob.tmp_image }}" ls -la /packages || true
           docker run --rm "${{ matrix.bob.tmp_image }}" cat /etc/gentoo-release
           docker run --rm "${{ matrix.bob.tmp_image }}" sh -c "grep -E 'Latest|stage3' /latest-stage3*.txt"
