@@ -397,7 +397,7 @@ jobs:
           tree -aC --filelimit 100 ~/.kubler/packages || true
 
       - name: 🐋🍳 Docker Bake Kubler builder - bob-builder
-        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        #if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: ${{ matrix.bob.goss }}
@@ -435,7 +435,7 @@ jobs:
           tree -aC --filelimit 100 ~/.kubler/packages || true
 
       - name: 🐋🍳 Docker Bake Kubler builder - bob
-        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        #if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         uses: docker/bake-action@v4
         with:
           workdir: ${{ matrix.bob.goss }}
