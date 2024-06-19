@@ -415,6 +415,7 @@ jobs:
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.core.cache }}
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.bob.cache }}
+            ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.bob.cache }}-builder
             ${{matrix.bob.target}}-builder.cache-to=type=gha,scope=${{ matrix.bob.cache }}-builder
 
       - name: 🐋 Docker Build kubler builder - bob - test baked - builder
