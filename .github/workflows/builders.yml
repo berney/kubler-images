@@ -395,6 +395,19 @@ jobs:
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.bob.cache }}
             ${{matrix.bob.target}}-builder.cache-to=type=gha,scope=${{ matrix.bob.cache }}-builder
 
+      - name: 🐋 Docker Build kubler builder - bob - test baked - builder
+        continue-on-error: true
+        run: |
+          set -eux
+          docker images
+          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /distfiles || true
+          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /packages || true
+          # Extract files to host, for caching
+          docker create --name "${{ matrix.name }}"-builder "${{ matrix.bob.tmp_image }}"-builder
+          docker cp "${{ matrix.name }}"-builder:/distfiles ~/.kubler/ || true
+          docker cp "${{ matrix.name }}"-builder:/packages ~/.kubler/ || true
+          docker rm "${{ matrix.name }}"-builder
+
       - name: Inspect Distfiles Cache - After
         continue-on-error: true
         run: |
@@ -426,19 +439,6 @@ jobs:
             ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}-builder
             ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}
             ${{matrix.bob.target}}.cache-to=type=gha,scope=${{ matrix.bob.cache }}
-
-      - name: 🐋 Docker Build kubler builder - bob - test baked - builder
-        continue-on-error: true
-        run: |
-          set -eux
-          docker images
-          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /distfiles || true
-          docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /packages || true
-          # Extract files to host, for caching
-          docker create --name "${{ matrix.name }}"-builder "${{ matrix.bob.tmp_image }}"-builder
-          docker cp "${{ matrix.name }}"-builder:/distfiles ~/.kubler/ || true
-          docker cp "${{ matrix.name }}"-builder:/packages ~/.kubler/ || true
-          docker rm "${{ matrix.name }}"-builder
 
       - name: 🐋 Docker Build kubler builder - bob - test baked
         id: bob-bake-test
