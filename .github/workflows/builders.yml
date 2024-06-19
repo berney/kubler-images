@@ -163,6 +163,28 @@ jobs:
           cd "${{ matrix.stage3.goss }}" || exit 1
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "$KUBLER_IMAGE" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.stage3.image }}" -l debug validate --color
 
+      - name: Check env before exposing GitHub Runtime - grep
+        run: |
+          env | grep ^ACTIONS
+
+      - name: Check env before exposing GitHub Runtime - full
+        run: |
+          env
+
+      # Needed for bake-action to use GHA cache
+      # XXX I think this may be a bit dangerous, exposing secrets to everything in the job
+      - name: Expose GitHub Runtime
+        #if: ${{ false }}
+        uses: crazy-max/ghaction-github-runtime@v3
+
+      - name: Check env after exposed GitHub Runtime - grep
+        run: |
+          env | grep ^ACTIONS
+
+      - name: Check env after exposed GitHub Runtime - full
+        run: |
+          env
+
       - name: 🐋🍳 Docker Bake Kubler stage3 - list targets
         if: ${{ steps.stage3-pull.outcome == 'failure' || steps.stage3-pull-test.outcome == 'failure' }}
         uses: docker/bake-action/subaction/list-targets@v4
