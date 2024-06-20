@@ -331,7 +331,7 @@ jobs:
       - name: 🐋 Docker Pull bob
         id: bob-pull
         # Temporary whilst testing changes to get binpkgs working
-        if: ${{ false }}
+        #if: ${{ false }}
         continue-on-error: true
         run: |
           set -eu
@@ -521,7 +521,7 @@ jobs:
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint -e GOSS_FILE=goss-ripgrep.yaml "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.tmp_image }}" -l debug validate --color
 
       - name: 🐋🍳 Docker Bake Kubler builder - bob - oras cp
-        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        if: ${{ steps.bob-bake-test.outcome == 'success' }}
         env:
           TMP_IMAGE: ${{ matrix.bob.tmp_image }}
           IMAGE: ${{ matrix.bob.image }}
