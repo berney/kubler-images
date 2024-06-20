@@ -43,6 +43,7 @@ jobs:
       matrix:
         include:
           - name: bob
+            cache-key-prefix: bob-glibc
             stage3:
               base: gentoo/stage3:hardened-nomultilib
               tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-hardened-nomultilib-openrc:${{ inputs.portage_date }}
@@ -62,6 +63,7 @@ jobs:
               cache: bob
               goss: builder/bob
           - name: bob-musl
+            cache-key-prefix: bob-musl
             stage3:
               base: gentoo/stage3:musl-hardened
               tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-musl-hardened:${{ inputs.portage_date }}
@@ -118,8 +120,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.kubler/distfiles/
-          key: kubler-${{ matrix.name }}-${{ github.sha }}
+          key: kubler-${{ matrix.cache-key-prefix }}-${{ github.sha }}
           restore-keys: |
+            kubler-${{ matrix.cache-key-prefix }}-
             kubler-${{ matrix.name }}-
             kubler-
 
@@ -127,8 +130,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.kubler/packages/
-          key: kubler-${{ matrix.name }}-${{ github.sha }}
+          key: kubler-${{ matrix.cache-key-prefix }}-${{ github.sha }}
           restore-keys: |
+            kubler-${{ matrix.cache-key-prefix }}-
             kubler-${{ matrix.name }}-
             kubler-
 
