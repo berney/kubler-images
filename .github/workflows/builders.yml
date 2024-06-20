@@ -401,6 +401,12 @@ jobs:
           ls -ltra ~/.kubler/packages/* || true
           tree -aC --filelimit 100 ~/.kubler/packages || true
 
+      # This isn't expoted in the env context, so we need to set it
+      - name: Get HOME directory
+        run: |
+          set -eux
+          echo "HOME=$HOME" >> $GITHUB_ENV
+
       - name: 🐋🍳 Docker Bake Kubler builder - bob-builder
         #if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         uses: docker/bake-action@v4
