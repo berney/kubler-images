@@ -480,6 +480,7 @@ jobs:
         continue-on-error: true
         run: |
           set -eux
+          docker images
           docker run --rm "${{ matrix.bob.tmp_image }}" ls -la /distfiles || true
           docker run --rm "${{ matrix.bob.tmp_image }}" ls -la /packages || true
           docker run --rm "${{ matrix.bob.tmp_image }}" cat /etc/gentoo-release
