@@ -411,8 +411,8 @@ jobs:
           set: |
             ${{matrix.bob.target}}-builder.args.BASE_IMAGE=${{ matrix.core.image }}
             ${{matrix.bob.target}}-builder.tags=${{ matrix.bob.tmp_image }}-builder
-            ${{matrix.bob.target}}-builder.contexts.distfiles=$HOME/.kubler/distfiles
-            ${{matrix.bob.target}}-builder.contexts.packages=$HOME/.kubler/packages
+            ${{matrix.bob.target}}-builder.contexts.distfiles=$$HOME/.kubler/distfiles
+            ${{matrix.bob.target}}-builder.contexts.packages=$$HOME/.kubler/packages
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=portage
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.core.cache }}
