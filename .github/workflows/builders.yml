@@ -191,13 +191,13 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - list targets
         if: ${{ steps.stage3-pull.outcome == 'failure' || steps.stage3-pull-test.outcome == 'failure' }}
-        uses: docker/bake-action/subaction/list-targets@v4
+        uses: docker/bake-action/subaction/list-targets@v5
         with:
           workdir: bob-stage3
 
       - name: 🐋🍳 Docker Bake Kubler stage3
         if: ${{ steps.stage3-pull.outcome == 'failure' || steps.stage3-pull-test.outcome == 'failure' }}
-        uses: docker/bake-action@v4
+        uses: docker/bake-action@v5
         with:
           workdir: bob-stage3
           push: true
@@ -280,13 +280,13 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - list targets
         if: ${{ steps.bob-core-pull.outcome == 'failure' || steps.bob-core-pull-test.outcome == 'failure' }}
-        uses: docker/bake-action/subaction/list-targets@v4
+        uses: docker/bake-action/subaction/list-targets@v5
         with:
           workdir: bob-core
 
       - name: 🐋🍳 Docker Bake Kubler bob-core
         if: ${{ steps.bob-core-pull.outcome == 'failure' || steps.bob-core-pull-test.outcome == 'failure' }}
-        uses: docker/bake-action@v4
+        uses: docker/bake-action@v5
         with:
           workdir: bob-core
           push: true
@@ -387,7 +387,7 @@ jobs:
 
       - name: 🐋 Docker Build kubler builder - bob - list targets
         if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
-        uses: docker/bake-action/subaction/list-targets@v4
+        uses: docker/bake-action/subaction/list-targets@v5
         with:
           workdir: ${{ matrix.bob.goss }}
 
@@ -413,7 +413,7 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler builder - bob-builder
         #if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
-        uses: docker/bake-action@v4
+        uses: docker/bake-action@v5
         with:
           workdir: ${{ matrix.bob.goss }}
           push: true
@@ -460,7 +460,7 @@ jobs:
       - name: 🐋🍳 Docker Bake Kubler builder - bob
         id: bob-bake
         #if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
-        uses: docker/bake-action@v4
+        uses: docker/bake-action@v5
         with:
           workdir: ${{ matrix.bob.goss }}
           push: true
