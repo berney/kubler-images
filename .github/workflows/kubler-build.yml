@@ -351,10 +351,28 @@ jobs:
           # The buildx builder is the default builder due to the `install: true` above
           docker buildx inspect "${{ steps.buildx.outputs.name }}"
 
+      - name: 🔑 Get Gentoo Portage GPG Key - Web Key Directory (WKD) Method
+        id: gpg-wkd
+        #if: ${{ steps.gpg-recv-key.outcome == 'failure' }}
+        continue-on-error: true
+        run: |
+          gpg --auto-key-locate=clear,nodefault,wkd --locate-key releng@gentoo.org
+
+      - name: 🔑 Get Gentoo Portage GPG Key - curl qa-reports Method
+        id: gpg-web
+        #if: ${{ steps.gpg-recv-key.outcome == 'failure' && steps.gpg-wkd.outcome == 'failure' }}
+        if: ${{ steps.gpg-wkd.outcome == 'failure' }}
+        continue-on-error: true
+        run: |
+          # keys.gentoo.org seems flakey lately
+          curl -L https://qa-reports.gentoo.org/output/service-keys.gpg | gpg --import
+
+      # This flakey step is taking 2mins to fail, so moved it to last resort
       - name: 🔑 Get Gentoo Portage GPG Key
         id: gpg-recv-key
+        if: ${{ steps.gpg-wkd.outcome == 'failure' && steps.gpg-web.outcome == 'failure' }}
         # keys.gentoo.org seems flakey lately - alternative methods in steps below
-        continue-on-error: true
+        #continue-on-error: true
         run: |
           # For Portage signatures
           #
@@ -396,19 +414,6 @@ jobs:
           #             534E4209AB49EEE1C19D96162C44695DB9F6043D
           #
           gpg --keyserver hkps://keys.gentoo.org --recv-keys 13EBBDBEDE7A12775DFDB1BABB572E0E2D182910
-
-      - name: 🔑 Get Gentoo Portage GPG Key - Web Key Directory (WKD) Method
-        id: gpg-wkd
-        if: ${{ steps.gpg-recv-key.outcome == 'failure' }}
-        continue-on-error: true
-        run: |
-          gpg --auto-key-locate=clear,nodefault,wkd --locate-key releng@gentoo.org
-
-      - name: 🔑 Get Gentoo Portage GPG Key - curl qa-reports Method
-        if: ${{ steps.gpg-recv-key.outcome == 'failure' && steps.gpg-wkd.outcome == 'failure' }}
-        run: |
-          # keys.gentoo.org seems flakey lately
-          curl -L https://qa-reports.gentoo.org/output/service-keys.gpg | gpg --import
 
       - name: 🔑 List Gentoo Portage GPG Keys
         run: |
