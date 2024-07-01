@@ -42,10 +42,14 @@ jobs:
           # Gets an OAUTH2 Access Token to the whole Storage Account
           # Alternatively could get a SAS to the storage container
           ACCESS_TOKEN=$(az account get-access-token --resource https://storage.azure.com/ --query accessToken --output tsv)
-          echo "account_name: ${{ secrets.AZURE_STORAGE_ACCOUNT }}" > config.yaml
-          echo "auth_type: OAuth" >> config.yaml
-          echo "container_name: ${{ secrets.AZURE_STORAGE_CONTAINER }}" >> config.yaml
-          echo "oauth2_token: $ACCESS_TOKEN" >> config.yaml
+          cat <<-EOF > config.yaml
+            azstorage:
+              account-name: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+              container_name: ${{ secrets.AZURE_STORAGE_CONTAINER }}
+          EOF
+          cat config.yaml
+          #auth_type: OAuth
+          #oauth2_token: ${ACCESS_TOKEN}
           sudo mkdir -p /mnt/blobfuse2
           sudo mkdir -p /mnt/blobfuse2tmp
           sudo blobfuse2 mount /mnt/blobfuse2 --config-file=config.yaml --tmp-path=/mnt/blobfuse2tmp
