@@ -29,6 +29,12 @@ jobs:
           sudo apt update
           sudo apt-get install -y blobfuse2
           ls -la /mnt
+          cat /mnt/DATALOSS_WARNING_README.txt
+          free -h || true
+          free -m
+          lsblk
+          nproc
           mount
           cat /proc/mounts
           type blobfuse || true
+          type blobfuse2 || true
