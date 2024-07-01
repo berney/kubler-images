@@ -46,7 +46,9 @@ jobs:
           echo "auth_type: OAuth" >> config.yaml
           echo "container_name: ${{ secrets.AZURE_STORAGE_CONTAINER }}" >> config.yaml
           echo "oauth2_token: $ACCESS_TOKEN" >> config.yaml
+          echo "tmp_path: /mnt/blobfuse2tmp" >> config.yaml
           sudo mkdir -p /mnt/blobfuse2
+          sudo mkdir -p /mnt/blobfuse2tmp
           sudo blobfuse2 mount /mnt/blobfuse2 --config-file=config.yaml
           ls -la /mnt/blobfuse2
           echo "Hello World" > /mnt/blobfuse2/hello.txt
