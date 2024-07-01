@@ -45,7 +45,7 @@ jobs:
           cat <<-EOF > config.yaml
             azstorage:
               account-name: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
-              container_name: ${{ secrets.AZURE_STORAGE_CONTAINER }}
+              container: ${{ secrets.AZURE_STORAGE_CONTAINER }}
           EOF
           cat config.yaml
           #auth_type: OAuth
