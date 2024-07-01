@@ -49,6 +49,7 @@ jobs:
             azstorage:
               account-name: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
               container: ${{ secrets.AZURE_STORAGE_CONTAINER }}
+              account-key: ${ACCESS_TOKEN}
           EOF
           cat config.yaml
           #auth_type: OAuth
