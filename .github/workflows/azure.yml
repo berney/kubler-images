@@ -46,6 +46,10 @@ jobs:
           # Alternatively could get a SAS to the storage container
           ACCESS_TOKEN=$(az account get-access-token --resource https://storage.azure.com/ --query accessToken --output tsv)
           cat <<-EOF > config.yaml
+            logging:
+              level: log_debug
+              file-path: "blobfuse2-logs.txt"
+              type: base
             azstorage:
               account-name: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
               container: ${{ secrets.AZURE_STORAGE_CONTAINER }}
@@ -57,7 +61,7 @@ jobs:
           #oauth2_token: ${ACCESS_TOKEN}
           sudo mkdir -p /mnt/blobfuse2
           sudo mkdir -p /mnt/blobfuse2tmp
-          sudo blobfuse2 mount /mnt/blobfuse2 --config-file=config.yaml --tmp-path=/mnt/blobfuse2tmp
+          sudo blobfuse2 mount /mnt/blobfuse2 --config-file=config.yaml --tmp-path=/mnt/blobfuse2tmp || ls -l blbofuse2-logs.txt && cat blobfuse2-logs.txt && false
           ls -la /mnt/blobfuse2
           echo "Hello World" > /mnt/blobfuse2/hello.txt
           cat /mnt/blobfuse2/hello.txt
