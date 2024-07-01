@@ -44,7 +44,10 @@ jobs:
           curl -H "Metadata: true" "http://169.254.169.254/metadata/instance?api-version=2021-02-01" -s | jq .
           az account show
           az storage account list
-          az storage container list --acount-name berneygithub
+          az --version
+          az version
+          az storage container list --help
+          az storage container list --acount-name berneygithub || true
           az storage container-rm list --storage-account berneygithub
           # Gets an OAUTH2 Access Token to the whole Storage Account
           # Alternatively could get a SAS to the storage container
