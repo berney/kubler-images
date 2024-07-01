@@ -23,3 +23,12 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az account show
+      - name: Blob FUSE
+        run: |
+          set -eux
+          apt update
+          apt-get install -y blobfuse2
+          ls -la /mnt
+          mount
+          cat /proc/mounts
+          type blobfuse || true
