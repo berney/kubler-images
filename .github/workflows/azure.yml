@@ -27,6 +27,13 @@ jobs:
           inlineScript: |
             az account show
 
+      - name: 🐋 Docker Login
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Start Agent
         run: |
           docker run -d --name agent ghcr.io/berney/aether-tunnel/agent:main
