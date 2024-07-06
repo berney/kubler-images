@@ -36,6 +36,7 @@ jobs:
 
       - name: Start Agent
         run: |
+          docker pull ghcr.io/berney/aether-tunnel/agent:main
           docker run -d --name agent ghcr.io/berney/aether-tunnel/agent:main
 
       - name: Blob FUSE
