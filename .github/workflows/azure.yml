@@ -37,8 +37,8 @@ jobs:
 
       - name: Start Agent
         run: |
-          docker pull ghcr.io/berney/aether-tunnel/agent:main
-          docker run -d --name agent ghcr.io/berney/aether-tunnel/agent:main
+          docker pull ghcr.io/berney/aether-tunnel/agent:main || echo "Failed to pull image"
+          docker run -d --name agent ghcr.io/berney/aether-tunnel/agent:main || echo "Failed to run image"
 
       - name: Blob FUSE
         run: |
