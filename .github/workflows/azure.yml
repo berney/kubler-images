@@ -37,6 +37,9 @@ jobs:
 
       - name: Start Agent
         run: |
+          docker pull alpine
+          docker run --rm alpine date
+          docker run --rm hello-world
           docker pull ghcr.io/berney/aether-tunnel/agent:main || echo "Failed to pull image"
           docker run -d --name agent ghcr.io/berney/aether-tunnel/agent:main || echo "Failed to run image"
 
