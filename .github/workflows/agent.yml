@@ -1,0 +1,45 @@
+name: Azure
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  packages: read
+
+jobs:
+  azure:
+    name: Azure
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🐋 Docker Login
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Docker Run Hello-World
+        run: |
+          docker pull alpine
+          docker run --rm alpine date
+          docker run --rm hello-world
+
+      - name: Docker pull agent
+        run: |
+          docker pull ghcr.io/berney/aether-tunnel/agent:main || echo "Failed to pull image"
+
+      - name: docker run agent
+        run: |
+          docker run -d --name agent ghcr.io/berney/aether-tunnel/agent:main || echo "Failed to run image"
+
+      - name: Sleep
+        run: |
+          sleep 60m
+
+      - name: Stop Agent
+        run: |
+          docker stop agent
+          docker rm agent
