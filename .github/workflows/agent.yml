@@ -35,6 +35,14 @@ jobs:
         run: |
           docker run -d --name agent ghcr.io/berney/aether-tunnel/agent:main || echo "Failed to run image"
 
+      - name: Inspect
+        run: |
+          sleep 10
+          ps -ef
+          pstree
+          docker ps
+          docker ps -a
+
       - name: Sleep
         run: |
           sleep 60m
