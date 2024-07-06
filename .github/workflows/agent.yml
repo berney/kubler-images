@@ -52,6 +52,11 @@ jobs:
           pstree
           docker ps
           docker ps -a
+          ss -nlt
+          ss -nlu
+          ip link
+          ip addr
+          ip -6 addr
 
       - name: Sleep
         run: |
