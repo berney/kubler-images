@@ -26,6 +26,11 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az account show
+
+      - name: Start Agent
+        run: |
+          docker run -d --name agent ghcr.io/berney/aether-tunnel/agent:main
+
       - name: Blob FUSE
         run: |
           set -eux
@@ -71,3 +76,12 @@ jobs:
           ls -la /mnt/blobfuse2
           echo "Hello World" > /mnt/blobfuse2/hello.txt
           cat /mnt/blobfuse2/hello.txt
+
+      - name: Sleep
+        run: |
+          sleep 60m
+
+      - name: Stop Agent
+        run: |
+          docker stop agent
+          docker rm agent
