@@ -57,6 +57,7 @@ jobs:
 
       - name: Inspect
         run: |
+          set -eux
           sleep 10
           ps -ef
           pstree
@@ -67,6 +68,8 @@ jobs:
           ip link
           ip addr
           ip -6 addr
+          ls -l ~/log/mosh-server/current || true
+          cat ~/log/mosh-server/current || true
 
       - name: Blob FUSE
         continue-on-error: true
@@ -117,6 +120,7 @@ jobs:
 
       - name: Sleep
         run: |
+          set -eux
           LOOPS=12
           for x in $(seq $LOOPS); do
             echo "== $x/$LOOPS"
@@ -129,5 +133,7 @@ jobs:
             ip link
             ip addr
             ip -6 addr
+            ls -l ~/log/mosh-server/current || true
+            cat ~/log/mosh-server/current || true
             sleep 5m
           done
