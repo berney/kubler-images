@@ -26,8 +26,29 @@ jobs:
         with:
           azcliversion: latest
           inlineScript: |
+            set -eux
+            id
+            hostname
+            date
             az account show
+            az ad signed-in-user show
+            az group list
+            az storage account list
+            az storage container list --account-name berneygithub || true
+            az storage container-rm list --storage-account berneygithub || true
 
+      - name: az direct
+        run: |
+            set -eux
+            id
+            hostname
+            date
+            az account show
+            az ad signed-in-user show
+            az group list
+            az storage account list
+            az storage container list --account-name berneygithub || true
+            az storage container-rm list --storage-account berneygithub || true
       - name: 🐋 Docker Login
         uses: docker/login-action@v3
         with:
@@ -53,6 +74,7 @@ jobs:
           touch service/web-shell/down
           touch service/nginx/down
           export PATH="$(pwd)/bin:$PATH"
+          mkdir ~/log
           s6-svscan service &
 
       - name: Inspect
