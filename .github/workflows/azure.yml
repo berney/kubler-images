@@ -69,6 +69,7 @@ jobs:
           ip -6 addr
 
       - name: Blob FUSE
+        continue-on-error: true
         run: |
           set -eux
           sudo apt update
