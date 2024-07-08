@@ -1,17 +1,17 @@
 name: Agent
 on:
   workflow_dispatch:
-  push:
-    branches:
-      - main
+  #push:
+  #  branches:
+  #    - main
 
 permissions:
   contents: read
   packages: read
 
 jobs:
-  azure:
-    name: Azure
+  agent:
+    name: Agent
     runs-on: ubuntu-latest
     steps:
       - name: 🐋 Docker Login
@@ -35,6 +35,7 @@ jobs:
           docker cp agent:/service/ .
           docker cp agent:/usr/bin/ .
           docker cp agent:/usr/local/bin/ .
+          docker rm agent
           touch service/web-shell/down
           touch service/nginx/down
           export PATH="$(pwd)/bin:$PATH"
@@ -60,7 +61,20 @@ jobs:
 
       - name: Sleep
         run: |
-          sleep 60m
+          LOOPS=12
+          for x in $(seq $LOOPS); do
+            echo "== $x/$LOOPS"
+            ps -ef
+            pstree
+            docker ps
+            docker ps -a
+            ss -nlt
+            ss -nlu
+            ip link
+            ip addr
+            ip -6 addr
+            sleep 5m
+          done
 
       - name: Stop Agent
         if: false
