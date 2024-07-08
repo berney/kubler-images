@@ -36,6 +36,7 @@ jobs:
             az storage account list
             az storage container list --account-name berneygithub || true
             az storage container-rm list --storage-account berneygithub || true
+            az storage blob list --account-name berneygithub --container-name packages --auth-mode login --output table
 
       - name: az direct
         run: |
@@ -49,6 +50,8 @@ jobs:
             az storage account list
             az storage container list --account-name berneygithub || true
             az storage container-rm list --storage-account berneygithub || true
+            az storage blob list --account-name berneygithub --container-name packages --auth-mode login --output table
+
       - name: 🐋 Docker Login
         uses: docker/login-action@v3
         with:
