@@ -31,7 +31,7 @@ jobs:
             hostname
             date
             az account show
-            az ad signed-in-user show
+            az ad signed-in-user show || true
             az group list
             az storage account list
             az storage container list --account-name berneygithub || true
@@ -44,7 +44,7 @@ jobs:
             hostname
             date
             az account show
-            az ad signed-in-user show
+            az ad signed-in-user show || true
             az group list
             az storage account list
             az storage container list --account-name berneygithub || true
