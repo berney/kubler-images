@@ -145,10 +145,19 @@ jobs:
           cat config.yaml
           sudo mkdir -p /mnt/blobfuse2
           sudo mkdir -p /mnt/blobfuse2tmp
-          sudo blobfuse2 mount /mnt/blobfuse2 --config-file=config.yaml --tmp-path=/mnt/blobfuse2tmp || ls -l blobfuse2-logs.txt && cat blobfuse2-logs.txt && false
-          ls -la /mnt/blobfuse2
-          echo "Hello World" > /mnt/blobfuse2/hello.txt
-          cat /mnt/blobfuse2/hello.txt
+          echo "
+          if sudo blobfuse2 mount /mnt/blobfuse2 --config-file=config.yaml --tmp-path=/mnt/blobfuse2tmp; then
+            echo "DBG Blobfuse2 mount worked $?"
+            ls -lad /mnt/blobfuse2
+            ls -la /mnt/blobfuse2
+            echo "Hello World" > /mnt/blobfuse2/hello.txt
+            cat /mnt/blobfuse2/hello.txt
+          else
+            echo "ERR Blobfuse2 mount failed $?"
+            ls -l blobfuse2-logs.txt
+            cat blobfuse2-logs.txt
+            exit 1
+          fi
 
       - name: Sleep
         run: |
