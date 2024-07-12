@@ -120,6 +120,7 @@ jobs:
       # `restore-keys` provides a list to restore a cache when key doesn't match
       # If there's no exact match, the most recent cache that partially matches will be used
       #
+      # If no cache can be restored the directory won't be created
       - name: Cache Kubler Gentoo Distfiles
         uses: actions/cache@v4
         with:
@@ -196,7 +197,7 @@ jobs:
           mkdir -p ~/.kubler
           ln -sf /mnt/blobfuse2 ~/.kubler/packages
           ls -lad ~/.kubler/packages
-          ls -la ~/.kubler/packages
+          ls -la ~/.kubler/packages/
 
       - name: 🐋 Docker Pull stage3
         id: stage3-pull
@@ -457,13 +458,17 @@ jobs:
         continue-on-error: true
         run: |
           set -eux
-          ls -ltra ~/.kubler/distfiles/ | head -n 100 || true
+          # Ensure distfiles exists
+          mkdir -p ~/.kubler/distfiles
+          ls -ltra ~/.kubler/distfiles/ | head -n 100
 
       - name: Inspect Packages Cache - Before
         continue-on-error: true
         run: |
           set -eux
-          ls -ltra ~/.kubler/packages/ || true
+          # Ensure packages exists
+          mkdir -p ~/.kubler/packages
+          ls -ltra ~/.kubler/packages/
           ls -ltra ~/.kubler/packages/* || true
           tree -aC --filelimit 100 ~/.kubler/packages || true
 
