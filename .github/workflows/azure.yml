@@ -101,7 +101,7 @@ jobs:
           cat ~/log/mosh-server/current || true
 
       - name: Blob FUSE
-        continue-on-error: true
+        #continue-on-error: true
         run: |
           set -eux
           sudo apt update
