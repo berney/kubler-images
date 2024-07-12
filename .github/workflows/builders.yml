@@ -137,6 +137,11 @@ jobs:
             kubler-${{ matrix.name }}-
             kubler-
 
+      - name: Before Azure
+        run: |
+          set -eux
+          ls -lad ./.github/workflows/azure.yml
+
       - name: Azure Mount Packages
         uses: ./.github/workflows/azure.yml
 
