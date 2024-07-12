@@ -145,7 +145,6 @@ jobs:
           cat config.yaml
           sudo mkdir -p /mnt/blobfuse2
           sudo mkdir -p /mnt/blobfuse2tmp
-          echo "
           if sudo blobfuse2 mount /mnt/blobfuse2 --config-file=config.yaml --tmp-path=/mnt/blobfuse2tmp; then
             echo "DBG Blobfuse2 mount worked $?"
             ls -lad /mnt/blobfuse2
