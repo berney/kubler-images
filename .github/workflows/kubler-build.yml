@@ -197,6 +197,18 @@ jobs:
             #  goss_args: validate --color
 
     steps:
+      - name: Azure Mount Packages
+        uses: ./.github/workflows/azure.yml
+
+      - name: Symlink packages
+        run: |
+          ls -lad /mnt/blobfuse2
+          ls -la /mnt/blobfuse2
+          mkdir -p ~/.kubler
+          ln -sf /mnt/blobfuse2 ~/.kubler/packages
+          ls -lad ~/.kubler/packages
+          ls -la ~/.kubler/packages
+
       - name: Inspect
         run: |
           set -eux
@@ -270,6 +282,7 @@ jobs:
             kubler-
 
       - name: Cache Kubler Gentoo Packages
+        if: ${{ false }}
         uses: actions/cache@v4
         with:
           path: ~/.kubler/packages/
