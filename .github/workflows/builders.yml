@@ -83,18 +83,6 @@ jobs:
               cache: bob-musl
               goss: builder/bob-musl
     steps:
-      - name: Azure Mount Packages
-        uses: ./.github/workflows/azure.yml
-
-      - name: Symlink packages
-        run: |
-          ls -lad /mnt/blobfuse2
-          ls -la /mnt/blobfuse2
-          mkdir -p ~/.kubler
-          ln -sf /mnt/blobfuse2 ~/.kubler/packages
-          ls -lad ~/.kubler/packages
-          ls -la ~/.kubler/packages
-
       - name: Set up QEMU
         id: qemu
         uses: docker/setup-qemu-action@v3
@@ -148,6 +136,18 @@ jobs:
             kubler-${{ matrix.cache-key-prefix }}-
             kubler-${{ matrix.name }}-
             kubler-
+
+      - name: Azure Mount Packages
+        uses: ./.github/workflows/azure.yml
+
+      - name: Symlink packages
+        run: |
+          ls -lad /mnt/blobfuse2
+          ls -la /mnt/blobfuse2
+          mkdir -p ~/.kubler
+          ln -sf /mnt/blobfuse2 ~/.kubler/packages
+          ls -lad ~/.kubler/packages
+          ls -la ~/.kubler/packages
 
       - name: 🐋 Docker Pull stage3
         id: stage3-pull

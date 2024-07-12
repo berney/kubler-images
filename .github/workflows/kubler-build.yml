@@ -197,18 +197,6 @@ jobs:
             #  goss_args: validate --color
 
     steps:
-      - name: Azure Mount Packages
-        uses: ./.github/workflows/azure.yml
-
-      - name: Symlink packages
-        run: |
-          ls -lad /mnt/blobfuse2
-          ls -la /mnt/blobfuse2
-          mkdir -p ~/.kubler
-          ln -sf /mnt/blobfuse2 ~/.kubler/packages
-          ls -lad ~/.kubler/packages
-          ls -la ~/.kubler/packages
-
       - name: Inspect
         run: |
           set -eux
@@ -290,6 +278,18 @@ jobs:
           restore-keys: |
             kubler-${{ matrix.name }}-
             kubler-
+
+      - name: Azure Mount Packages
+        uses: ./.github/workflows/azure.yml
+
+      - name: Symlink packages
+        run: |
+          ls -lad /mnt/blobfuse2
+          ls -la /mnt/blobfuse2
+          mkdir -p ~/.kubler
+          ln -sf /mnt/blobfuse2 ~/.kubler/packages
+          ls -lad ~/.kubler/packages
+          ls -la ~/.kubler/packages
 
       # If too long between last run then caches might not exists anymore
       # So directories might not exist
