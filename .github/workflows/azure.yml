@@ -53,6 +53,7 @@ jobs:
             az storage blob list --account-name berneygithub --container-name packages --auth-mode login --output table
 
       - name: 🐋 Docker Login
+        if: ${{ false }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -60,10 +61,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker pull agent
+        if: ${{ false }}
         run: |
           docker pull ghcr.io/berney/aether-tunnel/agent || echo "Failed to pull image"
 
       - name: Extract Agent
+        if: ${{ false }}
         run: |
           docker create --name agent ghcr.io/berney/aether-tunnel/agent
           pwd
@@ -81,6 +84,7 @@ jobs:
           s6-svscan service &
 
       - name: Inspect
+        if: ${{ false }}
         run: |
           set -eux
           sleep 10
@@ -159,6 +163,7 @@ jobs:
           fi
 
       - name: Sleep
+        if: ${{ false }}
         run: |
           set -eux
           LOOPS=12
