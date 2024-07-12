@@ -29,6 +29,10 @@ on:
         type: string
 
 
+permissions:
+  id-token: write
+  contents: read
+
 # Jobs run in parallel
 # Jobs are independent with separate file systems, IP addresses, etc.
 jobs:
