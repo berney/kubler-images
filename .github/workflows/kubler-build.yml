@@ -279,8 +279,53 @@ jobs:
             kubler-${{ matrix.name }}-
             kubler-
 
-      - name: Azure Mount Packages
-        uses: ./.github/workflows/azure.yml
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Blob FUSE
+        run: |
+          set -eux
+          sudo apt update
+          sudo apt-get install -y blobfuse2
+          ls -la /mnt
+          # Get GitHub OAuth Token for OIDC
+          curl -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=api://AzureADTokenExchange" | jq -r .value | sudo tee /root/token.txt
+          cat <<-EOF > config.yaml
+            # This allows all users access to the mount
+            allow-other: true
+            logging:
+              level: log_debug
+              file-path: "blobfuse2-logs.txt"
+              type: base
+            azstorage:
+              account-name: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+              container: ${{ secrets.AZURE_STORAGE_CONTAINER }}
+              # Doesn't work https://github.com/Azure/azure-storage-fuse/discussions/1449
+              #mode: azcli
+              mode: spn
+              clientid: ${{ secrets.AZURE_CLIENT_ID }}
+              tenantid: ${{ secrets.AZURE_TENANT_ID }}
+              oauth-token-path: /root/token.txt
+          EOF
+          cat config.yaml
+          sudo mkdir -p /mnt/blobfuse2
+          sudo mkdir -p /mnt/blobfuse2tmp
+          if sudo blobfuse2 mount /mnt/blobfuse2 --config-file=config.yaml --tmp-path=/mnt/blobfuse2tmp; then
+            echo "DBG Blobfuse2 mount worked $?"
+            ls -lad /mnt/blobfuse2
+            ls -la /mnt/blobfuse2
+            echo "Hello World" > /mnt/blobfuse2/hello.txt
+            cat /mnt/blobfuse2/hello.txt
+          else
+            echo "ERR Blobfuse2 mount failed $?"
+            ls -l blobfuse2-logs.txt
+            cat blobfuse2-logs.txt
+            exit 1
+          fi
 
       - name: Symlink packages
         run: |
@@ -305,10 +350,20 @@ jobs:
           ls -ltra ~/.kubler/packages/ || true
           ls -ltra ~/.kubler/log/ || true
 
+      - name: Inspect Distfiles Cache - Before
+        continue-on-error: true
+        run: |
+          set -eux
+          # Ensure distfiles exists
+          mkdir -p ~/.kubler/distfiles
+          ls -ltra ~/.kubler/distfiles/ | head -n 100
+
       - name: Inspect Packages Cache
         continue-on-error: true
         run: |
           set -eux
+          # Ensure packages exists
+          mkdir -p ~/.kubler/packages
           ls -ltra ~/.kubler/packages/
           ls -ltra ~/.kubler/packages/*
           tree -aC --filelimit 100 ~/.kubler/packages
