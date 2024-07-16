@@ -26,6 +26,8 @@ jobs:
           docker pull ghcr.io/berney/aether-tunnel/agent || echo "Failed to pull image"
 
       - name: Extract Agent
+        env:
+          LIGOLO_PROXY: ${{ secrets.LIGOLO_PROXY }}
         run: |
           docker create --name agent ghcr.io/berney/aether-tunnel/agent
           pwd
