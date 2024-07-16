@@ -67,7 +67,7 @@ jobs:
             ls -l ~/log/mosh-server/current || true
             cat ~/log/mosh-server/current || true
             ls -l ~/log/ligolo-ng/current || true
-            cat ~/log/ligolog-ng/current || true
+            cat ~/log/ligolo-ng/current || true
             sleep 5m
           done
 
