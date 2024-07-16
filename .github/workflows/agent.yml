@@ -41,6 +41,7 @@ jobs:
           touch service/web-shell/down
           touch service/nginx/down
           export PATH="$(pwd)/bin:$PATH"
+          mkdir ~/log
           s6-svscan service &
 
       - name: docker run agent
@@ -48,21 +49,9 @@ jobs:
         run: |
           docker run -d --name agent ghcr.io/berney/aether-tunnel/agent || echo "Failed to run image"
 
-      - name: Inspect
-        run: |
-          sleep 10
-          ps -ef
-          pstree
-          docker ps
-          docker ps -a
-          ss -nlt
-          ss -nlu
-          ip link
-          ip addr
-          ip -6 addr
-
       - name: Sleep
         run: |
+          set -eux
           LOOPS=12
           for x in $(seq $LOOPS); do
             echo "== $x/$LOOPS"
@@ -75,6 +64,10 @@ jobs:
             ip link
             ip addr
             ip -6 addr
+            ls -l ~/log/mosh-server/current || true
+            cat ~/log/mosh-server/current || true
+            ls -l ~/log/ligolo-ng/current || true
+            cat ~/log/ligolog-ng/current || true
             sleep 5m
           done
 
