@@ -387,7 +387,7 @@ jobs:
 
       - name: 🐋 Docker Pull bob-core
         id: bob-core-pull
-        if: false
+        #if: false
         continue-on-error: true
         run: |
           set -eu
