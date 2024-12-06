@@ -2,8 +2,8 @@
 # The syntax line needs to be the first line
 
 # There's two very similar Dockerfiles:
-#   - Dockerfile.builder
-#   - Dockerfile.berney
+#   - Dockerfile.builder - has /distfiles and /packages
+#   - Dockerfile.berney - clean, no /distfiles, no /packages
 #
 # The difference is berney one will produce an image without `/distifiles/` nor `/packages/` directories,
 # because it's `RUN` had `--mount` with `type=cache`.
