@@ -2,7 +2,7 @@ ARG ORAS_VERSION=v1.1.0
 
 FROM berne/goss AS goss
 
-FROM ghcr.io/oras-project/oras:${ORAS_VERSION} as oras
+FROM ghcr.io/oras-project/oras:${ORAS_VERSION} AS oras
 
 FROM alpine
 # We are setting up user/group and dirs to match GitHub Runner ubuntu-latest

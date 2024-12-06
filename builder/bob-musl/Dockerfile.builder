@@ -21,7 +21,7 @@
 ARG BASE_IMAGE=berney/bob-musl-core:20240115
 
 # This stage (named-context) can be overriden
-FROM scratch as distfiles
+FROM scratch AS distfiles
 COPY --link /distfiles /
 
 # This stage (named-context) can be overriden
