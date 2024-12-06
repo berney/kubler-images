@@ -1,8 +1,8 @@
 # syntax=docker/dockerfile:1
 
 # Global ARGS can be used in FROM lines, need to come before the first FROM.
-ARG PORTAGE
-ARG BASE_IMAGE
+ARG PORTAGE=gentoo/portage
+ARG BASE_IMAGE=gentoo/stage3
 
 FROM $PORTAGE AS portage
 
