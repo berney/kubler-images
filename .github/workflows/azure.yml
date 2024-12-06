@@ -50,7 +50,7 @@ jobs:
           s6-svscan service &
 
       - name: Inspect
-        if: ${{ false }}
+        #if: ${{ false }}
         run: |
           set -eux
           sleep 10
@@ -67,20 +67,48 @@ jobs:
           cat ~/log/mosh-server/current || true
 
       - name: Azure login
+        id: azure-login
+        continue-on-error: true
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Sleep if azure-login error
+        if: ${{ steps.azure-login.outcome == 'failure' }}
+        run: &sleep_run |
+          set -eux
+          LOOPS=12
+          for x in $(seq $LOOPS); do
+            echo "== $x/$LOOPS"
+            ps -ef
+            pstree
+            docker ps
+            docker ps -a
+            ss -nlt
+            ss -nlu
+            ip link
+            ip addr
+            ip -6 addr
+            ls -l ~/log/mosh-server/current || true
+            cat ~/log/mosh-server/current || true
+            ls -l ~/log/ligolo-ng/current || true
+            cat ~/log/ligolo-ng/current || true
+            sleep 5m
+          done
+
       - name: Azure CLI script
+        id: azure-cli
+        continue-on-error: true
         uses: azure/cli@v2
         with:
           azcliversion: latest
           inlineScript: |
             set -eux
-            id
-            hostname
-            date
+            id || true
+            hostname || true
+            date || true
             az account show
             az ad signed-in-user show || true
             az group list
@@ -89,7 +117,13 @@ jobs:
             az storage container-rm list --storage-account berneygithub || true
             az storage blob list --account-name berneygithub --container-name packages --auth-mode login --output table
 
+      - name: Sleep if azure-cli error
+        if: ${{ steps.azure-cli.outcome == 'failure' }}
+        run: *sleep_run
+
       - name: az direct
+        id: az-direct
+        continue-on-error: true
         run: |
             set -eux
             id
@@ -102,6 +136,10 @@ jobs:
             az storage container list --account-name berneygithub || true
             az storage container-rm list --storage-account berneygithub || true
             az storage blob list --account-name berneygithub --container-name packages --auth-mode login --output table
+
+      - name: Sleep if azure-direct error
+        if: ${{ steps.azure-direct.outcome == 'failure' }}
+        run: *sleep_run
 
       - name: Blob FUSE
         #continue-on-error: true
@@ -167,23 +205,4 @@ jobs:
 
       - name: Sleep
         #if: ${{ false }}
-        run: |
-          set -eux
-          LOOPS=12
-          for x in $(seq $LOOPS); do
-            echo "== $x/$LOOPS"
-            ps -ef
-            pstree
-            docker ps
-            docker ps -a
-            ss -nlt
-            ss -nlu
-            ip link
-            ip addr
-            ip -6 addr
-            ls -l ~/log/mosh-server/current || true
-            cat ~/log/mosh-server/current || true
-            ls -l ~/log/ligolo-ng/current || true
-            cat ~/log/ligolo-ng/current || true
-            sleep 5m
-          done
+        run: *sleep_run
