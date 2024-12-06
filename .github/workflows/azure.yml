@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 🐋 Docker Login
-        #if: ${{ false }}
+        if: ${{ false }}
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
@@ -25,12 +25,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Docker pull agent
-        #if: ${{ false }}
+        if: ${{ false }}
         run: |
           docker pull ghcr.io/berney/aether-tunnel/agent || echo "Failed to pull image"
 
       - name: Extract Agent
-        #if: ${{ false }}
+        if: ${{ false }}
         env:
           LIGOLO_PROXY: ${{ secrets.LIGOLO_PROXY }}
         run: |
@@ -50,7 +50,7 @@ jobs:
           s6-svscan service &
 
       - name: Inspect
-        #if: ${{ false }}
+        if: ${{ false }}
         run: |
           set -eux
           sleep 10
@@ -68,7 +68,7 @@ jobs:
 
       - name: Azure login
         id: azure-login
-        continue-on-error: true
+        #continue-on-error: true
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
@@ -76,7 +76,8 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Sleep if azure-login error
-        if: ${{ steps.azure-login.outcome == 'failure' }}
+        #if: ${{ steps.azure-login.outcome == 'failure' }}
+        if: ${{ false }}
         run: |
           set -eux
           LOOPS=12
@@ -100,7 +101,7 @@ jobs:
 
       - name: Azure CLI script
         id: azure-cli
-        continue-on-error: true
+        #continue-on-error: true
         uses: azure/cli@v2
         with:
           azcliversion: latest
@@ -118,7 +119,8 @@ jobs:
             az storage blob list --account-name berneygithub --container-name packages --auth-mode login --output table
 
       - name: Sleep if azure-cli error
-        if: ${{ steps.azure-cli.outcome == 'failure' }}
+        #if: ${{ steps.azure-cli.outcome == 'failure' }}
+        if: ${{ false }}
         run: |
           set -eux
           LOOPS=12
@@ -142,7 +144,7 @@ jobs:
 
       - name: az direct
         id: az-direct
-        continue-on-error: true
+        #continue-on-error: true
         run: |
             set -eux
             id
@@ -157,7 +159,8 @@ jobs:
             az storage blob list --account-name berneygithub --container-name packages --auth-mode login --output table
 
       - name: Sleep if azure-direct error
-        if: ${{ steps.azure-direct.outcome == 'failure' }}
+        #if: ${{ steps.azure-direct.outcome == 'failure' }}
+        if: ${{ false }}
         run: |
           set -eux
           LOOPS=12
@@ -242,7 +245,7 @@ jobs:
           fi
 
       - name: Sleep
-        #if: ${{ false }}
+        if: ${{ false }}
         run: |
           set -eux
           LOOPS=12
