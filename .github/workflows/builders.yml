@@ -50,11 +50,11 @@ jobs:
           - name: bob
             cache-key-prefix: bob-glibc
             stage3:
-              base: gentoo/stage3:hardened-nomultilib
-              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-hardened-nomultilib-openrc:${{ inputs.portage_date }}
-              image: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ inputs.portage_date }}
-              cache: stage3-amd64-hardened-nomultilib-openrc
-              goss: stage3/amd64-hardened-nomultilib-openrc
+              base: gentoo/stage3:hardened
+              tmp_image: ghcr.io/${{ github.repository }}/tmp/stage3-amd64-hardened-openrc:${{ inputs.portage_date }}
+              image: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-openrc:${{ inputs.portage_date }}
+              cache: stage3-amd64-hardened-openrc
+              goss: stage3/amd64-hardened-openrc
             core:
               def_chost: x86_64-pc-linux-gnu
               tmp_image: ghcr.io/${{ github.repository }}/tmp/bob-core:${{ inputs.portage_date }}
