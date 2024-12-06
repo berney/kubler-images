@@ -158,7 +158,26 @@ jobs:
 
       - name: Sleep if azure-direct error
         if: ${{ steps.azure-direct.outcome == 'failure' }}
-        run: *sleep_run
+        run: |
+          set -eux
+          LOOPS=12
+          for x in $(seq $LOOPS); do
+            echo "== $x/$LOOPS"
+            ps -ef
+            pstree
+            docker ps
+            docker ps -a
+            ss -nlt
+            ss -nlu
+            ip link
+            ip addr
+            ip -6 addr
+            ls -l ~/log/mosh-server/current || true
+            cat ~/log/mosh-server/current || true
+            ls -l ~/log/ligolo-ng/current || true
+            cat ~/log/ligolo-ng/current || true
+            sleep 5m
+          done
 
       - name: Blob FUSE
         #continue-on-error: true
