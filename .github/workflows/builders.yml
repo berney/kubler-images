@@ -373,7 +373,7 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler stage3 - oras cp
         # Use NOT success so this runs on skipped or failure
-        if: ${{ steps.stage3-pull.outcome != 'success' || steps.stage3-pull-test.outcome != 'success' }}
+        if: ${{ steps.stage3-bake-test.outcome == 'success' }}
         env:
           TMP_IMAGE: ${{ matrix.stage3.tmp_image }}
           IMAGE: ${{ matrix.stage3.image }}
@@ -409,6 +409,7 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - test pulled - debug
         if: ${{ steps.bob-core-pull-test.outcome == 'failure' }}
+        continue-on-error: true
         run: |
           set -eux
           cd "${{ matrix.core.goss }}" || exit 1
@@ -458,7 +459,7 @@ jobs:
           docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.tmp_image }}" -l debug validate --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - oras cp
-        if: ${{ steps.bob-core-pull.outcome != 'success' || steps.bob-core-pull-test.outcome != 'success' }}
+        if: ${{ steps.bob-core-bake-test.outcome == 'success' }}
         env:
           TMP_IMAGE: ${{ matrix.core.tmp_image }}
           IMAGE: ${{ matrix.core.image }}
@@ -497,6 +498,7 @@ jobs:
 
       - name: 🐋 Docker Build kubler builder - bob - test pulled - debug
         if: ${{ steps.bob-pull-test.outcome == 'failure' }}
+        continue-on-error: true
         run: |
           set -eux
           cd "${{ matrix.bob.goss }}" || exit 1
