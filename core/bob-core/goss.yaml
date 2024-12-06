@@ -393,7 +393,7 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-    '[ "${DEF_BUILDER_CXXFLAGS}" = "" ]':
+    '[ "${DEF_BUILDER_CXXFLAGS}" = "-mtune=generic -O2 -pipe" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
@@ -449,8 +449,7 @@ command:
         stdout: ""
         stderr: ""
         timeout: 10000
-    # This one might be empty, but should be set
-    '[ -z "${DEF_BUILDER_CXXFLAGS}" ]':
+    '[ -n "${DEF_BUILDER_CXXFLAGS}" ]':
         exit-status: 0
         stdout: ""
         stderr: ""
