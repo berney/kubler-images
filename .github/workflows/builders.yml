@@ -546,8 +546,9 @@ jobs:
           set -eux
           echo "HOME=$HOME" >> $GITHUB_ENV
 
+      # This target has solid `/distfiles/` and `/packages/` directories so we can copy artifacts out for caching
       - name: 🐋🍳 Docker Bake Kubler builder - bob-builder
-        #if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         uses: docker/bake-action@v5
         with:
           workdir: ${{ matrix.bob.goss }}
@@ -565,7 +566,7 @@ jobs:
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.bob.cache }}-builder
             ${{matrix.bob.target}}-builder.cache-to=type=gha,scope=${{ matrix.bob.cache }}-builder
 
-      - name: 🐋 Docker Build kubler builder - bob - test baked - builder
+      - name: 🐋 Docker Build kubler builder - bob-builder - Extract /distfiles/ and /packages for caching
         continue-on-error: true
         run: |
           set -eux
@@ -592,9 +593,12 @@ jobs:
           ls -ltra ~/.kubler/packages/* || true
           tree -aC --filelimit 100 ~/.kubler/packages || true
 
+      # This has ephemeral `/distfiles/` and `/packages/` directories (writes are discarded)
+      # Except for this it is identical to the `bob-builder` image we just baked
+      # So, the BuildKit cache should mean this target builds quickly with cache hits
       - name: 🐋🍳 Docker Bake Kubler builder - bob
         id: bob-bake
-        #if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         uses: docker/bake-action@v5
         with:
           workdir: ${{ matrix.bob.goss }}
