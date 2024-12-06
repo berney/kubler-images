@@ -540,7 +540,7 @@ jobs:
           ls -ltra ~/.kubler/packages/* || true
           tree -aC --filelimit 100 ~/.kubler/packages || true
 
-      # This isn't expoted in the env context, so we need to set it
+      # This isn't exported in the env context, so we need to set it
       - name: Get HOME directory
         run: |
           set -eux
