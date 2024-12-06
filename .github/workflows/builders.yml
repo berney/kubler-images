@@ -1,4 +1,4 @@
-name: Bake Builders
+: Bake Builders
 on:
   #push:
   #  branches:
@@ -523,6 +523,7 @@ jobs:
           workdir: ${{ matrix.bob.goss }}
 
       - name: Inspect Distfiles Cache - Before
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         continue-on-error: true
         run: |
           set -eux
@@ -531,6 +532,7 @@ jobs:
           ls -ltra ~/.kubler/distfiles/ | head -n 100
 
       - name: Inspect Packages Cache - Before
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         continue-on-error: true
         run: |
           set -eux
@@ -542,12 +544,14 @@ jobs:
 
       # This isn't exported in the env context, so we need to set it
       - name: Get HOME directory
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         run: |
           set -eux
           echo "HOME=$HOME" >> $GITHUB_ENV
 
       # This target has solid `/distfiles/` and `/packages/` directories so we can copy artifacts out for caching
       - name: 🐋🍳 Docker Bake Kubler builder - bob-builder
+        id: bob-builder-bake
         if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         uses: docker/bake-action@v5
         with:
@@ -567,6 +571,7 @@ jobs:
             ${{matrix.bob.target}}-builder.cache-to=type=gha,scope=${{ matrix.bob.cache }}-builder
 
       - name: 🐋 Docker Build kubler builder - bob-builder - Extract /distfiles/ and /packages for caching
+        if: ${{ steps.bob-builder-bake.outcome == 'success' }}
         continue-on-error: true
         run: |
           set -eux
@@ -580,12 +585,14 @@ jobs:
           docker rm "${{ matrix.name }}"-builder
 
       - name: Inspect Distfiles Cache - After
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         continue-on-error: true
         run: |
           set -eux
           ls -ltra ~/.kubler/distfiles/ | head -n 100 || true
 
       - name: Inspect Packages Cache - After
+        if: ${{ steps.bob-pull.outcome == 'failure' || steps.bob-pull-test.outcome == 'failure' }}
         continue-on-error: true
         run: |
           set -eux
