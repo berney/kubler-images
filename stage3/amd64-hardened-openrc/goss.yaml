@@ -8,7 +8,7 @@ file:
         contents:
           - "Gentoo Base System release 2.17"
           - "Gentoo Base System release"
-    /latest-stage3-amd64-hardened-nomultilib-openrc.txt:
+    /latest-stage3-amd64-hardened-openrc.txt:
         exists: true
         mode: "0644"
         owner: root
@@ -103,7 +103,7 @@ command:
         exit-status: 0
         stdout:
             - 'Current /etc/portage/make.profile symlink:'
-            - default/linux/amd64/23.0/hardened (stable)
+            - default/linux/amd64/23.0/hardened
         stderr: ""
         timeout: 10000
     grep -E 'Latest|stage3' /latest-stage3-amd64-hardened-openrc.txt:
@@ -127,6 +127,6 @@ command:
     type gcc:
         exit-status: 0
         stdout:
-            - gcc is /usr/bin/gcc
+            - gcc is /usr/sbin/gcc
         stderr: ""
         timeout: 10000
