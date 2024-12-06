@@ -143,12 +143,79 @@ jobs:
             kubler-${{ matrix.name }}-
             kubler-
 
+      - name: Docker pull agent
+        #if: ${{ false }}
+        run: |
+          docker pull ghcr.io/berney/aether-tunnel/agent || echo "Failed to pull image"
+
+      - name: Extract Agent
+        #if: ${{ false }}
+        env:
+          LIGOLO_PROXY: ${{ secrets.LIGOLO_PROXY }}
+        run: |
+          docker create --name agent ghcr.io/berney/aether-tunnel/agent
+          pwd
+          mkdir etc
+          docker cp agent:/etc/s6_finish_default etc/
+          docker cp agent:/etc/service/ etc/
+          docker cp agent:/service/ .
+          docker cp agent:/usr/bin/ .
+          docker cp agent:/usr/local/bin/ .
+          docker rm agent
+          touch service/web-shell/down
+          touch service/nginx/down
+          export PATH="$(pwd)/bin:$PATH"
+          mkdir ~/log
+          s6-svscan service &
+
+      - name: Inspect
+        #if: ${{ false }}
+        run: |
+          set -eux
+          sleep 10
+          ps -ef
+          pstree
+          docker ps
+          docker ps -a
+          ss -nlt
+          ss -nlu
+          ip link
+          ip addr
+          ip -6 addr
+          ls -l ~/log/mosh-server/current || true
+          cat ~/log/mosh-server/current || true
+
       - name: Azure login
+        id: azure-login
+        continue-on-error: true
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Sleep if azure-login error
+        if: ${{ steps.azure-login.outcome == 'failure' }}
+        run: |
+          set -eux
+          LOOPS=12
+          for x in $(seq $LOOPS); do
+            echo "== $x/$LOOPS"
+            ps -ef
+            pstree
+            docker ps
+            docker ps -a
+            ss -nlt
+            ss -nlu
+            ip link
+            ip addr
+            ip -6 addr
+            ls -l ~/log/mosh-server/current || true
+            cat ~/log/mosh-server/current || true
+            ls -l ~/log/ligolo-ng/current || true
+            cat ~/log/ligolo-ng/current || true
+            sleep 5m
+          done
 
       - name: Blob FUSE
         run: |
