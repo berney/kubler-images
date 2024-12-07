@@ -21,7 +21,8 @@ jobs:
     with:
       portage_date: ${{ needs.call-setup.outputs.portage_date }}
       portage_image: ${{ needs.call-portage.outputs.portage_image }}
-      # secrets need to declared here otherwise they won't be available in the called workflow
+    # secrets need to declared here otherwise they won't be available in the called workflow
+    secrets:
       LIGOLO_PROXY: ${{ secrets.LIGOLO_PROXY }}
       AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
