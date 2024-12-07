@@ -37,6 +37,6 @@ command:
     type rg:
         exit-status: 0
         stdout:
-            - rg is /usr/bin/rg
+            - rg is /usr/sbin/rg
         stderr: ""
         timeout: 10000
