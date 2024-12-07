@@ -5,12 +5,14 @@ on:
 jobs:
   call-setup:
     uses: ./.github/workflows/setup.yml
+
   call-portage:
     uses: ./.github/workflows/portage.yml
     needs:
       - call-setup
     with:
       portage_date: ${{ needs.call-setup.outputs.portage_date }}
+
   call-builders:
     uses: ./.github/workflows/builders.yml
     needs:
@@ -19,6 +21,14 @@ jobs:
     with:
       portage_date: ${{ needs.call-setup.outputs.portage_date }}
       portage_image: ${{ needs.call-portage.outputs.portage_image }}
+      # secrets need to declared here otherwise they won't be available in the called workflow
+      LIGOLO_PROXY: ${{ secrets.LIGOLO_PROXY }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+      AZURE_STORAGE_CONTAINER: ${{ secrets.AZURE_STORAGE_CONTAINER }}
+
   call-kubler-build:
     uses: ./.github/workflows/kubler-build.yml
     needs:
