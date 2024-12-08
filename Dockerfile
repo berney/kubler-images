@@ -108,5 +108,5 @@ RUN <<-EOF
     cd ~/.kubler || exit 1
     kubler portage
     PORTAGE_DATE=$(kubler portage)
-    export PORTAGE_DRATE
+    export PORTAGE_DATE
 EOF
