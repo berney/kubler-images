@@ -61,7 +61,7 @@ jobs:
       KUBLER_IMAGE: ghcr.io/${{ github.repository }}
       PORTAGE_DATE: ${{ inputs.portage_date || 'latest' }}
       PORTAGE_IMAGE: ${{ inputs.portage_image || format('ghcr.io/{0}/portage:{1}', github.repository, inputs.portage_date || 'latest') }}
-      STAGE3_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-nomultilib-openrc:${{ inputs.portage_date || 'latest' }}
+      STAGE3_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-hardened-openrc:${{ inputs.portage_date || 'latest' }}
       STAGE3_MUSL_IMAGE: ghcr.io/${{ github.repository }}/stage3-amd64-musl-hardened:${{ inputs.portage_date || 'latest' }}
       BOB_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-core:${{ inputs.portage_date || 'latest' }}
       BOB_MUSL_CORE_IMAGE: ghcr.io/${{ github.repository }}/bob-musl-core:${{ inputs.portage_date || 'latest' }}
