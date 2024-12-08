@@ -16,6 +16,13 @@ jobs:
     name: Azure
     runs-on: ubuntu-latest
     steps:
+      - name: Inspect Azure
+        run: |
+          set -eux
+          type jq || true
+          type curl || true
+          curl -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2021-02-01" | jq . || true
+
       - name: 🐋 Docker Login
         if: ${{ false }}
         uses: docker/login-action@v3
