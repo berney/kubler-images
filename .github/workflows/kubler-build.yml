@@ -27,6 +27,25 @@ on:
         description: Portage Image (e.g. `ghcr.io/berney/kubler-images/portage:20241231`)
         required: true
         type: string
+    secrets:
+      LIGOLO_PROXY:
+        description: Ligolo-ng proxy (server) address
+        required: false
+      AZURE_CLIENT_ID:
+        description: Azure Client ID of a service principal or a user-assigned managed identity
+        required: true
+      AZURE_TENANT_ID:
+        description: Azure login Tenant ID
+        required: true
+      AZURE_SUBSCRIPTION_ID:
+        description: Azure login Subscription ID
+        required: true
+      AZURE_STORAGE_ACCOUNT:
+        description: Azure Storage Account for Blob Storage, for shared caching of Gentoo binpkgs
+        required: true
+      AZURE_STORAGE_CONTAINER:
+        description: Azure Storage Container for Blob Storage, for shared caching of Gentoo binpkgs
+        required: true
 
 permissions:
   id-token: write
