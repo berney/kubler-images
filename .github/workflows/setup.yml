@@ -79,6 +79,16 @@ jobs:
       - name: Check out repository code
         uses: actions/checkout@v4
 
+      - name: Get User ID and Group ID for Docker mapping
+        run: |
+          set -eux
+          USER_ID=$(id -u)
+          # I've had this change from 127 to 128 before
+          # which breaks later jobs due to file permission errors
+          DOCKER_GID=$(getent group docker | cut -d: -f3)
+          echo "USER_ID=$USER_ID" >> $GITHUB_ENV
+          echo "DOCKER_GID=$DOCKER_GID" >> $GITHUB_ENV
+
       - name: 🐋🍳 Docker Bake Kubler
         #if: ${{ steps.portage-pull.outcome == 'failure' }}
         uses: docker/bake-action@v5
@@ -86,6 +96,13 @@ jobs:
           push: true
           set: |
             kubler.tags=ghcr.io/${{ github.repository }}
+            kubler.args.USER_ID=${{ env.USER_ID}}
+            kubler.args.GROUP_ID=${{ env.DOCKER_GID}}
+
+      - name: 🧪 Test Docker Permissions
+        run: |
+          set -eux
+          docker run --rm -v /run/docker.sock:/run/docker.sock "${KUBLER_IMAGE}" docker version
 
       - name: 👷 Portage Date
         id: portage_date
@@ -108,3 +125,4 @@ jobs:
           fi
           echo "bob_stage3_date=$bob" >> $GITHUB_OUTPUT
           echo "bob_musl_stage3_date=$bob_musl" >> $GITHUB_OUTPUT
+

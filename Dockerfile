@@ -7,7 +7,7 @@ FROM ghcr.io/oras-project/oras:${ORAS_VERSION} AS oras
 FROM alpine
 # We are setting up user/group and dirs to match GitHub Runner ubuntu-latest
 # `docker` group in ubuntun-latest GitHub Runner
-ARG GROUP_ID=127
+ARG GROUP_ID=128
 ARG GROUP=docker
 ARG USER_ID=1001
 ARG USER=runner
