@@ -7,7 +7,7 @@
 #     - https://github.com/gentoo/gentoo-docker-images
 # - Or kubler `kubler-gentoo/portage` image created from downloaded (and cached) portage tarball
 #     - See `Dockerfile.download`
-ARG BASE_IMAGE
+ARG BASE_IMAGE=gentoo/portage
 FROM $BASE_IMAGE AS patcher
 
 COPY patches/ /patches
