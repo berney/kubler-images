@@ -51,13 +51,20 @@ command:
             - -E, --exclude <pattern>
             - --prune
             - -t, --type <filetype>
-            - '''f'' or ''file'':         regular files'
-            - '''d'' or ''directory'':    directories'
-            - '''l'' or ''symlink'':      symbolic links'
-            - '''s'' or ''socket'':       socket'
-            - '''p'' or ''pipe'':         named pipe (FIFO)'
-            - '''x'' or ''executable'':   executables'
-            - '''e'' or ''empty'':        empty files or directories'
+            - >-
+              /'f' .* 'file'.*: *regular files/
+            - >-
+              /'d' .* 'directory'.*: *directories/
+            - >-
+              /'l' .* 'symlink'.*: *symbolic links/
+            - >-
+              /'s' .* 'socket'.*: *socket/
+            - >-
+              /'p' .* 'pipe'.*: *named pipe \(FIFO\)/
+            - >-
+              /'x' .* 'executable'.*: *executables/
+            - >-
+              /'e' .* 'empty'.*: *empty files or directories/
             - -e, --extension <ext>
             - -S, --size <size>
             - '''b'':  bytes'
