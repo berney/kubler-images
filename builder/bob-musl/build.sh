@@ -14,7 +14,7 @@ configure_builder() {
     export EMERGE_DEFAULT_OPTS="-b -k --quiet-build --tree"
     emerge --info | grep EMERGE_DEFAULT_OPTS
     emerge app-portage/flaggie app-portage/eix app-portage/gentoolkit
-    configure_eix
+    eix-update
     mkdir -p /etc/portage/package.{accept_keywords,unmask,mask,use}
     touch /etc/portage/package.accept_keywords/flaggie
     echo 'LANG="en_US.utf8"' > /etc/env.d/02locale
