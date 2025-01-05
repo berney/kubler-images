@@ -515,7 +515,7 @@ file:
         group: root
         filetype: file
         contents: []
-    /usr/lib64/glibc-2.39:
+    /usr/lib64/glibc-2.40:
         exists: true
         mode: "0755"
         owner: root
