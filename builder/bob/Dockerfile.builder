@@ -43,7 +43,7 @@ RUN <<-EOF
   ls -lF /config
   ls -ltraF /distfiles | tail || true
   ls -ltraF /packages | tail || true
-  BOB_CURRENT_TARGET=berney/bob kubler-build-root
+  BOB_CURRENT_TARGET=berney/bob kubler-build-root || die "kubler-build-root failed"
   ls -ltraF /distfiles | tail || true
   ls -ltraF /packages | tail || true
 EOF
