@@ -43,6 +43,7 @@ RUN --mount=type=cache,from=distfiles,target=/distfiles \
     exit "${exit_code}"
   }
   env | grep -E '^((BOB|DEF)_|PKGDIR)'
+  ls -lF /
   ls -lF /config
   ls -ltraF /distfiles | tail || true
   ls -ltraF /packages | tail || true

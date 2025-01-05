@@ -45,6 +45,7 @@ RUN <<-EOF
     exit "${exit_code}"
   }
   env | grep -E '^((BOB|DEF)_|PKGDIR)'
+  ls -lF /
   ls -lF /config
   ls -ltraF /distfiles | tail || true
   ls -ltraF /packages | tail || true

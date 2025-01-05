@@ -39,12 +39,17 @@ COPY --link build.sh /config/
 #RUN --mount=type=cache,target=/distfiles,from=distfiles --mount=type=cache,target=/packages,from=packages <<-EOF
 #RUN --mount=type=cache,target=/distfiles --mount=type=cache,target=/packages <<-EOF
 RUN <<-EOF
+  die() {
+    exit_code="${2:-1}"
+    echo -e 'fatal:' "$1" >&2
+    exit "${exit_code}"
+  }
   env | grep -E '^((BOB|DEF)_|PKGDIR)'
   ls -lF /
   ls -lF /config
   ls -ltraF /distfiles | tail || true
   ls -ltraF /packages | tail || true
-  BOB_CURRENT_TARGET=berney/bob-musl kubler-build-root
+  BOB_CURRENT_TARGET=berney/bob-musl kubler-build-root || die "kubler-build-root failed"
   ls -ltraF /distfiles | tail || true
   ls -ltraF /packages | tail || true
 EOF
