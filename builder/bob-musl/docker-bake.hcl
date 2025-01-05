@@ -16,7 +16,7 @@
 #
 # ```hcl
 # SNAPSHOT="portage-20230425.tar.xz"
-# BASE_IMAGE="gentoo/porage:20230425"
+# BASE_IMAGE="gentoo/portage:20230425"
 # ```
 #
 variable "BASE_TAG" {
