@@ -382,10 +382,10 @@ jobs:
           set -eux
           # Ensure distfiles exists
           mkdir -p ~/.kubler/distfiles
-          ls -ltra ~/.kubler/distfiles/ | head -n 100
           cd ~/.kubler/distfiles
           git init
           git add .
+          ls -ltra ~/.kubler/distfiles/ | head -n 100
 
       - name: Inspect Packages Cache - Before
         continue-on-error: true
@@ -393,12 +393,12 @@ jobs:
           set -eux
           # Ensure packages exists
           mkdir -p ~/.kubler/packages
-          ls -ltra ~/.kubler/packages/
-          ls -ltra ~/.kubler/packages/*
-          tree -aC --filelimit 100 ~/.kubler/packages
           cd ~/.kubler/packages
           git init
           git add .
+          ls -ltra ~/.kubler/packages/
+          ls -ltra ~/.kubler/packages/* || true
+          tree -aC --filelimit 100 ~/.kubler/packages || true
 
       - name: Set up QEMU
         id: qemu
