@@ -557,6 +557,9 @@ jobs:
           # Ensure distfiles exists
           mkdir -p ~/.kubler/distfiles
           ls -ltra ~/.kubler/distfiles/ | head -n 100
+          cd ~/.kubler/distfiles
+          git init
+          git add .
 
       - name: Inspect Packages Cache - Before
         if: ${{ steps.bob-pull.outcome != 'success' || steps.bob-pull-test.outcome != 'success' }}
@@ -568,6 +571,9 @@ jobs:
           ls -ltra ~/.kubler/packages/
           ls -ltra ~/.kubler/packages/* || true
           tree -aC --filelimit 100 ~/.kubler/packages || true
+          cd ~/.kubler/packages
+          git init
+          git add .
 
       # This isn't exported in the env context, so we need to set it
       - name: Get HOME directory
@@ -617,6 +623,8 @@ jobs:
         run: |
           set -eux
           ls -ltra ~/.kubler/distfiles/ | head -n 100 || true
+          cd ~/.kubler/distfiles/
+          git status
 
       - name: Inspect Packages Cache - After
         if: ${{ steps.bob-pull.outcome != 'success' || steps.bob-pull-test.outcome != 'success' }}
@@ -626,6 +634,8 @@ jobs:
           ls -ltra ~/.kubler/packages/ || true
           ls -ltra ~/.kubler/packages/* || true
           tree -aC --filelimit 100 ~/.kubler/packages || true
+          cd ~/.kubler/packages/
+          git status
 
       # This has ephemeral `/distfiles/` and `/packages/` directories (writes are discarded)
       # Except for this it is identical to the `bob-builder` image we just baked

@@ -311,6 +311,7 @@ jobs:
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Blob FUSE
+        if: ${{ false }}
         run: |
           set -eux
           sudo apt update
@@ -352,6 +353,7 @@ jobs:
           fi
 
       - name: Symlink packages
+        if: ${{ false }}
         run: |
           ls -lad /mnt/blobfuse2
           ls -la /mnt/blobfuse2
@@ -381,8 +383,11 @@ jobs:
           # Ensure distfiles exists
           mkdir -p ~/.kubler/distfiles
           ls -ltra ~/.kubler/distfiles/ | head -n 100
+          cd ~/.kubler/distfiles
+          git init
+          git add .
 
-      - name: Inspect Packages Cache
+      - name: Inspect Packages Cache - Before
         continue-on-error: true
         run: |
           set -eux
@@ -391,6 +396,9 @@ jobs:
           ls -ltra ~/.kubler/packages/
           ls -ltra ~/.kubler/packages/*
           tree -aC --filelimit 100 ~/.kubler/packages
+          cd ~/.kubler/packages
+          git init
+          git add .
 
       - name: Set up QEMU
         id: qemu
@@ -819,6 +827,24 @@ jobs:
           ls -la ~/.kubler/log || true
           ls -l ~/.kubler/log/build.log || true
           cat ~/.kubler/log/build.log || true
+
+      - name: Inspect Distfiles Cache - After
+        continue-on-error: true
+        run: |
+          set -eux
+          ls -ltra ~/.kubler/distfiles/ | head -n 100 || true
+          cd ~/.kubler/distfiles/
+          git status
+
+      - name: Inspect Packages Cache - After
+        continue-on-error: true
+        run: |
+          set -eux
+          ls -ltra ~/.kubler/packages/ || true
+          ls -ltra ~/.kubler/packages/* || true
+          tree -aC --filelimit 100 ~/.kubler/packages || true
+          cd ~/.kubler/packages/
+          git status
 
       # Fail the job if the testing step above failed
       # Because the test step had `continue-on-error: true` it's conclusion will be 'success'
