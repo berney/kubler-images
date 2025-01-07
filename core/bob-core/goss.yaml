@@ -188,8 +188,8 @@ file:
         contents:
             - '# Latest as of '
             # Need to quote to be a string
-            - '2024'
-            - stage3-amd64-hardened-openrc-2024
+            - '2025'
+            - stage3-amd64-hardened-openrc-2025
     /root/.bashrc:
         exists: true
         mode: "0644"
@@ -475,8 +475,8 @@ command:
         exit-status: 0
         stdout:
             - '# Latest as of '
-            - '2024'
-            - stage3-amd64-hardened-openrc-2024
+            - '2025'
+            - stage3-amd64-hardened-openrc-2025
         stderr: ""
         timeout: 10000
     type gcc:
