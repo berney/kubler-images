@@ -94,13 +94,13 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler portage - list targets
         if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
-        uses: docker/bake-action/subaction/list-targets@v5
+        uses: docker/bake-action/subaction/list-targets@v6
         with:
           workdir: bob-portage
 
       - name: 🐋🍳 Docker Bake Kubler portage
         if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
-        uses: docker/bake-action@v5
+        uses: docker/bake-action@v6
         with:
           workdir: bob-portage
           push: true
