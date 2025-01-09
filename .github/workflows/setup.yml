@@ -91,7 +91,7 @@ jobs:
 
       - name: 🐋🍳 Docker Bake Kubler
         #if: ${{ steps.portage-pull.outcome == 'failure' }}
-        uses: docker/bake-action@v5
+        uses: docker/bake-action@v6
         with:
           push: true
           set: |
