@@ -352,6 +352,11 @@ jobs:
           oras cp -v "$TMP_IMAGE" "$IMAGE"
           oras cp -v "$TMP_IMAGE" "$LATEST"
 
+      - name: Set KUBLER_BUILD_ROOT_SHA256 Env Var
+        run: |
+          set -eux
+          KUBLER_BUILD_ROOT_SHA256=$(sha256sum -b bob-core/build-root.sh)
+          echo "KUBLER_BUILD_ROOT_SHA256=$KUBLER_BUILD_ROOT_SHA256" >> $GITHUB_ENV
 
       - name: 🐋 Docker Pull bob-core
         id: bob-core-pull
@@ -373,7 +378,7 @@ jobs:
           docker run --rm "${{ matrix.core.image }}" eselect profile show
           docker run --rm "${{ matrix.core.image }}" ls -l /var/cache
           cd "${{ matrix.core.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.image }}" validate --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss -e KUBLER_BUILD_ROOT_SHA256="$KUBLER_BUILD_ROOT_SHA256" "${{ matrix.core.image }}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - test pulled - debug
         if: ${{ steps.bob-core-pull-test.outcome == 'failure' }}
@@ -381,7 +386,7 @@ jobs:
         run: |
           set -eux
           cd "${{ matrix.core.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.image }}" -l debug validate --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss -e KUBLER_BUILD_ROOT_SHA256="$KUBLER_BUILD_ROOT_SHA256" "${{ matrix.core.image }}" -l debug validate --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - list targets
         # Use NOT success so this runs on skipped or failure
@@ -417,14 +422,14 @@ jobs:
           docker run --rm "${{ matrix.core.tmp_image }}" eselect profile show
           docker run --rm "${{ matrix.core.tmp_image }}" ls -l /var/cache
           cd "${{ matrix.core.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.tmp_image }}" validate --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss -e KUBLER_BUILD_ROOT_SHA256="$KUBLER_BUILD_ROOT_SHA256" "${{ matrix.core.tmp_image }}" validate --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - test baked - debug
         if: ${{ steps.bob-core-bake-test.outcome == 'failure' }}
         run: |
           set -eux
           cd "${{ matrix.core.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.core.tmp_image }}" -l debug validate --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss -e KUBLER_BUILD_ROOT_SHA256="$KUBLER_BUILD_ROOT_SHA256" "${{ matrix.core.tmp_image }}" -l debug validate --color
 
       - name: 🐋🍳 Docker Bake Kubler bob-core - oras cp
         if: ${{ steps.bob-core-bake-test.outcome == 'success' }}
@@ -462,7 +467,7 @@ jobs:
           docker run --rm "${{ matrix.bob.image }}" eix --selected -c
           docker run --rm "${{ matrix.bob.image }}" rg --version || true
           cd "${{ matrix.bob.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.image }}" validate --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss -e KUBLER_BUILD_ROOT_SHA256="$KUBLER_BUILD_ROOT_SHA256" "${{ matrix.bob.image }}" validate --color
 
       - name: 🐋 Docker Build kubler builder - bob - test pulled - debug
         if: ${{ steps.bob-pull-test.outcome == 'failure' }}
@@ -470,7 +475,7 @@ jobs:
         run: |
           set -eux
           cd "${{ matrix.bob.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.image }}" -l debug validate --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss -e KUBLER_BUILD_ROOT_SHA256="$KUBLER_BUILD_ROOT_SHA256" "${{ matrix.bob.image }}" -l debug validate --color
 
       - name: 🐋 Docker Build kubler builder - bob - test pulled - ripgrep
         # https://bugs.gentoo.org/922372 Bug 922372 - sys-apps/ripgrep-14.1.0 fails to compile (MUSL-SYSTEM): = note: ld: cannot find -lpcre2-8: No such file or directory
@@ -628,14 +633,14 @@ jobs:
           docker run --rm "${{ matrix.bob.tmp_image }}" eix --selected -c
           docker run --rm "${{ matrix.bob.tmp_image }}" rg --version || true
           cd "${{ matrix.bob.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.tmp_image }}" validate --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss -e KUBLER_BUILD_ROOT_SHA256="$KUBLER_BUILD_ROOT_SHA256" "${{ matrix.bob.tmp_image }}" validate --color
 
       - name: 🐋 Docker Build kubler builder - bob - test baked - debug
         if: ${{ steps.bob-bake-test.outcome == 'failure' }}
         run: |
           set -eux
           cd "${{ matrix.bob.goss }}" || exit 1
-          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss "${{ matrix.bob.tmp_image }}" -l debug validate --color
+          docker run --rm -v /run/docker.sock:/run/docker.sock -v "$(pwd):/src:ro" -w /src -e CONTAINER_MODE=entrypoint "${KUBLER_IMAGE}" dgoss run -w /goss --entrypoint /goss/goss -e KUBLER_BUILD_ROOT_SHA256="$KUBLER_BUILD_ROOT_SHA256" "${{ matrix.bob.tmp_image }}" -l debug validate --color
 
       - name: 🐋 Docker Build kubler builder - bob - test baked ripgrep
         id: bob-bake-test-ripgrep
