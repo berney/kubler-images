@@ -1,6 +1,6 @@
 #FROM ${IMAGE_PARENT}
 FROM ghcr.io/berney/kubler-images/s6
-MAINTAINER ${MAINTAINER}
+LABEL maintainer="${MAINTAINER}"
 
 ADD rootfs.tar /
 

@@ -1,7 +1,7 @@
 #FROM ${IMAGE_PARENT}
 FROM ghcr.io/berney/kubler-images/s6
 ADD rootfs.tar /
-LABEL maintainer Berne Campbell <berne.campbell@gmail.com>
+LABEL maintainer="Berne Campbell <berne.campbell@gmail.com>"
 USER turnserver
 #CMD ["/coturn.sh"]
 # -t0 is the default
