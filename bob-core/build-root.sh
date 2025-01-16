@@ -59,16 +59,16 @@ function die() {
 # Copy libgcc/libstdc++ libs
 function copy_gcc_libs() {
     mkdir -p "${_EMERGE_ROOT}/${_LIB}"
-    find /usr/lib/ -name libgcc_s.so.1 -print0 | rsync -avi0 / "${_EMERGE_ROOT}/${_LIB}"
-    find /usr/lib/ -name libgomp.so.1 -print0 | rsync -avi0 / "${_EMERGE_ROOT}/${_LIB}"
-    find /usr/lib/ -name libstdc++.so.6 -print0 | rsync -avi0 / "${_EMERGE_ROOT}/${_LIB}"
+    find /usr/lib/ -name libgcc_s.so.1 -print0 | rsync -avi0 --files-from=- / "${_EMERGE_ROOT}/${_LIB}"
+    find /usr/lib/ -name libgomp.so.1 -print0 | rsync -avi0 --files-from=- / "${_EMERGE_ROOT}/${_LIB}"
+    find /usr/lib/ -name libstdc++.so.6 -print0 | rsync -avi0 --files-from=- / "${_EMERGE_ROOT}/${_LIB}"
 }
 
 # Copy libgfortran libs
 function copy_gfortran_libs() {
     mkdir -p "${_EMERGE_ROOT}/${_LIB}"
-    find /usr/lib/ -name libgfortran.so.5 -print0 | rsync -avi0 / "${_EMERGE_ROOT}/${_LIB}"
-    find /usr/lib/ -name libquadmath.so.0 -print0 | rsync -avi0 / "${_EMERGE_ROOT}/${_LIB}"
+    find /usr/lib/ -name libgfortran.so.5 -print0 | rsync -avi0 --files-from=- / "${_EMERGE_ROOT}/${_LIB}"
+    find /usr/lib/ -name libquadmath.so.0 -print0 | rsync -avi0 --files-from=- / "${_EMERGE_ROOT}/${_LIB}"
 }
 
 # Fix profile symlink as we don't use default portage location, part of stage3 builder setup
