@@ -1,6 +1,8 @@
 #
 # build config
 #
+# XXX Is there some wget regression?
+# https://github.com/edannenberg/kubler-images/commit/e2ec12dfb569c90c5abf79626270b3800fe98d05
 _packages="sys-apps/busybox"
 
 #
@@ -8,7 +10,7 @@ _packages="sys-apps/busybox"
 #
 configure_rootfs_build()
 {
-    update_use 'sys-apps/busybox' '+make-symlinks +static'
+    update_use 'sys-apps/busybox' '+make-symlinks' '+static'
     update_use '+static-libs' '+minimal' '+static'
     # this runs in the builder, but as one of the last build steps the builder's /etc/passwd is copied to the custom root
     useradd busybox
