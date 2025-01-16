@@ -216,10 +216,12 @@ file:
         owner: root
         group: root
         filetype: file
-        {{ if getEnv "KUBLER_BUILD_ROOT_SHA256" }}
-        sha256: >-
-          {{ getEnv "KUBLER_BUILD_ROOT_SHA256" }}
-        {{end}}
+        sha256:
+          {{- if getEnv "KUBLER_BUILD_ROOT_SHA256" }}
+            {{ getEnv "KUBLER_BUILD_ROOT_SHA256" }}
+          {{ else }}
+            null
+          {{ end }}
         contents:
             - '#!/usr/bin/env bash'
             - '# Copyright (c) 2014-2019, Erik Dannenberg <erik.dannenberg@xtrade-gmbh.de>'
