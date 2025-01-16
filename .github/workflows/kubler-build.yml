@@ -427,11 +427,15 @@ jobs:
       - name: Docker Daemon Config - Enable Containerd Snapshotter
         run: |
           id -a
-          ls -l /etc/docker/daemon.json
-          # Old config
-          jq . /etc/docker/daemon.json
-          # First read old config before we clobber it
-          CONFIG=$(jq '.features["containerd-snapshotter"] = true' /etc/docker/daemon.json)
+          if [ -f /etc/docker/daemon.json ]; then
+            ls -l /etc/docker/daemon.json
+            # Old config
+            jq . /etc/docker/daemon.json
+            # First read old config before we clobber it
+            CONFIG=$(jq '.features["containerd-snapshotter"] = true' /etc/docker/daemon.json)
+          else
+            CONFIG=$(jq --null-input '.features["containerd-snapshotter"] = true')
+          fi
           # Write new config - sudo tee to write to root owned file
           echo "$CONFIG" | sudo tee /etc/docker/daemon.json
           jq . /etc/docker/daemon.json
