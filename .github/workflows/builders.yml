@@ -355,7 +355,7 @@ jobs:
       - name: Set KUBLER_BUILD_ROOT_SHA256 Env Var
         run: |
           set -eux
-          KUBLER_BUILD_ROOT_SHA256=$(sha256sum -b bob-core/build-root.sh)
+          KUBLER_BUILD_ROOT_SHA256=$(sha256sum -b bob-core/build-root.sh | cut -d' ' -f1)
           echo "KUBLER_BUILD_ROOT_SHA256=$KUBLER_BUILD_ROOT_SHA256" >> $GITHUB_ENV
 
       - name: 🐋 Docker Pull bob-core
