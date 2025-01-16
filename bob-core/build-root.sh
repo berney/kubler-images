@@ -58,27 +58,17 @@ function die() {
 
 # Copy libgcc/libstdc++ libs
 function copy_gcc_libs() {
-    local lib_gcc lib_gomp lib_stdc lib
     mkdir -p "${_EMERGE_ROOT}/${_LIB}"
-    lib_gcc="$(find /usr/lib/ -name libgcc_s.so.1)"
-    lib_gomp="$(find /usr/lib/ -name libgomp.so.1)"
-    lib_stdc="$(find /usr/lib/ -name libstdc++.so.6)"
-
-    for lib in "${lib_gcc}" "${lib_gomp}" "${lib_stdc}"; do
-        cp "${lib}" "${_EMERGE_ROOT}/${_LIB}/"
-    done
+    find /usr/lib/ -name libgcc_s.so.1 -print0 | rsync -avi0 / "${_EMERGE_ROOT}/${_LIB}"
+    find /usr/lib/ -name libgomp.so.1 -print0 | rsync -avi0 / "${_EMERGE_ROOT}/${_LIB}"
+    find /usr/lib/ -name libstdc++.so.6 -print0 | rsync -avi0 / "${_EMERGE_ROOT}/${_LIB}"
 }
 
 # Copy libgfortran libs
 function copy_gfortran_libs() {
-    local lib_gfortran lib_qm lib
     mkdir -p "${_EMERGE_ROOT}/${_LIB}"
-    lib_gfortran="$(find /usr/lib/ -name libgfortran.so.5)"
-    lib_qm="$(find /usr/lib/ -name libquadmath.so.0)"
-
-    for lib in "${lib_gfortran}" "${lib_qm}"; do
-        cp "${lib}" "${_EMERGE_ROOT}/${_LIB}/"
-    done
+    find /usr/lib/ -name libgfortran.so.5 -print0 | rsync -avi0 / "${_EMERGE_ROOT}/${_LIB}"
+    find /usr/lib/ -name libquadmath.so.0 -print0 | rsync -avi0 / "${_EMERGE_ROOT}/${_LIB}"
 }
 
 # Fix profile symlink as we don't use default portage location, part of stage3 builder setup
@@ -643,7 +633,7 @@ function build_rootfs() {
             mkdir -p "${_PORTAGE_LOGDIR}"
             export PORTAGE_LOGDIR="${_PORTAGE_LOGDIR}"
         fi
-        
+
         # install packages defined in image's build.sh
         # shellcheck disable=SC2086
         "${_emerge_bin}" ${_emerge_opt} --binpkg-respect-use=y -v ${_packages}
@@ -652,12 +642,12 @@ function build_rootfs() {
 
         # backup headers and static files, depending images can pull them in again
         if [[ -d "${_EMERGE_ROOT}/usr/include" ]]; then
-            find "${_EMERGE_ROOT}/usr/include" -type f -name '*.h' | \
-                tar -cpf "${_ROOTFS_BACKUP}/${target_id//\//_}-headers.tar" --files-from -
+            find "${_EMERGE_ROOT}/usr/include" -type f -name '*.h' -print0 | \
+                tar -cpf "${_ROOTFS_BACKUP}/${target_id//\//_}-headers.tar" --null --files-from -
         fi
         if [[ -d "${_EMERGE_ROOT}/usr/${_LIB}" ]]; then
-            find "${_EMERGE_ROOT}/usr/${_LIB}" -type f -name '*.a' | \
-                tar -cpf "${_ROOTFS_BACKUP}/${target_id//\//_}-static_libs.tar" --files-from -
+            find "${_EMERGE_ROOT}/usr/${_LIB}" -type f -name '*.a' -print0 | \
+                tar -cpf "${_ROOTFS_BACKUP}/${target_id//\//_}-static_libs.tar" --null --files-from -
         fi
 
         # extract any possible required headers and static libs from previous builds
