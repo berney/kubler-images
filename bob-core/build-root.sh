@@ -685,8 +685,8 @@ function build_rootfs() {
         done
     fi
 
+    #    "${_EMERGE_ROOT}"/etc/ld.so.cache \
     rm -rf \
-        "${_EMERGE_ROOT}"/etc/ld.so.cache \
         "${_EMERGE_ROOT}"/usr/"${_LIB}"/qt*/mkspecs/ \
         "${_EMERGE_ROOT}"/usr/share/aclocal/ \
         "${_EMERGE_ROOT}"/usr/share/gettext/ \
