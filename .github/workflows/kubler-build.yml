@@ -325,9 +325,12 @@ jobs:
           export REDIS_PASSWORD
           SECRET_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_ACCESS_KEY }}
           export SECRET_KEY
-          juicefs mount rediss://juicefs.redis.cache.windows.net:6380 ~/jfs --background
-          juicefs summary ~/jfs
+          # If it fails cat the logs
+          juicefs mount rediss://juicefs.redis.cache.windows.net:6380 ~/jfs --background || \
+            cat ~/.juicefs/juicefs.log && exit 1
+          #juicefs summary ~/jfs
           #juicefs bench ~/jfs
+          #time juicefs warmup ~/jfs/kubler
           ls -la ~/jfs
           cat ~/jfs/hello.txt
           date > ~/jfs/test-write.txt
