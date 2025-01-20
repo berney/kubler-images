@@ -711,6 +711,7 @@ jobs:
         # This is docker inception
         # We run the kubler container to run kubler
         # Kubler runs docker itself, but it will be mounting volumes from the host's POV
+        # We mount distfiles and packages in case they are symlinked to elsewhere (e.g JuiceFS)
         run: |
           set -eux
           echo "HOME=$HOME"
@@ -724,6 +725,8 @@ jobs:
             --rm \
             -v /run/docker.sock:/run/docker.sock \
             -v ~/.kubler:/$HOME/.kubler \
+            -v ~/.kubler/distfiles:/$HOME/.kubler/distfiles \
+            -v ~/.kubler/packages:/$HOME/.kubler/packages \
             -v "$(pwd)":"$(pwd)" \
             -w "$(pwd)" \
             -e TERM=dumb \
@@ -738,12 +741,15 @@ jobs:
         # so that the `kubler build` docker volume mounts are correct from host's POV.
         # Mounting `~/.kubler` from host should shadow that in the container.
         # `~/.kubler/namespaces` won't exist yet, so `kubler` should re-create it, and it will be on the host this time.
+        # We mount distfiles and packages in case they are symlinked to elsewhere (e.g JuiceFS)
         run: |
           export TERM
           docker run \
             --rm \
             -v /run/docker.sock:/run/docker.sock \
             -v ~/.kubler:/$HOME/.kubler \
+            -v ~/.kubler/distfiles:/$HOME/.kubler/distfiles \
+            -v ~/.kubler/packages:/$HOME/.kubler/packages \
             -v "$(pwd)":"$(pwd)" \
             -w "$(pwd)" \
             -e TERM=dumb \
