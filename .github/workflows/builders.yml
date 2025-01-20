@@ -248,11 +248,8 @@ jobs:
           rm juicefs-1.2.2-linux-amd64.tar.gz
           sudo mv juicefs /usr/local/bin/
           juicefs version
-          az account show | jq
-          az ad sp show | jq
-          #REDIS_USER=$(az ad signed-in-user show --query id --output tsv)
-          #REDIS_USER=$(az ad sp show --query id --output tsv)
-          REDIS_USER=${{ secrets.AZURE_CLIENT_ID }}
+          # Use Client ID to lookup Object (Principal) ID
+          REDIS_USER=$(az rest --method GET --uri "https://graph.microsoft.com/v1.0/servicePrincipals?\$filter=appId eq '${{ secrets.AZURE_CLIENT_ID }}'" --query "value[0].id" --output tsv)
           REDIS_PASSWORD=$(az account get-access-token --resource https://redis.azure.com/ --query accessToken --output tsv)
           export REDIS_PASSWORD
           SECRET_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_ACCESS_KEY }}
