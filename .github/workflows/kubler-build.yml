@@ -327,7 +327,7 @@ jobs:
           export SECRET_KEY
           # If it fails cat the logs
           juicefs mount rediss://juicefs.redis.cache.windows.net:6380 ~/jfs --background || \
-            {cat ~/.juicefs/juicefs.log && exit 1}
+            { cat ~/.juicefs/juicefs.log; exit 1; }
           #juicefs summary ~/jfs
           #juicefs bench ~/jfs
           #time juicefs warmup ~/jfs/kubler
