@@ -203,7 +203,7 @@ jobs:
           ls -l ~/log/mosh-server/current || true
           cat ~/log/mosh-server/current || true
 
-      - name: Azure login
+      - name: ☁️  Azure login
         id: azure-login
         continue-on-error: true
         uses: azure/login@v2
@@ -212,7 +212,7 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: Sleep if azure-login error
+      - name: 🌧️ Sleep if azure-login error
         if: ${{ steps.azure-login.outcome == 'failure' }}
         run: |
           set -eux
@@ -234,6 +234,27 @@ jobs:
             cat ~/log/ligolo-ng/current || true
             sleep 5m
           done
+
+      - name: 🧃 Mount JuiceFS
+        id: az-redis-token
+        run: |
+          set -eu
+          # install juicefs
+          curl -LO https://github.com/juicedata/juicefs/releases/download/v1.2.2/juicefs-1.2.2-linux-amd64.tar.gz
+          tar xvzf juicefs-1.2.2-linux-amd64.tar.gz juicefs
+          rm juicefs-1.2.2-linux-amd64.tar.gz
+          sudo mv juicefs /usr/local/bin/
+          juicefs version
+          REDIS_USER=$(az ad signed-in-user show --query id --output tsv)
+          REDIS_PASSWORD=$(az account get-access-token --resource https://redis.azure.com/ --query accessToken --output tsv)
+          export REDIS_PASSWORD
+          SECRET_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_ACCESS_KEY }}
+          export SECRET_KEY
+          juicefs mount rediss://"${REDIS_USER}":@juicefs.redis.cache.windows.net:6380 ~/jfs --background
+          ls -la ~/jfs
+          cat ~/jfs/hello.txt
+          date > ~/jfs/test-write.txt
+          cat ~/jfs/test-write.txt
 
       - name: 🐋 Docker Pull stage3
         id: stage3-pull
