@@ -145,6 +145,7 @@ jobs:
       #
       # If no cache can be restored the directory won't be created
       - name: Cache Kubler Gentoo Distfiles
+        if: ${{ false }}
         uses: actions/cache@v4
         with:
           path: ~/.kubler/distfiles/
@@ -155,6 +156,7 @@ jobs:
             kubler-
 
       - name: Cache Kubler Gentoo Packages
+        if: ${{ false }}
         uses: actions/cache@v4
         with:
           path: ~/.kubler/packages/
@@ -259,6 +261,18 @@ jobs:
           cat ~/jfs/hello.txt
           date > ~/jfs/test-write.txt
           cat ~/jfs/test-write.txt
+
+      - name: 🔗 Symlink ~/.kubler/{distfiles,packages}
+        run: |
+          set -eux
+          ls -lad ~/jfs ~/jfs/kubler ~/jfs/kubler/{distfiles,packages} || true
+          ls -la ~/jfs ~/jfs/kubler ~/jfs/kubler/{distfiles,packages} || true
+          mkdir -p ~/jfs/kubler ~/jfs/kubler/{distfiles,packages}
+          mkdir -p ~/.kubler
+          ln -sf ~/jfs/kubler/distfiles ~/.kubler/distfiles
+          ln -sf ~/jfs/kubler/packages ~/.kubler/packages
+          ls -lad ~/.kubler ~/.kubler/{distfiles,packages} || true
+          ls -la ~/.kubler ~/.kubler/{distfiles,packages} || true
 
       - name: 🐋 Docker Pull stage3
         id: stage3-pull
@@ -548,7 +562,7 @@ jobs:
           # Ensure packages exists
           mkdir -p ~/.kubler/packages
           cd ~/.kubler/packages
-          git init
+          git init || true
           git add .
           ls -ltra ~/.kubler/packages/
           ls -ltra ~/.kubler/packages/* || true
