@@ -606,8 +606,13 @@ jobs:
           docker run --rm "${{ matrix.bob.tmp_image }}-builder" ls -la /packages || true
           # Extract files to host, for caching
           docker create --name "${{ matrix.name }}"-builder "${{ matrix.bob.tmp_image }}"-builder
-          docker cp "${{ matrix.name }}"-builder:/distfiles ~/.kubler/ || true
-          docker cp "${{ matrix.name }}"-builder:/packages ~/.kubler/ || true
+          #docker cp "${{ matrix.name }}"-builder:/distfiles ~/.kubler/ || true
+          # docker cp won't follow symlink in destination
+          # > cannot overwrite non-directory "/home/runner/.kubler/distfiles" with directory "/home/runner/.kubler"
+          # So use real destination
+          docker cp "${{ matrix.name }}"-builder:/distfiles ~/jfs/kubler/ || true
+          #docker cp "${{ matrix.name }}"-builder:/packages ~/.kubler/ || true
+          docker cp "${{ matrix.name }}"-builder:/packages ~/jfs/kubler/ || true
           docker rm "${{ matrix.name }}"-builder
 
       - name: Inspect Distfiles Cache - After
