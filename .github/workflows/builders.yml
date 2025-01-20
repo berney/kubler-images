@@ -240,40 +240,6 @@ jobs:
             sleep 5m
           done
 
-      - name: 🧃 Mount JuiceFS
-        id: az-redis-token
-        run: |
-          set -eux
-          # install juicefs
-          curl -LO https://github.com/juicedata/juicefs/releases/download/v1.2.2/juicefs-1.2.2-linux-amd64.tar.gz
-          tar xvzf juicefs-1.2.2-linux-amd64.tar.gz juicefs
-          rm juicefs-1.2.2-linux-amd64.tar.gz
-          sudo mv juicefs /usr/local/bin/
-          juicefs version
-          # Use Client ID to lookup Object (Principal) ID
-          REDIS_USER=$(az rest --method GET --uri "https://graph.microsoft.com/v1.0/servicePrincipals?\$filter=appId eq '${{ secrets.AZURE_CLIENT_ID }}'" --query "value[0].id" --output tsv)
-          REDIS_PASSWORD=$(az account get-access-token --resource https://redis.azure.com/ --query accessToken --output tsv)
-          export REDIS_PASSWORD
-          SECRET_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_ACCESS_KEY }}
-          export SECRET_KEY
-          juicefs mount rediss://"${REDIS_USER}":@juicefs.redis.cache.windows.net:6380 ~/jfs --background
-          ls -la ~/jfs
-          cat ~/jfs/hello.txt
-          date > ~/jfs/test-write.txt
-          cat ~/jfs/test-write.txt
-
-      - name: 🔗 Symlink ~/.kubler/{distfiles,packages}
-        run: |
-          set -eux
-          ls -lad ~/jfs ~/jfs/kubler ~/jfs/kubler/{distfiles,packages} || true
-          ls -la ~/jfs ~/jfs/kubler ~/jfs/kubler/{distfiles,packages} || true
-          mkdir -p ~/jfs/kubler ~/jfs/kubler/{distfiles,packages}
-          mkdir -p ~/.kubler
-          ln -sf ~/jfs/kubler/distfiles ~/.kubler/distfiles
-          ln -sf ~/jfs/kubler/packages ~/.kubler/packages
-          ls -lad ~/.kubler ~/.kubler/{distfiles,packages} || true
-          ls -la ~/.kubler ~/.kubler/{distfiles,packages} || true
-
       - name: 🐋 Docker Pull stage3
         id: stage3-pull
         continue-on-error: true
@@ -541,6 +507,40 @@ jobs:
         uses: docker/bake-action/subaction/list-targets@v5
         with:
           workdir: ${{ matrix.bob.goss }}
+
+      - name: 🧃 Mount JuiceFS
+        id: az-redis-token
+        run: |
+          set -eux
+          # install juicefs
+          curl -LO https://github.com/juicedata/juicefs/releases/download/v1.2.2/juicefs-1.2.2-linux-amd64.tar.gz
+          tar xvzf juicefs-1.2.2-linux-amd64.tar.gz juicefs
+          rm juicefs-1.2.2-linux-amd64.tar.gz
+          sudo mv juicefs /usr/local/bin/
+          juicefs version
+          # Use Client ID to lookup Object (Principal) ID
+          REDIS_USER=$(az rest --method GET --uri "https://graph.microsoft.com/v1.0/servicePrincipals?\$filter=appId eq '${{ secrets.AZURE_CLIENT_ID }}'" --query "value[0].id" --output tsv)
+          REDIS_PASSWORD=$(az account get-access-token --resource https://redis.azure.com/ --query accessToken --output tsv)
+          export REDIS_PASSWORD
+          SECRET_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_ACCESS_KEY }}
+          export SECRET_KEY
+          juicefs mount rediss://"${REDIS_USER}":@juicefs.redis.cache.windows.net:6380 ~/jfs --background
+          ls -la ~/jfs
+          cat ~/jfs/hello.txt
+          date > ~/jfs/test-write.txt
+          cat ~/jfs/test-write.txt
+
+      - name: 🔗 Symlink ~/.kubler/{distfiles,packages}
+        run: |
+          set -eux
+          ls -lad ~/jfs ~/jfs/kubler ~/jfs/kubler/{distfiles,packages} || true
+          ls -la ~/jfs ~/jfs/kubler ~/jfs/kubler/{distfiles,packages} || true
+          mkdir -p ~/jfs/kubler ~/jfs/kubler/{distfiles,packages}
+          mkdir -p ~/.kubler
+          ln -sf ~/jfs/kubler/distfiles ~/.kubler/distfiles
+          ln -sf ~/jfs/kubler/packages ~/.kubler/packages
+          ls -lad ~/.kubler ~/.kubler/{distfiles,packages} || true
+          ls -la ~/.kubler ~/.kubler/{distfiles,packages} || true
 
       - name: Inspect Distfiles Cache - Before
         if: ${{ steps.bob-pull.outcome != 'success' || steps.bob-pull-test.outcome != 'success' }}
