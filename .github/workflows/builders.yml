@@ -530,7 +530,7 @@ jobs:
           #juicefs mount rediss://"${REDIS_USER}":@juicefs.redis.cache.windows.net:6380 ~/jfs --background
           juicefs mount rediss://juicefs.redis.cache.windows.net:6380 ~/jfs --background
           juicefs summary ~/jfs
-          juicefs bench ~/jfs
+          #juicefs bench ~/jfs
           ls -la ~/jfs
           cat ~/jfs/hello.txt
           date > ~/jfs/test-write.txt
