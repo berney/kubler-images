@@ -556,8 +556,8 @@ jobs:
           # Ensure distfiles exists
           mkdir -p ~/.kubler/distfiles
           cd ~/.kubler/distfiles
-          git init
-          git add .
+          git init || true
+          git add . || true
           ls -ltra ~/.kubler/distfiles/ | head -n 100
 
       - name: Inspect Packages Cache - Before
@@ -569,7 +569,7 @@ jobs:
           mkdir -p ~/.kubler/packages
           cd ~/.kubler/packages
           git init || true
-          git add .
+          git add . || true
           ls -ltra ~/.kubler/packages/
           ls -ltra ~/.kubler/packages/* || true
           tree -aC --filelimit 100 ~/.kubler/packages || true
