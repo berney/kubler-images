@@ -18,6 +18,16 @@ jobs:
     with:
       portage_date: ${{ inputs.portage_date }}
       portage_image: ${{ needs.call-portage.outputs.portage_image }}
+    # secrets need to declared here otherwise they won't be available in the called workflow
+    secrets:
+      LIGOLO_PROXY: ${{ secrets.LIGOLO_PROXY }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+      AZURE_STORAGE_ACCOUNT_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_ACCESS_KEY }}
+      AZURE_STORAGE_CONTAINER: ${{ secrets.AZURE_STORAGE_CONTAINER }}
+      AZURE_CACHE_FOR_REDIS_ACCESS_KEY: ${{ secrets.AZURE_CACHE_FOR_REDIS_ACCESS_KEY }}
   call-kubler-build:
     uses: ./.github/workflows/kubler-build.yml
     needs:
@@ -26,3 +36,12 @@ jobs:
     with:
       portage_date: ${{ inputs.portage_date }}
       portage_image: ${{ needs.call-portage.outputs.portage_image }}
+    secrets:
+      LIGOLO_PROXY: ${{ secrets.LIGOLO_PROXY }}
+      AZURE_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+      AZURE_STORAGE_ACCOUNT_ACCESS_KEY: ${{ secrets.AZURE_STORAGE_ACCOUNT_ACCESS_KEY }}
+      AZURE_STORAGE_CONTAINER: ${{ secrets.AZURE_STORAGE_CONTAINER }}
+      AZURE_CACHE_FOR_REDIS_ACCESS_KEY: ${{ secrets.AZURE_CACHE_FOR_REDIS_ACCESS_KEY }}
