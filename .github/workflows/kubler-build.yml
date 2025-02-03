@@ -43,8 +43,14 @@ on:
       AZURE_STORAGE_ACCOUNT:
         description: Azure Storage Account for Blob Storage, for shared caching of Gentoo binpkgs
         required: true
+      AZURE_STORAGE_ACCOUNT_ACCESS_KEY:
+        description: Azure Storage Account Access Key
+        required: true
       AZURE_STORAGE_CONTAINER:
         description: Azure Storage Container for Blob Storage, for shared caching of Gentoo binpkgs
+        required: true
+      AZURE_CACHE_FOR_REDIS_ACCESS_KEY:
+        description: Azure Cache for Redis Access Key for JuiceFS Metadata Server
         required: true
 
 permissions:
