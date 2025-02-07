@@ -22,11 +22,9 @@ ARG BASE_IMAGE=berney/bob-core:20240115
 
 # This stage (named-context) can be overriden
 FROM scratch AS distfiles
-COPY --link /distfiles /
 
 # This stage (named-context) can be overriden
 FROM scratch AS packages
-COPY --link /packages /
 
 FROM ${BASE_IMAGE}
 LABEL maintainer="Berne Campbell <berne.campbell@gmail.com>"

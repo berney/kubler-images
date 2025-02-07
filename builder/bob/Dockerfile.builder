@@ -22,18 +22,18 @@ ARG BASE_IMAGE=berney/bob-core:20240115
 
 # This stage (named-context) can be overriden
 FROM scratch AS distfiles
-COPY --link /distfiles /
 
 # This stage (named-context) can be overriden
 FROM scratch AS packages
-COPY --link /packages /
 
 FROM ${BASE_IMAGE}
 LABEL maintainer="Berne Campbell <berne.campbell@gmail.com>"
-COPY --link --from=distfiles / /distfiles/
-COPY --link --from=packages / /packages/
+COPY --link --from=distfiles / /
+COPY --link --from=packages / /
 #COPY PACKAGES.md /config/
 COPY --link build.sh /config/
+# This adds /etc/portage/binrepos.conf/bdawg-binhost.conf
+COPY --link root /
 #RUN <<-EOF
 #RUN --mount=type=bind,target=/distfiles,from=distfiles,rw --mount=type=bind,target=/packages,from=packages,rw <<-EOF
 #RUN --mount=type=cache,target=/distfiles,from=distfiles --mount=type=cache,target=/packages,from=packages <<-EOF
@@ -49,6 +49,15 @@ RUN <<-EOF
   ls -lF /config
   ls -ltraF /distfiles | tail || true
   ls -ltraF /packages | tail || true
+  ls -la /etc/portage/binrepos.conf/
+  cat /etc/portage/binrepos.conf/bdawg-binhost.conf
+  ping -c3 host.docker.internal || true
+  curl http://host.docker.internal:8080/test || true
+  emerge --info
+  echo "BOB_FEATURES was \"${BOB_FEATURES}\""
+  BOB_FEATURES="${BOB_FEATURES} buildpkg getbinpkg"
+  export BOB_FEATURES
+  echo "BOB_FEATURES now \"${BOB_FEATURES}\""
   BOB_CURRENT_TARGET=berney/bob kubler-build-root || die "kubler-build-root failed"
   ls -ltraF /distfiles | tail || true
   ls -ltraF /packages | tail || true

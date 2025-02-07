@@ -557,6 +557,7 @@ jobs:
           mkdir -p ~/.kubler/distfiles
           cd ~/.kubler/distfiles
           git init || true
+          grep -q '/.git/' .dockerignore || echo '/.git/' >> .dockerignore
           git add . || true
           ls -ltra ~/.kubler/distfiles/ | head -n 100
 
@@ -569,10 +570,18 @@ jobs:
           mkdir -p ~/.kubler/packages
           cd ~/.kubler/packages
           git init || true
+          grep -q '/.git/' .dockerignore || echo '/.git/' >> .dockerignore
           git add . || true
           ls -ltra ~/.kubler/packages/
           ls -ltra ~/.kubler/packages/* || true
           tree -aC --filelimit 100 ~/.kubler/packages || true
+
+      - name: Start Portage Binary Package Server
+        run: |
+          set -eux
+          ss -nlt
+          docker run --name miniserver-packages --detach --rm -v "${HOME}/.kubler/packages":/packages:ro -p 8080:8080 docker.io/svenstaro/miniserve:0.29.0-alpine /packages
+          curl -I http://localhost:8080/x86_64-pc-linux-gnu/Packages
 
       # This isn't exported in the env context, so we need to set it
       - name: Get HOME directory
@@ -593,14 +602,14 @@ jobs:
           set: |
             ${{matrix.bob.target}}-builder.args.BASE_IMAGE=${{ matrix.core.image }}
             ${{matrix.bob.target}}-builder.tags=${{ matrix.bob.tmp_image }}-builder
-            ${{matrix.bob.target}}-builder.contexts.distfiles=${{ env.HOME }}/.kubler/distfiles
-            ${{matrix.bob.target}}-builder.contexts.packages=${{ env.HOME }}/.kubler/packages
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=portage
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.core.cache }}
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.bob.cache }}
             ${{matrix.bob.target}}-builder.cache-from=type=gha,scope=${{ matrix.bob.cache }}-builder
             ${{matrix.bob.target}}-builder.cache-to=type=gha,scope=${{ matrix.bob.cache }}-builder
+          #  ${{matrix.bob.target}}-builder.contexts.distfiles=${{ env.HOME }}/.kubler/distfiles
+          #  ${{matrix.bob.target}}-builder.contexts.packages=${{ env.HOME }}/.kubler/packages
 
       - name: 🐋 Docker Build kubler builder - bob-builder - Extract /distfiles/ and /packages for caching
         if: ${{ steps.bob-builder-bake.outcome == 'success' }}
