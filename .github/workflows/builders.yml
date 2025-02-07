@@ -531,7 +531,7 @@ jobs:
           # I think Docker is doing things as root which fails without allow_other.
           ls -l /etc/fuse.conf
           cat /etc/fuse.conf
-          grep '^user_allow_other' /etc/fuse.conf || sudo sed -i 's/^#user_allow_other/user_allow_other/' /etc/fuse.conf
+          grep '^user_allow_other' /etc/fuse.conf || sudo sed -i -e 's/^#user_allow_other/user_allow_other/' /etc/fuse.conf
           #juicefs mount rediss://"${REDIS_USER}":@juicefs.redis.cache.windows.net:6380 ~/jfs --background
           juicefs mount -o allow_other rediss://juicefs.redis.cache.windows.net:6380 ~/jfs --background
           juicefs summary ~/jfs
