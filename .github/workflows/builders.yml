@@ -656,7 +656,7 @@ jobs:
           set -eux
           ls -ltra ~/.kubler/packages/ || true
           ls -ltra ~/.kubler/packages/* || true
-          tree -aC --filelimit 100 -I git/ ~/.kubler/packages || true
+          tree -aC --filelimit 100 -I .git/ ~/.kubler/packages || true
           cd ~/.kubler/packages/
           git status
 
