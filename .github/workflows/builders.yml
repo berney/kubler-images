@@ -674,14 +674,14 @@ jobs:
           set: |
             ${{matrix.bob.target}}.args.BASE_IMAGE=${{ matrix.core.image }}
             ${{matrix.bob.target}}.tags=${{ matrix.bob.tmp_image }}
-            ${{matrix.bob.target}}.contexts.distfiles=${{ env.HOME }}/.kubler/distfiles
-            ${{matrix.bob.target}}.contexts.packages=${{ env.HOME }}/.kubler/packages
             ${{matrix.bob.target}}.cache-from=type=gha,scope=portage
             ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.stage3.cache }}
             ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.core.cache }}
             ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}-builder
             ${{matrix.bob.target}}.cache-from=type=gha,scope=${{ matrix.bob.cache }}
             ${{matrix.bob.target}}.cache-to=type=gha,scope=${{ matrix.bob.cache }}
+          #  ${{matrix.bob.target}}.contexts.distfiles=${{ env.HOME }}/.kubler/distfiles
+          #  ${{matrix.bob.target}}.contexts.packages=${{ env.HOME }}/.kubler/packages
 
       - name: 🐋 Docker Build kubler builder - bob - test baked
         id: bob-bake-test
