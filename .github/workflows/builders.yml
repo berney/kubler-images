@@ -588,6 +588,9 @@ jobs:
           set -eux
           ss -nlt
           docker run --name miniserver-packages --detach --rm -v "${HOME}/.kubler/packages":/packages:ro -p 8080:8080 docker.io/svenstaro/miniserve:0.29.0-alpine /packages
+          for i in $(seq 60); do
+            curl -I http://localhost:8080/x86_64-pc-linux-gnu/Packages || sleep 1
+          done
           curl -I http://localhost:8080/x86_64-pc-linux-gnu/Packages
 
       # This isn't exported in the env context, so we need to set it
