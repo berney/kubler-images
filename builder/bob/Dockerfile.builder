@@ -27,6 +27,10 @@ FROM scratch AS distfiles
 FROM scratch AS packages
 
 FROM ${BASE_IMAGE}
+# GitHub Runner
+ARG BINHOST=http://172.17.0.1:8080
+# Docker for Windows/macOS
+#ARG BINHOST=http://host.docker.internal:8080
 LABEL maintainer="Berne Campbell <berne.campbell@gmail.com>"
 COPY --link --from=distfiles / /
 COPY --link --from=packages / /
@@ -51,8 +55,8 @@ RUN <<-EOF
   ls -ltraF /packages | tail || true
   ls -la /etc/portage/binrepos.conf/
   cat /etc/portage/binrepos.conf/bdawg-binhost.conf
-  ping -c3 host.docker.internal || true
-  curl http://host.docker.internal:8080/test || true
+  #ping -c3 "${BINHOST}" || true
+  curl "${BINHOST}/test" || true
   emerge --info
   echo "BOB_FEATURES was \"${BOB_FEATURES}\""
   BOB_FEATURES="${BOB_FEATURES} buildpkg getbinpkg"
