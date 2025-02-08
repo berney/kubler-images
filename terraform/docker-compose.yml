@@ -1,0 +1,49 @@
+services:
+  terraform:
+    image: berne/terraform:2
+    build: .
+    volumes:
+      - ~/.azure:/root/.azure
+      - .terraform:/root/.terraform
+      - ./:/root/data
+
+  azure-cli:
+    image: mcr.microsoft.com/azure-cli
+    volumes:
+      - ~/.azure:/root/.azure
+      - ./:/root/data
+
+  msgraph-cli:
+    image: berne/msgraph-cli
+    cap_add:
+      # https://man7.org/linux/man-pages/man7/capabilities.7.html
+      #
+      - IPC_LOCK # Required by gnome-keyring daemon, the dbus secret service
+    environment:
+      - KEYRING_PASSWORD=changeit
+    volumes:
+      - ./mgc/.mgc:/root/.mgc
+      - ./mgc/.IdentityService:/root/.local/share/.IdentityService
+      - ./mgc/keyrings:/root/.local/share/keyrings
+      # Not sure if the `.azure` will be helpful
+      - ~/.azure:/root/.azure
+      - ./:/root/data
+
+  scoutsuite:
+    #image: ghcr.io/ben-elttam/scoutsuite:develop-latacora-berne
+    image: berne/scoutsuite:5.14.0
+    #command: aws --no-browser --report-dir /out/
+    volumes:
+      #- $HOME/.aws:/root/.aws
+      #- ./:/out
+      #- ~/.azure:/root/.azure
+      - ./:/root/data
+
+  prowler:
+    image: toniblyx/prowler:4.3.5
+    command: azure
+    volumes:
+      #- $HOME/.aws:/home/prowler/.aws
+      #- ./:/home/prowler/output
+      #- ~/.azure:/home/prowler/.azure
+      - ./:/home/prowler/data
