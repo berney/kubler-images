@@ -428,16 +428,23 @@ jobs:
           export REDIS_PASSWORD
           SECRET_KEY=${{ secrets.AZURE_STORAGE_ACCOUNT_ACCESS_KEY }}
           export SECRET_KEY
+          # Ensure FUSE user_allow_other is enabled
+          # Docker does things as root which fails without allow_other.
+          ls -l /etc/fuse.conf
+          cat /etc/fuse.conf
+          grep '^user_allow_other' /etc/fuse.conf || sudo sed -i -e 's/^#user_allow_other/user_allow_other/' /etc/fuse.conf
           # If it fails cat the logs
-          juicefs mount rediss://juicefs.redis.cache.windows.net:6380 ~/jfs --background || \
+          juicefs mount -o allow_other rediss://juicefs.redis.cache.windows.net:6380 ~/jfs --background || \
             { cat ~/.juicefs/juicefs.log; exit 1; }
-          #juicefs summary ~/jfs
+          juicefs summary ~/jfs
           #juicefs bench ~/jfs
           #time juicefs warmup ~/jfs/kubler
           ls -la ~/jfs
           cat ~/jfs/hello.txt
           date > ~/jfs/test-write.txt
           cat ~/jfs/test-write.txt
+          # Check allow_other works
+          sudo ls -la ~/jfs
 
       - name: 🔗 Symlink ~/.kubler/{distfiles,packages}
         run: |
@@ -753,11 +760,11 @@ jobs:
           git add . || true
           ls -ltra ~/.kubler/packages/
           ls -ltra ~/.kubler/packages/* || true
-          tree -aC --filelimit 100 ~/.kubler/packages || true
+          tree -aC --filelimit 100 -I .git/ ~/.kubler/packages || true
 
       - name: 🚧 Kubler Build Image - Inspect
         #if: ${{ false }}
-        #id: ${{ matrix.name }}
+        id: kubler-inspect
         # This is docker inception
         # We run the kubler container to run kubler
         # Kubler runs docker itself, but it will be mounting volumes from the host's POV
@@ -783,6 +790,29 @@ jobs:
             "${KUBLER_IMAGE}" \
             sh -c 'set -eux; id; pwd; echo HOME=$HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads || true; ls -la ~/.kubler/distfiles || true; ls -la ~/.kubler/packages || true; ls -la ~/.kubler/log || true; ls -la ~/.kubler/namespaces || true; ls -la ~/.kubler/namespaces/kubler || true; mount'
 
+      - name: 🌧️ Sleep if Kubler Inspect Error
+        if: ${{ steps.kubler-inspect.outcome == 'failure' }}
+        run: |
+          set -eux
+          LOOPS=12
+          for x in $(seq $LOOPS); do
+            echo "== $x/$LOOPS"
+            ps -ef
+            pstree
+            docker ps
+            docker ps -a
+            ss -nlt
+            ss -nlu
+            ip link
+            ip addr
+            ip -6 addr
+            ls -l ~/log/mosh-server/current || true
+            cat ~/log/mosh-server/current || true
+            ls -l ~/log/ligolo-ng/current || true
+            cat ~/log/ligolo-ng/current || true
+            sleep 5m
+          done
+
       - name: 🚧 Kubler Build Image
         #if: ${{ false }}
         #id: ${{ matrix.name }}
@@ -805,6 +835,29 @@ jobs:
             -e TERM=dumb \
             "${KUBLER_IMAGE}" \
             kubler build -v "${{ matrix.name }}"
+
+      - name: 🌧️ Sleep if Kubler Build Error
+        if: ${{ steps.kubler-build.outcome == 'failure' }}
+        run: |
+          set -eux
+          LOOPS=12
+          for x in $(seq $LOOPS); do
+            echo "== $x/$LOOPS"
+            ps -ef
+            pstree
+            docker ps
+            docker ps -a
+            ss -nlt
+            ss -nlu
+            ip link
+            ip addr
+            ip -6 addr
+            ls -l ~/log/mosh-server/current || true
+            cat ~/log/mosh-server/current || true
+            ls -l ~/log/ligolo-ng/current || true
+            cat ~/log/ligolo-ng/current || true
+            sleep 5m
+          done
 
       - name: Test Image
         #id: test-${{ matrix.name }}
@@ -886,7 +939,7 @@ jobs:
           set -eux
           ls -ltra ~/.kubler/packages/ || true
           ls -ltra ~/.kubler/packages/* || true
-          tree -aC --filelimit 100 ~/.kubler/packages || true
+          tree -aC --filelimit 100 -I .git/ ~/.kubler/packages || true
           cd ~/.kubler/packages/
           git status
 
