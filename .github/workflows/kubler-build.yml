@@ -436,7 +436,8 @@ jobs:
           # If it fails cat the logs
           juicefs mount -o allow_other rediss://juicefs.redis.cache.windows.net:6380 ~/jfs --background || \
             { cat ~/.juicefs/juicefs.log; exit 1; }
-          juicefs summary ~/jfs
+          # juicefs summary is heavy on metadata server (redis)
+          #juicefs summary ~/jfs
           #juicefs bench ~/jfs
           #time juicefs warmup ~/jfs/kubler
           ls -la ~/jfs
