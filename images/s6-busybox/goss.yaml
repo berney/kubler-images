@@ -831,21 +831,6 @@ file:
         contents:
           - "#!/bin/sh"
           - exec /bin/ash
-    /lib:
-        exists: true
-        mode: "0755"
-        owner: root
-        group: root
-        filetype: directory
-        contents: []
-    /lib/ld-musl-x86_64.so.1:
-        exists: true
-        mode: "0777"
-        owner: root
-        group: root
-        linked-to: /usr/lib/libc.so
-        filetype: symlink
-        contents: []
     /service:
         exists: true
         mode: "0755"
@@ -867,83 +852,6 @@ file:
         owner: root
         group: root
         filetype: directory
-        contents: []
-    /usr/include:
-        exists: true
-        mode: "0755"
-        owner: root
-        group: root
-        filetype: directory
-        contents: []
-    /usr/lib:
-        exists: true
-        mode: "0755"
-        owner: root
-        group: root
-        filetype: directory
-        contents: []
-    /usr/lib/libc.so:
-        exists: true
-        mode: "0755"
-        owner: root
-        group: root
-        filetype: file
-        contents: []
-    /usr/lib/skalibs:
-        exists: true
-        mode: "0755"
-        owner: root
-        group: root
-        filetype: directory
-        contents: []
-    /usr/lib/skalibs/socket.lib:
-        exists: true
-        mode: "0644"
-        owner: root
-        group: root
-        filetype: file
-        contents: []
-    /usr/lib/skalibs/spawn.lib:
-        exists: true
-        mode: "0644"
-        owner: root
-        group: root
-        filetype: file
-        contents: []
-    /usr/lib/skalibs/sysclock.lib:
-        exists: true
-        mode: "0644"
-        owner: root
-        group: root
-        filetype: file
-        contents: []
-    /usr/lib/skalibs/sysdeps:
-        exists: true
-        mode: "0644"
-        owner: root
-        group: root
-        filetype: file
-        contents: []
-    /usr/lib/skalibs/target:
-        exists: true
-        mode: "0644"
-        owner: root
-        group: root
-        filetype: file
-        contents: []
-    /usr/lib/skalibs/timer.lib:
-        exists: true
-        mode: "0644"
-        owner: root
-        group: root
-        filetype: file
-        contents: []
-    /usr/lib/skalibs/util.lib:
-        exists: true
-        mode: "0644"
-        owner: root
-        group: root
-        filetype: file
         contents: []
     /var:
         exists: true
