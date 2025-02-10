@@ -175,6 +175,15 @@ jobs:
               # ash needs a terminal to start
               docker_args: -t
               goss_args:
+          - name: s6-linux-init
+            image: kubler-images/s6-linux-init
+            bob-musl: true
+            push: true
+            goss:
+              dir: images/s6-linux-init
+              container_mode: entrypoint
+              docker_args: -w /goss --entrypoint /goss/goss
+              goss_args: validate --color
           - name: coturn
             image: kubler-images/coturn
             bob-musl: true
