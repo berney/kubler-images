@@ -780,53 +780,19 @@ file:
         #group: root
         filetype: file
         contents: []
-    /etc/s6_finish_default:
-        exists: true
-        mode: "0755"
-        filetype: file
-        contents: []
-    /etc/service:
-        exists: true
-        mode: "0755"
-        #owner: root
-        #group: root
-        filetype: directory
-        contents: []
-    /etc/service/.s6-svscan:
-        exists: true
-        mode: "0755"
-        #owner: root
-        #group: root
-        filetype: directory
-        contents: []
-    /etc/service/.s6-svscan/finish:
-        exists: true
-        mode: "0777"
-        #owner: root
-        #group: root
-        linked-to: /etc/s6_finish_default
-        filetype: symlink
-        contents: []
-    /service:
-        exists: true
-        mode: "0755"
-        #owner: root
-        #group: root
-        filetype: directory
-        contents: []
     /usr:
         exists: false
-        mode: "0755"
+        #mode: "0755"
         #owner: root
         #group: root
-        filetype: directory
+        #filetype: directory
         contents: []
     /var:
         exists: false
-        mode: "0755"
+        #mode: "0755"
         #owner: root
         #group: root
-        filetype: directory
+        #filetype: directory
         contents: []
 command:
   s6-svscan:
