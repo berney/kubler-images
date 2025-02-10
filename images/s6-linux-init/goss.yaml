@@ -1,0 +1,837 @@
+# goss needs `getent` to lookup user/group name
+# The docker image doesn't have `getent` so this won't work
+file:
+    /bin:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: directory
+        contents: []
+    /bin/background:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/backtick:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/cd:
+        exists: true
+        mode: "0777"
+        #owner: root
+        #group: root
+        linked-to: execline-cd
+        filetype: symlink
+        contents: []
+    /bin/define:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/dollarat:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/elgetopt:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/elgetpositionals:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/elglob:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/emptyenv:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/envfile:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/exec:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/execline-cd:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/execline-umask:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/execlineb:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/exit:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/export:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/fdblock:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/fdclose:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/fdmove:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/fdreserve:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/fdswap:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/forbacktickx:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/foreground:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/forstdin:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/forx:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/getcwd:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/getpid:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/heredoc:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/homeof:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/if:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/ifelse:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/ifte:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/ifthenelse:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/importas:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/loopwhilex:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/multidefine:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/multisubstitute:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/pipeline:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/piperw:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/posix-cd:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/posix-umask:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/redirfd:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/runblock:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-accessrules-cdb-from-fs:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-accessrules-fs-from-cdb:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-applyuidgid:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-cleanfifodir:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-connlimit:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-envdir:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-envuidgid:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-fdholder-daemon:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-fdholder-delete:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-fdholder-getdump:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-fdholder-list:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-fdholder-retrieve:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-fdholder-setdump:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-fdholder-store:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-fdholder-transferdump:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-fdholderd:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-fghack:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ftrig-listen:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ftrig-listen1:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ftrig-notify:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ftrig-wait:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ftrigrd:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ioconnect:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ipcclient:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ipcserver:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ipcserver-access:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ipcserver-socketbinder:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-ipcserverd:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-log:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-mkfifodir:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-notifyoncheck:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-permafailon:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-setlock:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-setsid:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-setuidgid:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-softlimit:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-sudo:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-sudoc:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-sudod:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-supervise:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-svc:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-svdt:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-svdt-clear:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-svlisten:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-svlisten1:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-svok:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-svscan:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-svscanctl:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-svstat:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-svwait:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-tai64n:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/s6-tai64nlocal:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/shift:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/trap:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/tryexec:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/ucspilogd:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/umask:
+        exists: true
+        mode: "0777"
+        #owner: root
+        #group: root
+        linked-to: execline-umask
+        filetype: symlink
+        contents: []
+    /bin/unexport:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/wait:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /bin/withstdinas:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /etc:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: directory
+        contents: []
+    /etc/csh.env:
+        exists: true
+        mode: "0644"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /etc/env.d:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: directory
+        contents: []
+    /etc/environment.d:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: directory
+        contents: []
+    /etc/environment.d/10-gentoo-env.conf:
+        exists: true
+        mode: "0644"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /etc/ld.so.conf:
+        exists: true
+        mode: "0644"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /etc/profile.env:
+        exists: true
+        mode: "0644"
+        #owner: root
+        #group: root
+        filetype: file
+        contents: []
+    /etc/s6_finish_default:
+        exists: true
+        mode: "0755"
+        filetype: file
+        contents: []
+    /etc/service:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: directory
+        contents: []
+    /etc/service/.s6-svscan:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: directory
+        contents: []
+    /etc/service/.s6-svscan/finish:
+        exists: true
+        mode: "0777"
+        #owner: root
+        #group: root
+        linked-to: /etc/s6_finish_default
+        filetype: symlink
+        contents: []
+    /service:
+        exists: true
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: directory
+        contents: []
+    /usr:
+        exists: false
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: directory
+        contents: []
+    /var:
+        exists: false
+        mode: "0755"
+        #owner: root
+        #group: root
+        filetype: directory
+        contents: []
+command:
+  s6-svscan:
+    exec: [s6-svscan, --help]
+    exit-status: 100
+    stdout: ""
+    stderr: |
+      s6-svscan: usage: s6-svscan [ -c services_max | -C services_max ] [ -L name_max ] [ -t timeout ] [ -d notif ] [ -X consoleholder ] [ dir ]
