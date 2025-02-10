@@ -43,6 +43,6 @@ configure_builder() {
     update_use app-editors/vim-core -nls
     update_use app-editors/vim -nls
     emerge --info | grep EMERGE_DEFAULT_OPTS
-    emerge app-editors/vim sys-apps/bat sys-apps/fd
+    emerge app-editors/vim app-text/tree sys-apps/bat sys-apps/fd
     emerge sys-apps/ripgrep
 }
