@@ -79,21 +79,6 @@ file:
 
             ACCEPT_LICENSE="*"
     /etc/portage/postsync.d:
-        exists: true
-        mode: "0755"
-        owner: root
-        group: root
-        filetype: directory
-        contents: []
-    /etc/portage/postsync.d/50-eix-postsync:
-        exists: true
-        mode: "0777"
-        owner: root
-        group: root
-        linked-to: ../../../usr/bin/eix-postsync
-        filetype: symlink
-        contents: null
-    /etc/portage/postsync.d/eix:
         exists: false
     /etc/portage/repos.conf:
         exists: true
