@@ -798,7 +798,18 @@ jobs:
             -w "$(pwd)" \
             -e TERM=dumb \
             "${KUBLER_IMAGE}" \
-            sh -c 'set -eux; id; pwd; echo HOME=$HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads || true; ls -la ~/.kubler/distfiles || true; ls -la ~/.kubler/packages || true; ls -la ~/.kubler/log || true; ls -la ~/.kubler/namespaces || true; ls -la ~/.kubler/namespaces/kubler || true; mount'
+            sh -c 'set -eux; id; pwd; echo HOME=$HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads || true; ls -la ~/.kubler/distfiles || true; ls -la ~/.kubler/distfiles/ || true; ls -la ~/.kubler/packages || true; ls -la ~/.kubler/packages/ || true; ls -la ~/.kubler/log || true; ls -la ~/.kubler/namespaces || true; ls -la ~/.kubler/namespaces/kubler || true; mount'
+          docker run \
+            --rm \
+            -v /run/docker.sock:/run/docker.sock \
+            -v ~/.kubler:/$HOME/.kubler \
+            -v ~/.kubler/distfiles/:/$HOME/.kubler/distfiles \
+            -v ~/.kubler/packages/:/$HOME/.kubler/packages \
+            -v "$(pwd)":"$(pwd)" \
+            -w "$(pwd)" \
+            -e TERM=dumb \
+            "${KUBLER_IMAGE}" \
+            sh -c 'set -eux; id; pwd; echo HOME=$HOME; ls -la; ls -la ~/.kubler; ls -la ~/.kubler/downloads || true; ls -la ~/.kubler/distfiles || true; ls -la ~/.kubler/distfiles/ || true; ls -la ~/.kubler/packages || true; ls -la ~/.kubler/packages/ || true; ls -la ~/.kubler/log || true; ls -la ~/.kubler/namespaces || true; ls -la ~/.kubler/namespaces/kubler || true; mount'
 
       - name: 🌧️ Sleep if Kubler Inspect Error
         if: ${{ steps.kubler-inspect.outcome == 'failure' }}
