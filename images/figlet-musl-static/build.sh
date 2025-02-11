@@ -1,7 +1,8 @@
 ## This is an exercise in minimalism
 
 # Don't set _packages so that baselayout won't be installed
-PACKAGES_M="app-misc/figlet"
+#PACKAGES_M="app-misc/figlet"
+_packages="app-misc/figlet"
 
 #
 # this hook can be used to configure the build container itself, install packages, etc
@@ -16,6 +17,12 @@ configure_bob() {
 configure_rootfs_build() {
 	# this runs in the builder, but as one of the last build steps the builder's /etc/passwd is copied to the custom root
 	useradd figlet
+
+	# Add our custom overlay
+	add_overlay berne https://github.com/berney/gentoo-overlay.git
+
+	update_use '+static-libs' '+minimal' '+static'
+
 	# Create home directory in custom root
 	# we don't need this for our purposes
 	#mkdir -p "${_EMERGE_ROOT}"/home/figlet
@@ -25,18 +32,18 @@ configure_rootfs_build() {
 	# We don't want to emerge the non-static binary package if it exists and emerge doesn't know not to because
 	# the use flags will be the same, so let's exclude the binary package so we always compile from source
 	# and hence honour our custom CFLAGS/CXXFLAGS/LDFLAGS
-	set -u
+	#set -u
 	#declare -p
-	CFLAGS="$(emerge --info|grep ^CFLAGS|grep -oP '(?<=").*(?=")') -static" \
-	CXXFLAGS=$CFLAGS \
-	LDFLAGS="$(emerge --info|grep LDFLAGS|grep -oP '(?<=").*(?=")') -static" \
-	"${_emerge_bin}" ${_emerge_opt} --binpkg-respect-use=y --usepkg-exclude="$PACKAGES_M" -v $PACKAGES_M
+	#CFLAGS="$(emerge --info|grep ^CFLAGS|grep -oP '(?<=").*(?=")') -static" \
+	#CXXFLAGS=$CFLAGS \
+	#LDFLAGS="$(emerge --info|grep LDFLAGS|grep -oP '(?<=").*(?=")') -static" \
+	#"${_emerge_bin}" ${_emerge_opt} --binpkg-respect-use=y --usepkg-exclude="$PACKAGES_M" -v $PACKAGES_M
 	# As we broke the normal builder chain, recreate the docs for the busybox image
-	init_docs "$PACKAGES_M"
+	#init_docs "$PACKAGES_M"
 	# XXX TODO would be nice to add/update fake USE flags +musl +static
 	#update_use "$PACKAGES_M" "+musl +static"
-	generate_doc_package_installed "$PACKAGES_M"
-	set +u
+	#generate_doc_package_installed "$PACKAGES_M"
+	#set +u
 }
 
 #
