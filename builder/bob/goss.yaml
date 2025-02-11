@@ -486,12 +486,13 @@ command:
             - '[I] app-portage/flaggie'
             - '[I] app-portage/gentoolkit'
             - '[I] app-shells/bash-completion'
+            - '[I] app-text/tree'
             - '[I] dev-lang/go'
             - '[I] dev-vcs/git'
             - '[I] sys-apps/bat'
             - '[I] sys-apps/fd'
             #- '[I] sys-apps/ripgrep'
-            - /Found 1[12] matches/
+            - /Found 1[23] matches/
         stderr: ""
         timeout: 10000
     equery --version:
