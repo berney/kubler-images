@@ -59,7 +59,7 @@ RUN <<-EOF
   curl "${BINHOST}/test" || true
   emerge --info
   echo "BOB_FEATURES was \"${BOB_FEATURES}\""
-  BOB_FEATURES="${BOB_FEATURES} buildpkg getbinpkg"
+  BOB_FEATURES="${BOB_FEATURES} buildpkg getbinpkg pkgdir-index-trusted"
   export BOB_FEATURES
   echo "BOB_FEATURES now \"${BOB_FEATURES}\""
   BOB_CURRENT_TARGET=berney/bob kubler-build-root || die "kubler-build-root failed"
