@@ -102,7 +102,8 @@ jobs:
         if: ${{ steps.portage-pull.outcome == 'failure' || steps.portage-pull-test.outcome == 'failure' }}
         uses: docker/bake-action@v6
         with:
-          workdir: bob-portage
+          # subdirectory of Git context
+          source: "{{defaultContext}}:bob-portage"
           push: true
           set: |
             kubler-portage.tags=${{ env.TMP_PORTAGE_IMAGE }}
