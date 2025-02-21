@@ -308,7 +308,8 @@ jobs:
         if: ${{ steps.stage3-pull.outcome != 'success' || steps.stage3-pull-test.outcome != 'success' }}
         uses: docker/bake-action@v6
         with:
-          workdir: bob-stage3
+          # subdirectory of Git context
+          source: "{{defaultContext}}:bob-stage3"
           push: true
           # In the `docker-bake.hcl`
           # There is a variable `BASE_TAG` and `BASE_IMAGE`. `BASE_IMAGE` interpolates `BASE_TAG`i
@@ -407,7 +408,8 @@ jobs:
         if: ${{ steps.bob-core-pull.outcome != 'success' || steps.bob-core-pull-test.outcome != 'success' }}
         uses: docker/bake-action@v6
         with:
-          workdir: bob-core
+          # subdirectory of Git context
+          source: "{{defaultContext}}:bob-core"
           push: true
           set: |
             core.args.DEF_CHOST=${{ matrix.core.def_chost }}
@@ -607,7 +609,8 @@ jobs:
         if: ${{ steps.bob-pull.outcome != 'success' || steps.bob-pull-test.outcome != 'success' }}
         uses: docker/bake-action@v6
         with:
-          workdir: ${{ matrix.bob.goss }}
+          # subdirectory of Git context
+          source: "{{defaultContext}}:${{ matrix.bob.goss }}"
           push: true
           targets: ${{ matrix.bob.target }}-builder
           set: |
@@ -669,7 +672,8 @@ jobs:
         if: ${{ steps.bob-pull.outcome != 'success' || steps.bob-pull-test.outcome != 'success' }}
         uses: docker/bake-action@v6
         with:
-          workdir: ${{ matrix.bob.goss }}
+          # subdirectory of Git context
+          source: "{{defaultContext}}:${{ matrix.bob.goss }}"
           push: true
           targets: ${{ matrix.bob.target }}
           set: |
