@@ -62,7 +62,7 @@ jobs:
           oras version
 
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: 🐋🍳 Docker Bake Kubler portage - set PORTAGE_IMAGE env vars
         run: |

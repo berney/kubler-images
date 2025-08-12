@@ -77,7 +77,7 @@ jobs:
           #logout: true
 
       - name: Check out repository code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Get User ID and Group ID for Docker mapping
         run: |
