@@ -292,7 +292,7 @@ jobs:
       #
       - name: Cache Kubler Downloads
         if: ${{ false }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.kubler/downloads/
           key: kubler-${{ matrix.name }}-${{ github.sha }}
@@ -302,7 +302,7 @@ jobs:
 
       - name: Cache Kubler Gentoo Distfiles
         if: ${{ false }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.kubler/distfiles/
           key: kubler-${{ matrix.name }}-${{ github.sha }}
@@ -312,7 +312,7 @@ jobs:
 
       - name: Cache Kubler Gentoo Packages
         if: ${{ false }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.kubler/packages/
           key: kubler-${{ matrix.name }}-${{ github.sha }}
