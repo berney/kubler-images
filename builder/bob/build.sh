@@ -28,7 +28,7 @@ configure_builder() {
     [[ -f /usr/"${_LIB}"/misc/ssh-keysign ]] && rm /usr/"${_LIB}"/misc/ssh-keysign
     update_use 'dev-vcs/git' '-perl'
     update_use 'app-crypt/pinentry' '+ncurses'
-    update_keywords 'dev-python/ssl-fetch' '+~amd64'
+    update_keywords 'dev-python/ssl-fetch' '+~amd64' || true
     update_keywords 'app-admin/su-exec' '+~amd64'
     emerge --info | grep EMERGE_DEFAULT_OPTS
     export EMERGE_DEFAULT_OPTS="-b -k --quiet-build --tree"
