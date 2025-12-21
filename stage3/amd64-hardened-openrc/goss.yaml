@@ -6,7 +6,7 @@ file:
         group: root
         filetype: file
         contents:
-          - "Gentoo Base System release 2.17"
+          - "Gentoo Base System release 2.18"
           - "Gentoo Base System release"
     /latest-stage3-amd64-hardened-openrc.txt:
         exists: true
@@ -24,7 +24,7 @@ file:
         mode: "0777"
         owner: root
         group: root
-        linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/14/gcc
+        linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/15/gcc
         filetype: symlink
         contents: null
     /usr/sbin/gcc:
@@ -32,7 +32,7 @@ file:
         mode: "0777"
         owner: root
         group: root
-        linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/14/gcc
+        linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/15/gcc
         filetype: symlink
         contents: null
     # I bake in portage, so check it
