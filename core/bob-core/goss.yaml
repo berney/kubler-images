@@ -46,7 +46,7 @@ file:
         filetype: file
         contents:
             - Gentoo Base System release
-            - Gentoo Base System release 2.17
+            - Gentoo Base System release 2.18
     /etc/portage:
         exists: true
         mode: "0755"
@@ -187,7 +187,7 @@ file:
         mode: "0777"
         owner: root
         group: root
-        linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/14/gcc
+        linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/15/gcc
         filetype: symlink
         contents: null
     /usr/sbin/gcc:
@@ -195,7 +195,7 @@ file:
         mode: "0777"
         owner: root
         group: root
-        linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/14/gcc
+        linked-to: /usr/x86_64-pc-linux-gnu/gcc-bin/15/gcc
         filetype: symlink
         contents: null
     /usr/local/bin/kubler-build-root:
