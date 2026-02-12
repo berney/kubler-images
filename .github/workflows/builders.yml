@@ -149,7 +149,7 @@ jobs:
       # If no cache can be restored the directory won't be created
       - name: Cache Kubler Gentoo Distfiles
         if: ${{ false }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.kubler/distfiles/
           key: kubler-${{ matrix.cache-key-prefix }}-${{ github.sha }}
@@ -160,7 +160,7 @@ jobs:
 
       - name: Cache Kubler Gentoo Packages
         if: ${{ false }}
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.kubler/packages/
           key: kubler-${{ matrix.cache-key-prefix }}-${{ github.sha }}
